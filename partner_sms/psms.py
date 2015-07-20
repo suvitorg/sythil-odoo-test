@@ -22,6 +22,8 @@ class psms_compose(models.TransientModel):
     sms_gateway = fields.Many2one('psms.conf', required=True, string='Account/Number')
     to_number = fields.Char(required=True, string='To Mobile Number', readonly=True)
     sms_content = fields.Text('SMS Content')
+    field_id = fields.Char('Field ID')
+    
     
     @api.one
     def send_sms(self):
@@ -34,29 +36,25 @@ class psms_compose(models.TransientModel):
         r = requests.get(smsglobal_url)
         
         my_model = self.env['ir.model'].search([('model','=',self.model_id)])
-        psms_history = self.env['psms.history'].create({'record_id': self.record_id,'model_id':my_model[0].id,'from_mobile':self.sms_gateway.from_number,'to_mobile':self.to_number,'sms_content':self.sms_content,'status_string':r.text, 'direction':'O','my_date':datetime.utcnow()})
-
-class psms_partner(models.Model):
-
-    _inherit = "res.partner"
-    
-    smshistory = fields.Many2many('psms.history')
+        my_field = self.env['ir.model.fields'].search([('name','=',self.field_id)])
+        psms_history = self.env['psms.history'].create({'field_id':my_field[0].id, 'record_id': self.record_id,'model_id':my_model[0].id,'from_mobile':self.sms_gateway.from_number,'to_mobile':self.to_number,'sms_content':self.sms_content,'status_string':r.text, 'direction':'O','my_date':datetime.utcnow()})
      
 class psms_history(models.Model):
 
     _name = "psms.history"
     
-    record_id = fields.Integer(readonly=True)
-    model_id = fields.Many2one('ir.model', readonly=True)
+    record_id = fields.Integer(readonly=True, string="Record")
+    model_id = fields.Many2one('ir.model', readonly=True, string="Model")
+    model_name = fields.Char(string="Model Name", related='model_id.model')
+    field_id = fields.Many2one('ir.model.fields', readonly=True, string="Field")
     from_mobile = fields.Char(string="From Mobile Number", readonly=True)
     to_mobile = fields.Char(string="To Mobile Number", readonly=True)
     sms_content = fields.Text(string="SMS Message", readonly=True)
     record_name = fields.Char(string="Record Name", compute="_rec_nam")
     status_string = fields.Char(string="Status Code", readonly=True)
-    direction = fields.Selection((("I","INBOUND"),("O","OUTBOUND")), string="Status Code", readonly=True)
+    direction = fields.Selection((("I","INBOUND"),("O","OUTBOUND")), string="Direction", readonly=True)
     my_date = fields.Datetime(string="Date", readonly=True, help="The date and time the sms is received or sent")
     status_mini = fields.Char(compute="_short_status", string="Status")
-
 
     @api.one
     @api.depends('record_id', 'model_id')

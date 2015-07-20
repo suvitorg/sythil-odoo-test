@@ -2,38 +2,13 @@
 <openerp>
     <data>
     
-    
-    
-    
-    
-      <record model="ir.actions.act_window" id="psms_compose_action">
-              <field name="name">psms compose action</field>
-          	  <field name="res_model">psms.compose</field>
-          	  <field name="view_type">form</field>
-          	  <field name="view_mode">form</field>
-          	  <field name="target">new</field>
-      </record>
-      
-      <record model="ir.ui.view" id="psms_partner_view">
-          <field name="name">psms partner</field>
-          <field name="model">res.partner</field>
-          <field name="inherit_id" ref="base.view_partner_form" />
-	  <field name="arch" type="xml">
-	      <field name="mobile" position="after">
-	          <button type="action" name='%(partner_sms.psms_compose_action)d' context="{'default_to_number':mobile,'default_record_id':active_id,'default_model_id':active_model}" string="Compose SMS"/>    
-	      </field>
-	  </field>
-      </record>
-      
-<!-- ##################################################################### -->
-
       <record model="ir.ui.view" id="psms_compose_view">
           <field name="name">psms compose view</field>
           <field name="model">psms.compose</field>
           <field name="arch" type="xml">
       	      <form>
       	          <group>
-                      <field name="sms_gateway"/>
+      	              <field name="sms_gateway"/>
       	              <field name="to_number" />
       	              <field name="sms_content"/>
       	          </group>
@@ -94,6 +69,8 @@
       	          <group>
       	              <field name="my_date"/>
       	              <field name="model_id"/>
+      	              <field name="model_name"/>
+      	              <field name="field_id"/>
       	              <field name="record_id"/>
       	              <field name="create_uid"/>
       	              <field name="direction"/>
