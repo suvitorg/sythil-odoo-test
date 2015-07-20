@@ -1,7 +1,7 @@
 {
     'name': "Mass Import Customer Images",
     'version': "1.0",
-    'author': "Anonymous",
+    'author': "Sythil",
     'category': "Tools",
     'data': [
         'mass_customer_image_migrate.xml',
