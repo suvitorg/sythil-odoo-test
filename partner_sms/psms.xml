@@ -2,6 +2,26 @@
 <openerp>
     <data>
     
+<act_window name="Send SMS Partner"
+    res_model="psms.compose"
+    src_model="res.partner"
+    key2="client_action_multi" 
+    view_mode="form" target="new" 
+    view_type="form"
+    context="{'default_field_id':'mobile','default_to_number':mobile,'default_record_id':active_id,'default_model_id':active_model}"
+    id="act_send_sms_partner_menu" />
+
+<act_window name="Send SMS Lead"
+    res_model="psms.compose"
+    src_model="crm.lead"
+    key2="client_action_multi" 
+    view_mode="form" target="new" 
+    view_type="form"
+    context="{'default_field_id':'mobile','default_to_number':mobile,'default_record_id':active_id,'default_model_id':active_model}"
+    id="act_send_sms_lead_menu" />
+
+<!-- ####################################################################### -->
+
       <record model="ir.ui.view" id="psms_compose_view">
           <field name="name">psms compose view</field>
           <field name="model">psms.compose</field>
