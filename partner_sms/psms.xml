@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-<act_window name="Mass SMS Partners"
+<act_window name="SMS Multiple Partners"
     res_model="psms.compose.multi"
     src_model="res.partner"
     key2="client_action_multi" 
@@ -10,7 +10,7 @@
     view_type="form"
     id="act_send_sms_partner_multi_menu" />
 
-<act_window name="Mass SMS Lead"
+<act_window name="SMS Multiple Leads"
     res_model="psms.compose.multi"
     src_model="crm.lead"
     key2="client_action_multi" 
@@ -129,6 +129,8 @@
       	      <form>
       	          <group>
       	              <field name="my_date"/>
+      	              <field name="gateway_name"/>
+      	              <field name="sms_gateway_message_id"/>
       	              <field name="model_id"/>
       	              <field name="model_name"/>
       	              <field name="field_id"/>

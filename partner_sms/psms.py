@@ -72,7 +72,6 @@ class esms(models.TransientModel):
    def send_sms(self, sms_gateway_id, to_number, sms_content, my_model_name, my_record_id, my_field_name):
        sms_gateway = self.env['psms.conf'].search([('id','=',sms_gateway_id)])
        
-       #SMS Gateway specific code
        gateway_name = "SMSGLOBAL"
        format_number = to_number
        if " " in format_number: format_number.replace(" ", "")
@@ -87,14 +86,16 @@ class esms(models.TransientModel):
            response_code = "FAILED DELIVERY"
        else:
            response_code = "SUCCESSFUL"
-       #End SMS Gateway specific code
+       
+       sms_gateway_message_id = response_string.text.split('SMSGlobalMsgID:')[1]
+       
        
        my_model = self.env['ir.model'].search([('model','=',my_model_name)])
        my_field = self.env['ir.model.fields'].search([('name','=',my_field_name)])
        if response_code == "SUCCESSFUL":
-           psms_history = self.env['psms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'from_mobile':sms_gateway.from_number,'to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'gateway_name': gateway_name, 'direction':'O','my_date':datetime.utcnow(), 'status_code':'successful'})
+           psms_history = self.env['psms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'from_mobile':sms_gateway.from_number,'to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'gateway_name': gateway_name, 'direction':'O','my_date':datetime.utcnow(), 'status_code':'successful', 'sms_gateway_message_id':sms_gateway_message_id})
        else:
-           psms_history = self.env['psms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'from_mobile':sms_gateway.from_number,'to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'gateway_name': gateway_name, 'direction':'O','my_date':datetime.utcnow(), 'status_code':'failed'})
+           psms_history = self.env['psms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'from_mobile':sms_gateway.from_number,'to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'gateway_name': gateway_name, 'direction':'O','my_date':datetime.utcnow(), 'status_code':'failed', 'sms_gateway_message_id':sms_gateway_message_id})
        
        return response_code
        
@@ -111,9 +112,9 @@ class psms_history(models.Model):
     sms_content = fields.Text(string="SMS Message", readonly=True)
     record_name = fields.Char(string="Record Name", compute="_rec_nam")
     status_string = fields.Char(string="Status Code", readonly=True)
-    status_code = fields.Selection((('successful', 'successful'), ('failed', 'failed')),string='Status Code', readonly=True)
-    gateway_name = fields.Char(string="Gateway Name")
-    
+    status_code = fields.Selection((('successful', 'Sent'), ('failed', 'Failed to Send'), ('DELIVRD', 'Delivered'), ('EXPIRED','Timed Out'), ('UNDELIV', 'Undelivered')), string='Status Code', readonly=True)
+    gateway_name = fields.Char(string="Gateway Name", readonly=True)
+    sms_gateway_message_id = fields.Char(string="SMS Gateway Message ID", readonly=True)
     direction = fields.Selection((("I","INBOUND"),("O","OUTBOUND")), string="Direction", readonly=True)
     my_date = fields.Datetime(string="Date", readonly=True, help="The date and time the sms is received or sent")
 
