@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+<act_window name="Mass SMS Partners"
+    res_model="psms.compose.multi"
+    src_model="res.partner"
+    key2="client_action_multi" 
+    view_mode="form" target="new" 
+    view_type="form"
+    id="act_send_sms_partner_multi_menu" />
+
+<act_window name="Mass SMS Lead"
+    res_model="psms.compose.multi"
+    src_model="crm.lead"
+    key2="client_action_multi" 
+    view_mode="form" target="new" 
+    view_type="form"
+    id="act_send_sms_lead_multi_menu" />
+
     
-<act_window name="Send SMS Partner"
+<act_window name="SMS Partner"
     res_model="psms.compose"
     src_model="res.partner"
     key2="client_action_multi" 
@@ -11,7 +28,7 @@
     context="{'default_field_id':'mobile','default_to_number':mobile,'default_record_id':active_id,'default_model_id':active_model}"
     id="act_send_sms_partner_menu" />
 
-<act_window name="Send SMS Lead"
+<act_window name="SMS Lead"
     res_model="psms.compose"
     src_model="crm.lead"
     key2="client_action_multi" 
@@ -22,18 +39,42 @@
 
 <!-- ####################################################################### -->
 
+
+
+      <record model="ir.ui.view" id="psms_compose__multi_view">
+          <field name="name">psms compose multi view</field>
+          <field name="model">psms.compose.multi</field>
+          <field name="arch" type="xml">
+      	      <form>
+      	          <group>
+      	              <field name="sms_gateway"/>
+      	              <field name="sms_content"/>
+      	          </group>
+                  <footer>
+                      <button type="object" name="send_sms_multi" string="Mass Send SMS"/>
+                  </footer>      	          
+      	      </form>
+      	  </field>
+      </record>
+
+
+
+
+
+
       <record model="ir.ui.view" id="psms_compose_view">
           <field name="name">psms compose view</field>
           <field name="model">psms.compose</field>
           <field name="arch" type="xml">
       	      <form>
+      	          <span style="color:red;font-size:20px;"><field name="error_message"/></span>
       	          <group>
       	              <field name="sms_gateway"/>
       	              <field name="to_number" />
       	              <field name="sms_content"/>
       	          </group>
                   <footer>
-                      <button type="object" name="send_sms" string="Send SMS"/>
+                      <button type="object" name="send_entity" string="Send SMS"/>
                   </footer>      	          
       	      </form>
       	  </field>
@@ -98,6 +139,7 @@
       	              <field name="from_mobile"/>
       	              <field name="to_mobile"/>
       	              <field name="status_string"/>
+      	              <field name="status_code"/>
       	              <field name="sms_content"/>
       	          </group>
       	      </form>
@@ -110,12 +152,13 @@
           <field name="arch" type="xml">
       	      <tree>
       	          <field name="create_uid" string="By"/>
+      	          <field name="gateway_name"/>
       	          <field name="record_name"/>
       	          <field name="direction"/>
       	          <field name="my_date"/>
       	          <field name="from_mobile"/>
       	          <field name="to_mobile"/>
-      	          <field name="status_mini"/>
+      	          <field name="status_code"/>
       	          <field name="sms_content"/>
       	      </tree>
       	  </field>

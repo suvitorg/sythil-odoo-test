@@ -10,6 +10,6 @@
     ],
     'qweb': ['static/src/xml/psms_widget.xml'],
     'demo': [],
-    'depends': [],
+    'depends': ['crm'],
     'installable': True,
 }
