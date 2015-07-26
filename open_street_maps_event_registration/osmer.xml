@@ -8,13 +8,13 @@
           <field name="model">event.event</field>
           <field name="inherit_id" ref="event.view_event_form" />
       	  <field name="arch" type="xml">
-      	      <field name="organizer_id" position="after">     	          
-                  <button name="open_map" type="object" string="Create a map"/>
-                  <field name="osmer_url" widget="url"/>
-      	      </field>
+      	      <xpath expr="//form/header" position="inside">
+      	          <button name="open_map" type="object" string="Show Registrant Map"/>
+      	      </xpath>
       	  </field>
       </record>
       
+      <!--
       <template id="osmer_map">
       &lt;!DOCTYPE html&gt;
       <html>
@@ -51,7 +51,7 @@
 </body>
 </html>
 </template>
-
+-->
       
       
       

@@ -17,15 +17,18 @@ class osmer(models.Model):
     _inherit = "event.event"
 
     osmer_secret = fields.Char()
-    osmer_url = fields.Char(string="Map URL")
  
-    @api.one
+    @api.multi
     def open_map(self):
-        
+        self.ensure_one()
         rand_number = random.randint(1, 1000000)
-        
-        self.write({'osmer_secret':rand_number,'osmer_url':request.httprequest.host_url + "osmer_map?secret=" + str(rand_number)})
-        
+        map_url = request.httprequest.host_url + "osmer_map?secret=" + str(rand_number)
+        self.write({'osmer_secret':rand_number})
+        return {
+                  'type'     : 'ir.actions.act_url',
+                  'target'   : 'new',
+                  'url'      : map_url
+               }        
 
 class MyController(http.Controller):
 
