@@ -42,7 +42,7 @@ class MyController(http.Controller):
         
         return werkzeug.utils.redirect(rl[0].return_url)
     
-    @http.route('/form/myinsertjson',type="http")
+    @http.route('/form/myinsertjson',type="http", auth="public")
     def some_json(self, **kwargs):
         
         values = {}
@@ -70,14 +70,11 @@ class MyController(http.Controller):
         
         return return_string
         
-    @http.route('/form/autocomplete',type="http")
+    @http.route('/form/autocomplete',type="http", auth="public")
     def some_autocomplete(self, **kwargs):
         values = {}
         for field_name, field_value in kwargs.items():
             values[field_name] = field_value
-
-        _logger.error(values['q'])
-        _logger.error(values['f'])
         
         return_string = ""
         attach_obj = request.registry['res.country']
@@ -87,6 +84,6 @@ class MyController(http.Controller):
             return_string += "{'label':'" +  ri.name  + "'},"
         return_string = return_string[:-1]
         
-        return_string = values['callback'] + "(" + return_string + ");"
-        _logger.error(return_string)
+        return_string = values['callback'] + "([" + return_string + "]);"
+        
         return return_string

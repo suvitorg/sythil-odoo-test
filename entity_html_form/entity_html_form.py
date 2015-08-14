@@ -34,6 +34,9 @@ class ehtml_gen(models.Model):
     @api.one
     def generate_form(self):
         html_output = ""
+        html_output += "<link href=\"http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css\" rel=\"stylesheet\">\n";
+	html_output += "<script src=\"http://code.jquery.com/jquery-1.10.2.js\"></script>\n";
+        html_output += "<script src=\"http://code.jquery.com/ui/1.10.4/jquery-ui.js\"></script>\n";
         html_output += '<div id="ehtml_form">' + "\n"
         html_output += '<form method="POST" action="' + request.httprequest.host_url + 'form/myinsert">' + "\n"
         for fe in self.fields_ids:              
@@ -71,6 +74,29 @@ class ehtml_gen(models.Model):
 		    	            
     	        html_output += '/><br>\n'
     	    
+    	    if fe.html_field_type == "search":
+                html_output += "<script>\n"
+                html_output += "$(document).ready(function() {\n"
+                html_output += '    $("#' + fe.html_name + '").autocomplete({' + "\n"
+                html_output += "        source: function( request, response ) {\n"
+                html_output += '            $.ajax({url: "' + request.httprequest.host_url + 'form/autocomplete?callback=?",dataType: "jsonp",' + "\n"
+                html_output += '            data: {'+ "\n"
+                html_output += "                q: request.term\n"
+                html_output += "            },\n"
+                html_output += "            success: function( data ) {\n"
+                html_output += "                response( data );\n"
+                html_output += "            }});\n"
+                html_output += "        }\n"
+                html_output += "    });\n"
+                html_output += "});\n"
+                html_output += "</script>\n"
+                html_output += '<input type="search" id="' + fe.html_name + '" name="' + fe.html_name + '"'
+		    
+	        if fe.field_id.required == True:
+	            html_output += ' required'        
+		    	            
+    	        html_output += '/><br>\n'
+    	    
     	    html_output += "<br>\n"
     	html_output += '<input type="hidden" name="form_id" value="' + str(self.id) + '"/>' + "\n"
     	html_output += '<input type="submit" value="Submit Forms"/>' + "\n"
@@ -83,9 +109,9 @@ class ehtml_field_entry(models.Model):
     _name = "ehtml.fieldentry"
 
     html_id = fields.Many2one('ehtml.formgen')
-    field_id = fields.Many2one('ir.model.fields', domain="['|',('ttype','=','char'),'|',('ttype','=','text'),('ttype','=','integer'),('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Fields")
+    field_id = fields.Many2one('ir.model.fields', domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Fields")
     html_name = fields.Char(string="HTML Field Name")
-    html_field_type = fields.Selection((('text','Textbox'),('textarea','Textarea'),('number','Number')), string="HTML Field Type")
+    html_field_type = fields.Selection((('text','Textbox'),('textarea','Textarea'),('number','Number'), ('search','Search') ), string="HTML Field Type")
     
     @api.onchange('field_id')
     def update_html_name(self):
@@ -99,6 +125,10 @@ class ehtml_field_entry(models.Model):
         
         if (self.field_id.ttype == "integer"):
             self.html_field_type = "number"
+            
+        if (self.field_id.ttype == "many2one"):
+	            self.html_field_type = "search"
+        
         
 class ehtml_field_default(models.Model):
 
