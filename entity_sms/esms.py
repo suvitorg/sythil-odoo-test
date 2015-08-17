@@ -25,7 +25,7 @@ class esms_compose_multi(models.TransientModel):
 
     _name = "esms.compose.multi"
     
-    sms_gateway = fields.Many2one('psms.accounts', required=True, string='Account/Number')
+    sms_gateway = fields.Many2one('esms.accounts', required=True, string='Account/Number')
     sms_content = fields.Text('SMS Content')
     
     @api.one
@@ -63,6 +63,8 @@ class esms_compose(models.TransientModel):
 	   message_return = "Failed to Deliver"
 	elif my_sms.response_code == "SUCCESSFUL":
 	   message_return = "Successful"
+	else:
+	   message_return = "Failed"
 	   
 	if message_return != "Successful":
 	   return {
