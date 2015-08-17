@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
+<!--
 <act_window name="SMS Multiple Partners"
-    res_model="psms.compose.multi"
+    res_model="esms.compose.multi"
     src_model="res.partner"
     key2="client_action_multi" 
     view_mode="form" target="new" 
     view_type="form"
     id="act_send_sms_partner_multi_menu" />
+-->
 
-<act_window name="SMS Multiple Leads"
-    res_model="psms.compose.multi"
-    src_model="crm.lead"
-    key2="client_action_multi" 
-    view_mode="form" target="new" 
-    view_type="form"
-    id="act_send_sms_lead_multi_menu" />
-
-    
 <act_window name="SMS Partner"
-    res_model="psms.compose"
+    res_model="esms.compose"
     src_model="res.partner"
     key2="client_action_multi" 
     view_mode="form" target="new" 
@@ -28,22 +20,11 @@
     context="{'default_field_id':'mobile','default_to_number':mobile,'default_record_id':active_id,'default_model_id':active_model}"
     id="act_send_sms_partner_menu" />
 
-<act_window name="SMS Lead"
-    res_model="psms.compose"
-    src_model="crm.lead"
-    key2="client_action_multi" 
-    view_mode="form" target="new" 
-    view_type="form"
-    context="{'default_field_id':'mobile','default_to_number':mobile,'default_record_id':active_id,'default_model_id':active_model}"
-    id="act_send_sms_lead_menu" />
-
 <!-- ####################################################################### -->
 
-
-
-      <record model="ir.ui.view" id="psms_compose__multi_view">
-          <field name="name">psms compose multi view</field>
-          <field name="model">psms.compose.multi</field>
+      <record model="ir.ui.view" id="esms_compose_multi_view">
+          <field name="name">esms compose multi view</field>
+          <field name="model">esms.compose.multi</field>
           <field name="arch" type="xml">
       	      <form>
       	          <group>
@@ -57,14 +38,9 @@
       	  </field>
       </record>
 
-
-
-
-
-
-      <record model="ir.ui.view" id="psms_compose_view">
-          <field name="name">psms compose view</field>
-          <field name="model">psms.compose</field>
+      <record model="ir.ui.view" id="esms_compose_view">
+          <field name="name">esms compose view</field>
+          <field name="model">esms.compose</field>
           <field name="arch" type="xml">
       	      <form>
       	          <span style="color:red;font-size:20px;"><field name="error_message"/></span>
@@ -80,51 +56,52 @@
       	  </field>
       </record>
 
-
 <!-- ################################################################################### -->
 
-      <record model="ir.ui.view" id="psms_conf_form_view">
-          <field name="name">psms conf form view</field>
-          <field name="model">psms.conf</field>
+      <record model="ir.ui.view" id="esms_conf_form_view">
+          <field name="name">esms conf form view</field>
+          <field name="model">esms.accounts</field>
           <field name="arch" type="xml">
       	      <form>
       	          <group>
       	              <field name="name"/>
-      	              <field name="username"/>
-      	              <field name="password"/>
-      	              <field name="from_number"/>
+      	              <field name="account_gateway"/>
+      	              <field name="priority"/>
+      	              <field name="gateway_model" invisible="1"/>
       	          </group>
+      	          <h2 string="Gateway Hook">Gateway Settings</h2>
       	      </form>
       	  </field>
       </record>
 
-      <record model="ir.ui.view" id="psms_conf_tree_view">
-          <field name="name">psms conf tree view</field>
-          <field name="model">psms.conf</field>
+      <record model="ir.ui.view" id="esms_conf_tree_view">
+          <field name="name">esms conf tree view</field>
+          <field name="model">esms.accounts</field>
           <field name="arch" type="xml">
       	      <tree>
+      	          <field name="priority"/>
       	          <field name="name"/>
-      	          <field name="from_number"/>
+      	          <field name="account_gateway"/>
+
       	      </tree>
       	  </field>
       </record>
 
-
-      <record model="ir.actions.act_window" id="psms_action">
-          <field name="name">psms action</field>
-      	  <field name="res_model">psms.conf</field>
+      <record model="ir.actions.act_window" id="esms_action">
+          <field name="name">SMS Gateway Accounts</field>
+      	  <field name="res_model">esms.accounts</field>
       	  <field name="view_type">form</field>
       	  <field name="view_mode">tree,form</field>
       	  <field name="help" type="html">
-	      <p class="oe_view_nocontent_create">SMS gateway configuration</p>
+	      <p class="oe_view_nocontent_create">Add SMS Gateway Accounts</p>
 	  </field>
       </record>
       
 <!-- ##################################################################################################### -->       
       
-      <record model="ir.ui.view" id="psms_history_form_view">
-          <field name="name">psms history form view</field>
-          <field name="model">psms.history</field>
+      <record model="ir.ui.view" id="esms_history_form_view">
+          <field name="name">esms history form view</field>
+          <field name="model">esms.history</field>
           <field name="arch" type="xml">
       	      <form>
       	          <group>
@@ -148,9 +125,9 @@
       	  </field>
       </record>
 
-      <record model="ir.ui.view" id="psms_history_tree_view">
-          <field name="name">psms history tree view</field>
-          <field name="model">psms.history</field>
+      <record model="ir.ui.view" id="esms_history_tree_view">
+          <field name="name">esms history tree view</field>
+          <field name="model">esms.history</field>
           <field name="arch" type="xml">
       	      <tree>
       	          <field name="create_uid" string="By"/>
@@ -166,9 +143,9 @@
       	  </field>
       </record>
       
-      <record model="ir.actions.act_window" id="psms_history_action">
-          <field name="name">psms history action</field>
-          <field name="res_model">psms.history</field>
+      <record model="ir.actions.act_window" id="esms_history_action">
+          <field name="name">esms history action</field>
+          <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">tree,form</field>
           <field name="help" type="html">
@@ -177,9 +154,9 @@
       </record>
       
       
-      <menuitem id="psms_gateway_config_menu" name="SMS Gateway Configuration" parent="base.menu_custom" sequence="80"/>
-      <menuitem id="psms_accounts_menu" name="Accounts" parent="psms_gateway_config_menu" action="psms_action" sequence="90"/>
-      <menuitem id="psms_history_menu" name="SMS History" parent="psms_gateway_config_menu" action="psms_history_action" sequence="100"/>
+      <menuitem id="esms_gateway_config_menu" name="SMS Gateway Configuration" parent="base.menu_custom" sequence="80"/>
+      <menuitem id="esms_accounts_menu" name="Accounts" parent="esms_gateway_config_menu" action="esms_action" sequence="90"/>
+      <menuitem id="esms_history_menu" name="SMS History" parent="esms_gateway_config_menu" action="esms_history_action" sequence="100"/>
         
   </data>
 </openerp>

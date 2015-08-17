@@ -1,4 +1,4 @@
-openerp.partner_sms = function (instance, local){
+openerp.entity_sms = function (instance, local){
 var _t = instance.web._t,
         _lt = instance.web._lt;
 var QWeb = instance.web.qweb;
@@ -48,7 +48,7 @@ local.FieldChar2 = instance.web.form.AbstractField.extend({
 
 			        this.do_action({
 	                    type:'ir.actions.act_window',
-	                    res_model:'psms.compose',
+	                    res_model:'esms.compose',
 	                    views: [[false,'form']],
 	                    target:'new',
 	                    context: {'default_field_id':this.name,'default_to_number':this.get("value"),'default_record_id':this.getParent().get_fields_values()['id'],'default_model_id':this.getParent().model},
@@ -60,7 +60,7 @@ local.FieldChar2 = instance.web.form.AbstractField.extend({
 
 });
 
-instance.web.form.widgets.add('smsfield', 'instance.partner_sms.FieldChar2');
+instance.web.form.widgets.add('smsfield', 'instance.entity_sms.FieldChar2');
 
 
 

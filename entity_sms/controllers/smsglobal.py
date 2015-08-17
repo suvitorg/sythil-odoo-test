@@ -5,8 +5,8 @@ _logger = logging.getLogger(__name__)
 
 class MyController(http.Controller):
 
-    @http.route('/sms/receipt',type="http", auth="public")
-    def sms_receipt(self, **kwargs):
+    @http.route('/sms/smsglobal/receipt', type="http", auth="public")
+    def sms__smsglobal_receipt(self, **kwargs):
         _logger.error("read re")
         values = {}
 	for field_name, field_value in kwargs.items():
@@ -14,7 +14,7 @@ class MyController(http.Controller):
             
         gateway_name = "SMSGLOBAL"
         
-        attach_obj = request.registry['psms.history']
+        attach_obj = request.registry['esms.history']
 	rs = attach_obj.search(request.cr, SUPERUSER_ID, [('gateway_name','=',gateway_name), ('sms_gateway_message_id','=',values['msgid'])], limit=1)
 	sms_message = attach_obj.browse(request.cr, SUPERUSER_ID, rs)
         
