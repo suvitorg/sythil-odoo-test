@@ -9,9 +9,9 @@
       	      <xpath expr="//h2[@string='Gateway Hook']" position="after">
       	          <div attrs="{'invisible': [('gateway_model', '!=', 'esms.clickatell')]}">
 		      <group>
-		          <field name="clickatell_username"/>
-		          <field name="clickatell_password"/>
-		          <field name="clickatell_api_id"/>
+		          <field name="clickatell_username" groups="base.group_erp_manager,base.group_system"/>
+		          <field name="clickatell_password" groups="base.group_erp_manager,base.group_system"/>
+		          <field name="clickatell_api_id" groups="base.group_erp_manager,base.group_system"/>
 	              </group>
     	          </div>
       	      </xpath>

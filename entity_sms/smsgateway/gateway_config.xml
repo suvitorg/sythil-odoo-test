@@ -9,7 +9,7 @@
       	      <xpath expr="//h2[@string='Gateway Hook']" position="after">
       	          <div attrs="{'invisible': [('gateway_model', '!=', 'esms.smsgateway')]}">
 		      <group>
-		          <field name="smsgateway_accountkey"/>
+		          <field name="smsgateway_accountkey" groups="base.group_erp_manager,base.group_system"/>
 	              </group>
     	          </div>
       	      </xpath>

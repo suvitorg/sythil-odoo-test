@@ -29,7 +29,7 @@
           <field name="arch" type="xml">
       	      <form>
       	          <group>
-      	              <field name="sms_gateway"/>
+      	              <field name="sms_gateway"  widget="selection"/>
       	              <field name="sms_content"/>
       	          </group>
                   <footer>
@@ -46,7 +46,7 @@
       	      <form>
       	          <span style="color:red;font-size:20px;"><field name="error_message"/></span>
       	          <group>
-      	              <field name="sms_gateway"/>
+      	              <field name="sms_gateway" widget="selection"/>
       	              <field name="to_number" />
       	              <field name="sms_content"/>
       	          </group>
