@@ -36,7 +36,7 @@ class smsgateway_core(models.Model):
         my_model = self.env['ir.model'].search([('model','=',my_model_name)])
         my_field = self.env['ir.model.fields'].search([('name','=',my_field_name)])
 
-        esms_history = self.env['esms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'from_mobile':self.env.user.partner_id.mobile,'to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'gateway_name': gateway_name, 'direction':'O','my_date':datetime.utcnow(), 'status_code':status_code})
+        esms_history = self.env['esms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'from_mobile':'','to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'gateway_name': gateway_name, 'direction':'O','my_date':datetime.utcnow(), 'status_code':status_code})
 
         my_sms_response = sms_response()
         my_sms_response.response_string = response_string.text
