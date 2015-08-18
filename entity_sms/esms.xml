@@ -66,7 +66,7 @@
       	      <form>
       	          <group>
       	              <field name="name"/>
-      	              <field name="account_gateway"/>
+      	              <field name="account_gateway" widget="selection"/>
       	              <field name="priority"/>
       	              <field name="gateway_model" invisible="1"/>
       	          </group>
@@ -107,11 +107,11 @@
       	      <form>
       	          <group>
       	              <field name="my_date"/>
-      	              <field name="gateway_name"/>
       	              <field name="sms_gateway_message_id"/>
-      	              <field name="model_id"/>
+      	              <field name="account_id" options="{'no_open': True}"/>
+      	              <field name="model_id" options="{'no_open': True}"/>
       	              <field name="model_name"/>
-      	              <field name="field_id"/>
+      	              <field name="field_id" options="{'no_open': True}"/>
       	              <field name="record_id"/>
       	              <field name="create_uid"/>
       	              <field name="direction"/>
@@ -132,7 +132,7 @@
           <field name="arch" type="xml">
       	      <tree>
       	          <field name="create_uid" string="By"/>
-      	          <field name="gateway_name"/>
+      	          <field name="account_id"/>
       	          <field name="record_name"/>
       	          <field name="direction"/>
       	          <field name="my_date"/>

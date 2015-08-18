@@ -1,6 +1,6 @@
 {
     'name': "Entity SMS (SMSGATEWAY,CLICKATELL,SMSGLOBAL)",
-    'version': "1.3",
+    'version': "1.4",
     'author': "Sythil",
     'category': "Tools",
     'summary': "Allows you send smses from any model",

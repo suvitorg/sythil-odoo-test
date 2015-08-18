@@ -82,6 +82,7 @@ class esms_history(models.Model):
     _name = "esms.history"
     
     record_id = fields.Integer(readonly=True, string="Record")
+    account_id = fields.Many2one('esms.accounts', readonly=True, string="SMS Account")
     model_id = fields.Many2one('ir.model', readonly=True, string="Model")
     model_name = fields.Char(string="Model Name", related='model_id.model', readonly=True)
     field_id = fields.Many2one('ir.model.fields', readonly=True, string="Field")
@@ -91,7 +92,6 @@ class esms_history(models.Model):
     record_name = fields.Char(string="Record Name", compute="_rec_nam")
     status_string = fields.Char(string="Status Code", readonly=True)
     status_code = fields.Selection((('successful', 'Sent'), ('failed', 'Failed to Send'), ('DELIVRD', 'Delivered'), ('EXPIRED','Timed Out'), ('UNDELIV', 'Undelivered')), string='Status Code', readonly=True)
-    gateway_name = fields.Char(string="Gateway Name", readonly=True)
     sms_gateway_message_id = fields.Char(string="SMS Gateway Message ID", readonly=True)
     direction = fields.Selection((("I","INBOUND"),("O","OUTBOUND")), string="Direction", readonly=True)
     my_date = fields.Datetime(string="Date", readonly=True, help="The date and time the sms is received or sent")
