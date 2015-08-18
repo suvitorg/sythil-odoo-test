@@ -104,7 +104,7 @@
           <field name="name">esms history form view</field>
           <field name="model">esms.history</field>
           <field name="arch" type="xml">
-      	      <form>
+      	      <form create="false" edit="false">
       	          <group>
       	              <field name="my_date"/>
       	              <field name="sms_gateway_message_id"/>
@@ -130,7 +130,7 @@
           <field name="name">esms history tree view</field>
           <field name="model">esms.history</field>
           <field name="arch" type="xml">
-      	      <tree>
+      	      <tree edit="false" create="false">
       	          <field name="create_uid" string="By"/>
       	          <field name="account_id"/>
       	          <field name="record_name"/>
@@ -145,12 +145,25 @@
       </record>
       
       <record model="ir.actions.act_window" id="esms_history_action">
-          <field name="name">esms history action</field>
+          <field name="name">SMS history</field>
           <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">tree,form</field>
           <field name="help" type="html">
       	      <p class="oe_view_nocontent_create">SMS History</p>
+      	  </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="esms_user_history_action">
+          <field name="name">SMS personal history</field>
+          <field name="res_model">esms.history</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+	  <field name="domain">[('create_uid', '=', uid)]</field>
+          <field name="help" type="html">
+		<p>
+                    This list contains SMS messages sent by you.
+                </p>
       	  </field>
       </record>
       
@@ -159,5 +172,12 @@
       <menuitem id="esms_accounts_menu" name="Accounts" parent="esms_gateway_config_menu" action="esms_action" sequence="90"/>
       <menuitem id="esms_history_menu" name="SMS History" parent="esms_gateway_config_menu" action="esms_history_action" sequence="100"/>
         
+      <menuitem id="esms_user_history_title" name="SMS" parent="mail.mail_feeds_main" groups="base.group_user"/>
+      <record id="esms_user_history_menu" model="ir.ui.menu">
+          <field name="name">SMS History</field>
+          <field name="sequence" eval="10"/>
+          <field name="action" ref="esms_user_history_action"/>
+          <field name="parent_id" ref="esms_user_history_title"/>
+      </record>
   </data>
 </openerp>
