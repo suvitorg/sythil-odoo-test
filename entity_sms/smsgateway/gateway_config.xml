@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <record model="ir.ui.view" id="smsgateway_conf_form_view">
+          <field name="name">esms conf form view</field>
+          <field name="model">esms.accounts</field>
+          <field name="inherit_id" ref="entity_sms.esms_conf_form_view"/>
+          <field name="arch" type="xml">
+      	      <xpath expr="//h2[@string='Gateway Hook']" position="after">
+      	          <div attrs="{'invisible': [('gateway_model', '!=', 'esms.smsgateway')]}">
+		      <group>
+		          <field name="smsgateway_accountkey"/>
+	              </group>
+    	          </div>
+      	      </xpath>
+      	  </field>
+      </record>
+  </data>
+</openerp>
