@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-<!--
+<!-- -->
+
 <act_window name="SMS Multiple Partners"
     res_model="esms.compose.multi"
     src_model="res.partner"
     key2="client_action_multi" 
     view_mode="form" target="new" 
     view_type="form"
+    multi="True"
     id="act_send_sms_partner_multi_menu" />
--->
 
 <act_window name="SMS Partner"
     res_model="esms.compose"

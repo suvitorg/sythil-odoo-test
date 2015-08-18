@@ -33,7 +33,8 @@ class esms_compose_multi(models.TransientModel):
         for send_to in self._context['active_ids']:
             my_model = self._context['active_model']
             p_mobile = self.env[my_model].search([('id','=',send_to)])[0].mobile
-            my_sms = self.env['esms.core'].send_sms(self.sms_gateway.id, p_mobile, self.sms_content, my_model, send_to, 'mobile')
+	    gateway_model = self.sms_gateway.account_gateway.gateway_model_name
+            my_sms = self.env[gateway_model].send_sms(self.sms_gateway.id, p_mobile, self.sms_content, my_model, send_to, 'mobile')
 
 
 class esms_compose(models.TransientModel):
