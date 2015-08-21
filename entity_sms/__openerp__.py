@@ -1,5 +1,5 @@
 {
-    'name': "Entity SMS (SMSGATEWAY,CLICKATELL,SMSGLOBAL)",
+    'name': "Entity SMS V2 (SMSGATEWAY,CLICKATELL,SMSGLOBAL)",
     'version': "1.4",
     'author': "Sythil",
     'category': "Tools",
