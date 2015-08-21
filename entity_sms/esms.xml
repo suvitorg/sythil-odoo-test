@@ -46,9 +46,12 @@
       	      <form>
       	          <span style="color:red;font-size:20px;"><field name="error_message"/></span>
       	          <group>
+<<<<<<< HEAD
       	              <field name="record_id" invisible="1"/>      	              
                       <field name="model_id" invisible="1"/>
       	              <field name="template_id" domain="[('model_id.model','=',model_id)]" />
+=======
+>>>>>>> origin/8.0
       	              <field name="sms_gateway" widget="selection"/>
       	              <field name="to_number" />
       	              <field name="sms_content"/>
