@@ -25,7 +25,7 @@ class esms_compose_multi(models.TransientModel):
 
     _name = "esms.compose.multi"
     
-    sms_gateway = fields.Many2one('psms.accounts', required=True, string='Account/Number')
+    sms_gateway = fields.Many2one('esms.accounts', required=True, string='Account/Number')
     sms_content = fields.Text('SMS Content')
     
     @api.one
@@ -33,7 +33,8 @@ class esms_compose_multi(models.TransientModel):
         for send_to in self._context['active_ids']:
             my_model = self._context['active_model']
             p_mobile = self.env[my_model].search([('id','=',send_to)])[0].mobile
-            my_sms = self.env['esms.core'].send_sms(self.sms_gateway.id, p_mobile, self.sms_content, my_model, send_to, 'mobile')
+	    gateway_model = self.sms_gateway.account_gateway.gateway_model_name
+            my_sms = self.env[gateway_model].send_sms(self.sms_gateway.id, p_mobile, self.sms_content, my_model, send_to, 'mobile')
 
 
 class esms_compose(models.TransientModel):
@@ -47,6 +48,17 @@ class esms_compose(models.TransientModel):
     to_number = fields.Char(required=True, string='To Mobile Number', readonly=True)
     sms_content = fields.Text(string='SMS Content')
     field_id = fields.Char(string='Field Name')
+    template_id = fields.Many2one('esms.templates', string="Template")
+    
+    @api.onchange('template_id')
+    def load_template(self):
+        if self.template_id.id != False:
+            
+            sms_rendered_content = self.env['esms.templates'].render_template(self.template_id.template_body, self.template_id.model_id.model, self.record_id)
+    
+            self.sms_content = sms_rendered_content
+            #self.sms_content = self.template_id.template_body
+            self.sms_gateway = self.template_id.account_gateway.id
 
     @api.multi
     def send_entity(self):
@@ -63,6 +75,8 @@ class esms_compose(models.TransientModel):
 	   message_return = "Failed to Deliver"
 	elif my_sms.response_code == "SUCCESSFUL":
 	   message_return = "Successful"
+	else:
+	   message_return = "Failed"
 	   
 	if message_return != "Successful":
 	   return {
@@ -79,6 +93,7 @@ class esms_history(models.Model):
     _name = "esms.history"
     
     record_id = fields.Integer(readonly=True, string="Record")
+    account_id = fields.Many2one('esms.accounts', readonly=True, string="SMS Account")
     model_id = fields.Many2one('ir.model', readonly=True, string="Model")
     model_name = fields.Char(string="Model Name", related='model_id.model', readonly=True)
     field_id = fields.Many2one('ir.model.fields', readonly=True, string="Field")
@@ -88,7 +103,6 @@ class esms_history(models.Model):
     record_name = fields.Char(string="Record Name", compute="_rec_nam")
     status_string = fields.Char(string="Status Code", readonly=True)
     status_code = fields.Selection((('successful', 'Sent'), ('failed', 'Failed to Send'), ('DELIVRD', 'Delivered'), ('EXPIRED','Timed Out'), ('UNDELIV', 'Undelivered')), string='Status Code', readonly=True)
-    gateway_name = fields.Char(string="Gateway Name", readonly=True)
     sms_gateway_message_id = fields.Char(string="SMS Gateway Message ID", readonly=True)
     direction = fields.Selection((("I","INBOUND"),("O","OUTBOUND")), string="Direction", readonly=True)
     my_date = fields.Datetime(string="Date", readonly=True, help="The date and time the sms is received or sent")

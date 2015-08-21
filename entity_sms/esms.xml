@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-<!--
+<!-- -->
+
 <act_window name="SMS Multiple Partners"
     res_model="esms.compose.multi"
     src_model="res.partner"
     key2="client_action_multi" 
     view_mode="form" target="new" 
     view_type="form"
+    multi="True"
     id="act_send_sms_partner_multi_menu" />
--->
 
 <act_window name="SMS Partner"
     res_model="esms.compose"
@@ -28,7 +29,7 @@
           <field name="arch" type="xml">
       	      <form>
       	          <group>
-      	              <field name="sms_gateway"/>
+      	              <field name="sms_gateway"  widget="selection"/>
       	              <field name="sms_content"/>
       	          </group>
                   <footer>
@@ -45,7 +46,10 @@
       	      <form>
       	          <span style="color:red;font-size:20px;"><field name="error_message"/></span>
       	          <group>
-      	              <field name="sms_gateway"/>
+      	              <field name="record_id" invisible="1"/>      	              
+                      <field name="model_id" invisible="1"/>
+      	              <field name="template_id" domain="[('model_id.model','=',model_id)]" />
+      	              <field name="sms_gateway" widget="selection"/>
       	              <field name="to_number" />
       	              <field name="sms_content"/>
       	          </group>
@@ -65,7 +69,7 @@
       	      <form>
       	          <group>
       	              <field name="name"/>
-      	              <field name="account_gateway"/>
+      	              <field name="account_gateway" widget="selection"/>
       	              <field name="priority"/>
       	              <field name="gateway_model" invisible="1"/>
       	          </group>
@@ -103,14 +107,14 @@
           <field name="name">esms history form view</field>
           <field name="model">esms.history</field>
           <field name="arch" type="xml">
-      	      <form>
+      	      <form create="false" edit="false">
       	          <group>
       	              <field name="my_date"/>
-      	              <field name="gateway_name"/>
       	              <field name="sms_gateway_message_id"/>
-      	              <field name="model_id"/>
+      	              <field name="account_id" options="{'no_open': True}"/>
+      	              <field name="model_id" options="{'no_open': True}"/>
       	              <field name="model_name"/>
-      	              <field name="field_id"/>
+      	              <field name="field_id" options="{'no_open': True}"/>
       	              <field name="record_id"/>
       	              <field name="create_uid"/>
       	              <field name="direction"/>
@@ -129,9 +133,9 @@
           <field name="name">esms history tree view</field>
           <field name="model">esms.history</field>
           <field name="arch" type="xml">
-      	      <tree>
+      	      <tree edit="false" create="false">
       	          <field name="create_uid" string="By"/>
-      	          <field name="gateway_name"/>
+      	          <field name="account_id"/>
       	          <field name="record_name"/>
       	          <field name="direction"/>
       	          <field name="my_date"/>
@@ -144,12 +148,25 @@
       </record>
       
       <record model="ir.actions.act_window" id="esms_history_action">
-          <field name="name">esms history action</field>
+          <field name="name">SMS history</field>
           <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">tree,form</field>
           <field name="help" type="html">
       	      <p class="oe_view_nocontent_create">SMS History</p>
+      	  </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="esms_user_history_action">
+          <field name="name">SMS personal history</field>
+          <field name="res_model">esms.history</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+	  <field name="domain">[('create_uid', '=', uid)]</field>
+          <field name="help" type="html">
+		<p>
+                    This list contains SMS messages sent by you.
+                </p>
       	  </field>
       </record>
       
@@ -158,5 +175,12 @@
       <menuitem id="esms_accounts_menu" name="Accounts" parent="esms_gateway_config_menu" action="esms_action" sequence="90"/>
       <menuitem id="esms_history_menu" name="SMS History" parent="esms_gateway_config_menu" action="esms_history_action" sequence="100"/>
         
+      <menuitem id="esms_user_history_title" name="SMS" parent="mail.mail_feeds_main" groups="base.group_user"/>
+      <record id="esms_user_history_menu" model="ir.ui.menu">
+          <field name="name">SMS History</field>
+          <field name="sequence" eval="10"/>
+          <field name="action" ref="esms_user_history_action"/>
+          <field name="parent_id" ref="esms_user_history_title"/>
+      </record>
   </data>
 </openerp>
