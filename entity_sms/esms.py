@@ -57,7 +57,6 @@ class esms_compose(models.TransientModel):
             sms_rendered_content = self.env['esms.templates'].render_template(self.template_id.template_body, self.template_id.model_id.model, self.record_id)
     
             self.sms_content = sms_rendered_content
-            #self.sms_content = self.template_id.template_body
             self.sms_gateway = self.template_id.account_gateway.id
 
     @api.multi
@@ -65,47 +64,46 @@ class esms_compose(models.TransientModel):
         self.ensure_one()
         
         gateway_model = self.sms_gateway.account_gateway.gateway_model_name
-        my_sms = self.env[gateway_model].send_sms(self.sms_gateway.id, self.to_number, self.sms_content, self.model_id, self.record_id, self.field_id)
+        my_sms = self.env[gateway_model].send_message(self.sms_gateway.id, self.env.user.partner_id.mobile, self.to_number, self.sms_content, self.model_id, self.record_id, self.field_id)
         
-        if my_sms.response_code == "INSUFFICIENT CREDIT":
-	    message_return = "Insufficent Credit"
-	elif my_sms.response_code == "BAD CREDENTIALS":
-	    message_return = "Bad Credentials"
-	elif my_sms.response_code == "FAILED DELIVERY":
-	   message_return = "Failed to Deliver"
-	elif my_sms.response_code == "SUCCESSFUL":
-	   message_return = "Successful"
-	else:
-	   message_return = "Failed"
-	   
-	if message_return != "Successful":
+        #use the human readable error message if present
+        error_message = ""
+        if my_sms.human_read_error != "":
+            error_message = my_sms.human_read_error
+        else:
+            error_message = my_sms.response_string
+            
+	#display the screen with an error code if the sms/mms was not successfully sent
+	if my_sms.delivary_state == "failed":
 	   return {
 	   'type':'ir.actions.act_window',
 	   'res_model':'esms.compose',
 	   'view_type':'form',
 	   'view_mode':'form',
 	   'target':'new',
-	   'context':{'default_field_id':'mobile','default_to_number':self.to_number,'default_record_id':self.record_id,'default_model_id':self.model_id, 'default_error_message':message_return + " (" + my_sms.response_string + ")"}
+	   'context':{'default_field_id': self.field_id,'default_sms_gateway': self.sms_gateway.id, 'default_to_number':self.to_number,'default_record_id':self.record_id,'default_model_id':self.model_id, 'default_error_message':error_message}
 	   }
-       
+	   
 class esms_history(models.Model):
 
     _name = "esms.history"
+    _order = "my_date desc"
     
     record_id = fields.Integer(readonly=True, string="Record")
     account_id = fields.Many2one('esms.accounts', readonly=True, string="SMS Account")
     model_id = fields.Many2one('ir.model', readonly=True, string="Model")
     model_name = fields.Char(string="Model Name", related='model_id.model', readonly=True)
     field_id = fields.Many2one('ir.model.fields', readonly=True, string="Field")
-    from_mobile = fields.Char(string="From Mobile Number", readonly=True)
-    to_mobile = fields.Char(string="To Mobile Number", readonly=True)
+    from_mobile = fields.Char(string="From Mobile", readonly=True)
+    to_mobile = fields.Char(string="To Mobile", readonly=True)
     sms_content = fields.Text(string="SMS Message", readonly=True)
     record_name = fields.Char(string="Record Name", compute="_rec_nam")
-    status_string = fields.Char(string="Status Code", readonly=True)
-    status_code = fields.Selection((('successful', 'Sent'), ('failed', 'Failed to Send'), ('DELIVRD', 'Delivered'), ('EXPIRED','Timed Out'), ('UNDELIV', 'Undelivered')), string='Status Code', readonly=True)
+    status_string = fields.Char(string="Response String", readonly=True)
+    status_code = fields.Selection((('failed', 'Failed to Send'), ('queued', 'Queued'), ('successful', 'Sent'), ('DELIVRD', 'Delivered'), ('EXPIRED','Timed Out'), ('UNDELIV', 'Undelivered')), string='Delivary State', readonly=True)
     sms_gateway_message_id = fields.Char(string="SMS Gateway Message ID", readonly=True)
     direction = fields.Selection((("I","INBOUND"),("O","OUTBOUND")), string="Direction", readonly=True)
-    my_date = fields.Datetime(string="Date", readonly=True, help="The date and time the sms is received or sent")
+    my_date = fields.Datetime(string="Send/Receive Date", readonly=True, help="The date and time the sms is received or sent")
+    delivary_error_string = fields.Text(string="Delivary Error")
 
     @api.one
     @api.depends('record_id', 'model_id')

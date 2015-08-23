@@ -1,7 +1,15 @@
 <div style="margin-left:100px;margin-right:100px;">
 <h2>Description</h2>
-Allows you send SMS's using the smsglobal,clickatell,smsgateway.ca gateways<br>
+Allows you send SMS's using the twilio, smsglobal, smsgateway.ca gateways<br>
 This module only sends smses, it does not yet recieve them<br>
+<br>
+<b>Individual gateway features</b>
+<table style="width:100%;">
+<tr><th>SMS Gateway</th><th>Send SMS</th><th>Delivary Receipts</th></tr>
+<tr><td>twilio</td><td>O</td><td>O</td></tr>
+<tr><td>smsglobal</td><td>O</td><td>X</td></tr>
+<tr><td>smsgateway.ca</td><td>O</td><td>X</td></tr>
+</table>
 <br>
 <h2>Features</h2>
 <ul>
@@ -13,7 +21,7 @@ This module only sends smses, it does not yet recieve them<br>
 </ul>
 <h2>Using the module</h2>
 <h3>Initial Configuration</h3>
-1.  Create a smsglobal/clickatell/smsgateway account and add credit<br>
+1.  Create a twilio/smsglobal/smsgateway account and add credit<br>
 2.  Go to Settings->SMS Gateway Configuration->Accounts and enter the all the api settings<br>
 <br>
 <h3>Sending an SMS to partners / customers / suppliers and leads</h3>
@@ -26,14 +34,18 @@ This module only sends smses, it does not yet recieve them<br>
 <h3>View SMS Histroy</h3>
 1.  Go to Settings->SMS Gateway Configuration->SMS History<br>
 <br>
+<h3>Create SMS Template</h3>
+1.  Go to Settings->SMS Gateway Configuration->SMS Templates<br>
+2.  Select the target model, sms account and type away<br>
+<br>
 <h2>Feature Ideas</h2>
-1.  SMS templates<br>
-2.  Inbound SMS<br>
-3.  Inbound MMS<br>
-4.  Oubound MMS<br>
-5.  Import sms/mss history from mobile phones<br>
-6.  Send SMS from code<br>
-7.  Send to multiple partners at once<br>
+1.  Inbound SMS<br>
+2.  Inbound MMS<br>
+3.  Oubound MMS<br>
+4.  Import sms/mss history from mobile phones<br>
+5.  Send SMS from code<br>
+6.  Mass SMS similiar to mass email with reports on delivary rate and OPT outs<br>
+7.  Kanabn view for sms history<br>
 <br>
 <h3>Contributors</h3>
 alex2grad<br>

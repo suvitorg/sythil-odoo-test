@@ -9,10 +9,10 @@
         'esms.xml',
         'esms.gateways.csv',
 	'security/ir.model.access.csv',
+        'esms_templates.xml',
         'smsgateway/gateway_config.xml',
-        'clickatell/gateway_config.xml',
         'smsglobal/gateway_config.xml',
-        'esms_templates.xml'
+        'twilio/gateway_config.xml',
     ],
     'qweb': ['static/src/xml/esms_widget.xml'],
     'demo': [],

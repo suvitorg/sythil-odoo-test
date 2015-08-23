@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-<!-- -->
 
 <act_window name="SMS Multiple Partners"
     res_model="esms.compose.multi"
@@ -33,8 +32,8 @@
       	              <field name="sms_content"/>
       	          </group>
                   <footer>
-                      <button type="object" name="send_sms_multi" string="Mass Send SMS"/>
-                  </footer>      	          
+                      <button type="object" name="send_sms_multi" string="Send Multiple SMS"/>
+                  </footer>
       	      </form>
       	  </field>
       </record>
@@ -46,12 +45,9 @@
       	      <form>
       	          <span style="color:red;font-size:20px;"><field name="error_message"/></span>
       	          <group>
-<<<<<<< HEAD
       	              <field name="record_id" invisible="1"/>      	              
                       <field name="model_id" invisible="1"/>
       	              <field name="template_id" domain="[('model_id.model','=',model_id)]" />
-=======
->>>>>>> origin/8.0
       	              <field name="sms_gateway" widget="selection"/>
       	              <field name="to_number" />
       	              <field name="sms_content"/>
@@ -126,6 +122,7 @@
       	              <field name="to_mobile"/>
       	              <field name="status_string"/>
       	              <field name="status_code"/>
+      	              <field name="delivary_error_string"/>
       	              <field name="sms_content"/>
       	          </group>
       	      </form>

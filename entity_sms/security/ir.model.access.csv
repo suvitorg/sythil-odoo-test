@@ -5,5 +5,5 @@ access_esms_history_user,access_esms_history,model_esms_history,base.group_user,
 access_esms_history_system,access_esms_history,model_esms_history,base.group_system,1,1,1,1
 access_esms_gateways,access_esms_gateways,model_esms_gateways,,1,0,0,0
 access_esms_smsglobal,access_esms_smsglobal,model_esms_smsglobal,,1,0,0,0
-access_esms_clickatell,access_esms_clickatell,model_esms_clickatell,,1,0,0,0
+access_esms_twilio,access_esms_twilio,model_esms_twilio,,1,0,0,0
 access_esms_smsgateway,access_esms_smsgateway,model_esms_smsgateway,,1,0,0,0
