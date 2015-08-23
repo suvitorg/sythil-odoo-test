@@ -1,5 +1,5 @@
 {
-    'name': "Entity SMS V2 (SMSGLOBAL)",
+    'name': "Entity SMS V1 (SMSGLOBAL)",
     'version': "1.1",
     'author': "Sythil",
     'category': "Tools",
