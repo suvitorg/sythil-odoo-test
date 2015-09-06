@@ -1,14 +1,13 @@
 <div style="margin-left:100px;margin-right:100px;">
 <h2>Description</h2>
-Allows you send SMS's using the twilio, smsglobal, smsgateway.ca gateways<br>
-This module only sends smses, it does not yet recieve them<br>
+Allows you send/receive SMS's using the twilio, smsglobal, smsgateway.ca gateways<br>
 <br>
 <b>Individual gateway features</b>
 <table style="width:100%;">
-<tr><th>SMS Gateway</th><th>Send SMS</th><th>Delivary Receipts</th></tr>
-<tr><td>twilio</td><td>O</td><td>O</td></tr>
-<tr><td>smsglobal</td><td>O</td><td>X</td></tr>
-<tr><td>smsgateway.ca</td><td>O</td><td>X</td></tr>
+<tr><th>SMS Gateway</th><th>Send SMS</th><th>Delivary Receipts</th><th>Receive SMS</th></tr>
+<tr><td>twilio</td><td>O</td><td>O</td><td>O</td></tr>
+<tr><td>smsglobal</td><td>O</td><td>X</td><td>X</td></tr>
+<tr><td>smsgateway.ca</td><td>O</td><td>X</td><td>X</td></tr>
 </table>
 <br>
 <h2>Features</h2>
@@ -16,7 +15,7 @@ This module only sends smses, it does not yet recieve them<br>
 <li>Configure multiple accounts for each gateway</li>
 <li>View SMS history</li>
 <li>Simple sending of smses for leads and partners</li>
-<li>Allows send of smses from any model, even ones with multiple mobile number fields</li>
+<li>Automaticlly creates new leads if a lead or partner doesn't have that mobile number
 <li>Built modularly so you can easily add a new gateway of your choice</li>
 </ul>
 <h2>Using the module</h2>
@@ -39,13 +38,11 @@ This module only sends smses, it does not yet recieve them<br>
 2.  Select the target model, sms account and type away<br>
 <br>
 <h2>Feature Ideas</h2>
-1.  Inbound SMS<br>
-2.  Inbound MMS<br>
-3.  Oubound MMS<br>
-4.  Import sms/mss history from mobile phones<br>
-5.  Send SMS from code<br>
-6.  Mass SMS similiar to mass email with reports on delivary rate and OPT outs<br>
-7.  Kanabn view for sms history<br>
+1.  Inbound MMS<br>
+2.  Oubound MMS<br>
+3.  Import sms/mss history from mobile phones<br>
+4.  Send SMS from code<br>
+5.  Mass SMS similiar to mass email with reports on delivary rate and OPT outs<br>
 <br>
 <h3>Contributors</h3>
 alex2grad<br>

@@ -13,6 +13,7 @@
                                 <field name="model_id" required="1" on_change="onchange_model_id(model_id)" options="{'no_create': True}"/>
                                 <field name="model" invisible="1"/>
                                 <field name="account_gateway"/>
+                                <field name="sms_from"/>
                             </group>
                         </div>
                         <notebook>
@@ -46,7 +47,7 @@
       	      </tree>
       	  </field>
       </record>
-      
+
       <record model="ir.actions.act_window" id="esms_templates_action">
           <field name="name">SMS Templates</field>
           <field name="res_model">esms.templates</field>
