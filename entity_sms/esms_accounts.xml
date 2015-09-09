@@ -6,9 +6,6 @@
           <field name="model">esms.accounts</field>
           <field name="arch" type="xml">
       	      <form>
-      	      <header>
-	          <button name="check_all_messages" type="object" string="Check All Accounts" help="Manually check for new inbound messages"/>
-              </header>
       	          <group>
       	              <field name="name"/>
       	              <field name="account_gateway" widget="selection"/>
