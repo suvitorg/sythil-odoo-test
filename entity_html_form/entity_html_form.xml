@@ -11,18 +11,23 @@
                           <field name="name"/>
                           <field name="return_url" placeholder="http://www.google.com.au"/>
                           <field name="model_id"/>
+                          <field name="form_type"/>
                           <field name="required_fields"/>
-                          <field name="fields_ids" context="{'html_id': active_id}" domain="['|',('ttype','=','char'),'|',('ttype','=','text'),('ttype','=','integer'),('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid'),('model_id','=',model_id)]">
+                          <field name="fields_ids" context="{'html_id': active_id,'default_model_id':model_id}">
 		              <tree editable="bottom">
-		                  <field name="field_id"/>
+		                  <field name="model_id" invisible="1"/>
+		                  <field name="model" invisible="1"/>
+		                  <field name="field_id" domain="['|',('ttype','=','char'),'|',('ttype','=','text'),('ttype','=','integer'),('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid'),('model_id','=',model)]"/>
 		                  <field name="html_name"/>
 		                  <field name="html_field_type"/>
 		              </tree>
 		          </field>
 		          
-		          <field name="defaults_values" context="{'html_id': active_id}">
+		          <field name="defaults_values" context="{'html_id': active_id,'default_model_id':model_id}">
 			      <tree editable="bottom">
-			          <field name="field_id"/>
+			      	  <field name="model_id" invisible="1"/>
+		                  <field name="model" invisible="1" />
+			          <field name="field_id" domain="['|',('ttype','=','char'),'|',('ttype','=','text'),('ttype','=','integer'),('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid'),('model_id','=',model)]"/>
 			          <field name="default_value"/>
 			      </tree>
 			  </field>
