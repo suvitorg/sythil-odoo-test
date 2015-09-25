@@ -13,10 +13,7 @@ class err(models.Model):
  
     @api.v7
     def check_reminder(self, cr, uid, context=None):
-        _logger.error("check reminder")
-        _logger.error("now3:" + str(datetime.utcnow()))
         my_delta_time_ago = datetime.utcnow() + timedelta(minutes=120)
-        _logger.error("pas3:" + str(my_delta_time_ago))
         
         #get all events that are going to start in 2 hours
         soon_events_ids = self.pool['event.event'].search(cr, uid, [('date_begin', '>', datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S") ),('date_begin','<', my_delta_time_ago.strftime("%Y-%m-%d %H:%M:%S") )])
@@ -27,12 +24,9 @@ class err(models.Model):
         email_templates = self.pool['email.template'].browse(cr, uid, email_templates_ids, context)
         
         for event in soon_events:
-            _logger.error("event:" + str(event.name))
-            _logger.error("event start:" + str(event.date_begin))
             
             for reg in event.registration_ids:
                 if reg.reminded == False:
-                    _logger.error("reg:" + str(reg.partner_id.name))
                 
                 
                     mail_values = self.pool['email.template'].generate_email(cr, uid, email_templates_ids[0], reg.id, context=context)
