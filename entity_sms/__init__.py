@@ -1,1 +1,1 @@
-import esms_autoresponse, esms_templates, esms_import, esms_gateways, esms_accounts, esms_compose, esms_compose_multi, esms_history, controllers, smsglobal, smsgateway, twilio
+import esms_autoresponse, res_partner, res_country, esms_templates, esms_import, esms_gateways, esms_accounts, esms_compose, esms_compose_multi, esms_history, controllers, smsglobal, smsgateway, twilio

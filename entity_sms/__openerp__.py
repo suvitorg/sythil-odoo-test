@@ -1,9 +1,9 @@
 {
-    'name': "Entity SMS V2 (Multi Gateway)",
-    'version': "2.5",
+    'name': "Entity SMS",
+    'version': "2.6",
     'author': "Sythil",
     'category': "Tools",
-    'summary': "Send/Receive sms to leads and partners using Twilio",
+    'summary': "Allows 2 way sms conversations between leads/partners using the twilio gateway",
     'data': [
         'ir.cron.csv',
         'esms_core.xml',
@@ -19,7 +19,8 @@
         'ir.actions.server.csv',
         'base.action.rule.csv',
 	'security/ir.model.access.csv',
-        'smsgateway/gateway_config.xml',
+	'res.country.csv',
+	'smsgateway/gateway_config.xml',
         'smsglobal/gateway_config.xml',
         'twilio/gateway_config.xml',
     ],

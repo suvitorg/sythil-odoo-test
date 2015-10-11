@@ -1,9 +1,9 @@
 {
-    'name': "Entity SMS V1 (SMSGLOBAL)",
+    'name': "Entity SMS(Legacy Version)",
     'version': "1.1",
     'author': "Sythil",
     'category': "Tools",
-    'summary': "Allows you send smses from any model",
+    'summary': "Allows you send smses from any model using SMSGLOBAL",
     'data': [
         'views/qweb.xml',
         'psms.xml',
