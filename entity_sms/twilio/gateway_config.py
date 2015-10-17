@@ -144,7 +144,9 @@ class twilio_core(models.Model):
 	    model_id = self.env['ir.model'].search([('model','=', target_model)])
 	    field_id = self.env['ir.model.fields'].search([('model_id.model','=',target_model), ('name','=', target_field)])
 	    twilio_gateway_id = self.env['esms.gateways'].search([('gateway_model_name', '=', 'esms.twilio')])
-	            
+	        
+	    self.env[target_model].search([('id','=', record_id)]).message_post(body=sms_message.find('Body').text, subject="SMS Received")
+	    
 	    #Create the sms record in history
 	    history_id = self.env['esms.history'].create({'account_id': account_id, 'status_code': "RECEIVED", 'gateway_id': twilio_gateway_id[0].id, 'from_mobile': sms_message.find('From').text, 'to_mobile': sms_message.find('To').text, 'sms_gateway_message_id': sms_message.find('Sid').text, 'sms_content': sms_message.find('Body').text, 'direction':'I', 'my_date':sms_message.find('DateUpdated').text, 'model_id':model_id.id, 'record_id':record_id, 'field_id':field_id.id})
                     

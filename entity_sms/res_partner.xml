@@ -18,6 +18,7 @@
             <field name="arch" type="xml">
       	        <field name="mobile" position="replace">
       	            <field name="mobile" placeholder="e.g. +61 427 671 760"/>
+      	            <field name="mobile_e164" invisible="True"/>
       	        </field>
       	    </field>
         </record>

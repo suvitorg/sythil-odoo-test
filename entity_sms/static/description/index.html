@@ -2,6 +2,8 @@
 <h2>Description</h2>
 Allows 2 way sms conversations between leads/partners using the twilio gateway<br>
 Also supports other gateways if you can be bothered coding them...<br>
+Automaticlly creates new leads if a lead or partner doesn't have that mobile number<br/>
+Built modularly so you can easily add a new gateway of your choice<br/>
 <br>
 <b>Individual gateway features</b>
 <table style="width:100%;">
@@ -11,29 +13,86 @@ Also supports other gateways if you can be bothered coding them...<br>
 <tr><td>smsgateway.ca</td><td>O</td><td>X</td><td>X</td></tr>
 </table>
 <br>
-<h2>Features</h2>
-<ul>
-<li>Configure multiple accounts for each gateway</li>
-<li>View SMS history</li>
-<li>Simple sending of smses for leads and partners</li>
-<li>Automaticlly creates new leads if a lead or partner doesn't have that mobile number
-<li>Built modularly so you can easily add a new gateway of your choice</li>
-</ul>
-<h2>Using the module</h2>
-<h3>Initial Configuration</h3>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Configure Multiple Accounts</h2>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="3.png">
+            </div>
+        </div>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Manage multiple gateways in the central location.<br/>
+<b>Instructions</b><br/>
 1.  Create a twilio/smsglobal/smsgateway account and add credit<br>
 2.  Go to Settings->SMS Gateway Configuration->Accounts and enter the all the api settings<br>
-<br>
-<h3>Sending an SMS to partners / customers / suppliers and leads</h3>
-1.	Simply select Send SMS from the more menu and type in your message<br>
-<br>
-<h3>View SMS Histroy</h3>
-1.  Go to Settings->SMS Gateway Configuration->SMS History<br>
-<br>
-<h3>Create SMS Template</h3>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">SMS Leads and Partners</h2>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Fast and straightforward smsing of leads and partners.
+<b>Instructions</b><br/>
+1.	Simply select 'Send SMS' from the more menu and type in your message<br>
+            </p>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+
+<img class="oe_picture oe_screenshot" src="1.png" alt="Send SMS Menu">
+<img class="oe_picture oe_screenshot" src="2.png" alt="Send SMS Interface">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">SMS Templates</h2>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="5.png">
+            </div>
+        </div>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Use SMS templates to reduce the amount of repeated message.<br/>
+<b>Instructions</b><br/>
 1.  Go to Settings->SMS Gateway Configuration->SMS Templates<br>
 2.  Select the target model, sms account and type away<br>
-<br>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">SMS Auto responders</h2>
+        <div class="oe_span6">
+            <p class="oe_mt32">
+Automaticly send out response smses when a keyword sms is sent.<br/>
+e.g. INFO=Thank you for requesting more information on our product<br/>
+<b>Instructions</b><br/>
+1.  Go to Settings->SMS Gateway Configuration->Auto Responders<br>
+2.  Enter the target mobile number, Keyword and response sms<br>
+</p>
+        </div>
+        <div class="oe_span6">
+            <div class="oe_row_img oe_centered">
+                <img class="oe_picture oe_screenshot" src="4.png">
+            </div>
+        </div>
+    </div>
+</section>
+<br/>
 <h2>Feature Ideas</h2>
 1.  Inbound MMS<br>
 2.  Oubound MMS<br>

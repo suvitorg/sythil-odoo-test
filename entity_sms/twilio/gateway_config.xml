@@ -6,7 +6,7 @@
           <field name="model">esms.accounts</field>
           <field name="inherit_id" ref="entity_sms.esms_accounts_form_view"/>
           <field name="arch" type="xml">
-      	      <xpath expr="//h2[@string='Gateway Hook']" position="after">
+      	      <xpath expr="//h2[@id='gatewayhook']" position="after">
       	          <div attrs="{'invisible': [('gateway_model', '!=', 'esms.twilio')]}">
 		      <group>
 	                  <field name="twilio_account_sid"/>

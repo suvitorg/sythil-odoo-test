@@ -12,7 +12,7 @@
       	              <field name="priority"/>
       	              <field name="gateway_model" invisible="1"/>
       	          </group>
-      	          <h2 string="Gateway Hook">Gateway Settings</h2>
+      	          <h2 id="gatewayhook">Gateway Settings</h2>
       	      </form>
       	  </field>
       </record>
