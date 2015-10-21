@@ -21,3 +21,5 @@ class res_partner_esms(models.Model):
                 self.mobile_e164 = self.mobile
             else:
                 self.mobile_e164 = self.country_id.mobile_prefix + self.mobile
+        else:
+            self.mobile_e164 = self.mobile
