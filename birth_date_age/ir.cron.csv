@@ -1,0 +1,2 @@
+"name","model","function","interval_number","interval_type","numbercall","active"
+"Partner Age Update","res.partner","update_ages",1,"days",-1,"true"
