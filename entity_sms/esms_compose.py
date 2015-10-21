@@ -36,7 +36,7 @@ class esms_compose(models.Model):
     def send_entity(self):
         self.ensure_one()
 
-        #gateway_model = self.sms_gateway.account_gateway.gateway_model_name
+        gateway_model = self.sms_gateway.account_gateway.gateway_model_name
         my_sms = self.env[gateway_model].send_message(self.sms_gateway.id, self.from_number, self.to_number, self.sms_content, self.model_id, self.record_id, self.field_id)
         
         #use the human readable error message if present

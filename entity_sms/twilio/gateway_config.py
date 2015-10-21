@@ -123,7 +123,7 @@ class twilio_core(models.Model):
         my_message = self.env['esms.history'].search([('sms_gateway_message_id','=', sms_message.find('Sid').text)])
         if len(my_message) == 0 and sms_message.find('Direction').text == "inbound":
             #look for a partner with this number
-            partner_id = self.env['res.partner'].search([('mobile','=', sms_message.find('From').text)])
+            partner_id = self.env['res.partner'].search([('mobile_e164','=', sms_message.find('From').text)])
 	    if len(partner_id) > 0:
 	        record_id = partner_id[0]
 	    	target_model = "res.partner"
@@ -145,7 +145,7 @@ class twilio_core(models.Model):
 	    field_id = self.env['ir.model.fields'].search([('model_id.model','=',target_model), ('name','=', target_field)])
 	    twilio_gateway_id = self.env['esms.gateways'].search([('gateway_model_name', '=', 'esms.twilio')])
 	        
-	    self.env[target_model].search([('id','=', record_id)]).message_post(body=sms_message.find('Body').text, subject="SMS Received")
+	    self.env[target_model].search([('id','=', record_id.id)]).message_post(body=sms_message.find('Body').text, subject="SMS Received")
 	    
 	    #Create the sms record in history
 	    history_id = self.env['esms.history'].create({'account_id': account_id, 'status_code': "RECEIVED", 'gateway_id': twilio_gateway_id[0].id, 'from_mobile': sms_message.find('From').text, 'to_mobile': sms_message.find('To').text, 'sms_gateway_message_id': sms_message.find('Sid').text, 'sms_content': sms_message.find('Body').text, 'direction':'I', 'my_date':sms_message.find('DateUpdated').text, 'model_id':model_id.id, 'record_id':record_id, 'field_id':field_id.id})
