@@ -1,5 +1,5 @@
 {
-    'name': "Birth Date Age",
+    'name': "Birth Date(DOB) Age",
     'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
