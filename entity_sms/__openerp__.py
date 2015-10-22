@@ -8,6 +8,7 @@
         'ir.cron.csv',
         'esms_core.xml',
         'res_partner.xml',
+        'crm_lead.xml',
         'esms_accounts.xml',
         'esms_templates.xml',
         'esms_import.xml',

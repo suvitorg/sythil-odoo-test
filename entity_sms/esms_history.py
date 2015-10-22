@@ -27,7 +27,12 @@ class esms_history(models.Model):
     delivary_error_string = fields.Text(string="Delivary Error")
 
     @api.one
+    @api.depends('to_mobile')
     def _rec_nam(self):
         if self.model_id != False:
-            my_record = self.env[self.model_id.model].search([('id','=',self.record_id)])
-            self.record_name = my_record.name
+            my_record_count = self.env[self.model_id.model].search_count([('id','=',self.record_id)])
+            if my_record_count > 0:
+                my_record = self.env[self.model_id.model].search([('id','=',self.record_id)])
+                self.record_name = my_record.name
+            else:
+                self.record_name = self.to_mobile

@@ -130,7 +130,7 @@ class twilio_core(models.Model):
 	    	target_field = "mobile"
 	    else:
 	        #If you can't find a partner with that mobile number then look for a lead with that number
-	    	lead_id = self.env['crm.lead'].search([('mobile','=', sms_message.find('From').text)])
+	    	lead_id = self.env['crm.lead'].search([('mobile_e164','=', sms_message.find('From').text)])
 	    	if len(lead_id) > 0:
 	    	    record_id = lead_id[0]
 	    	    target_model = "crm.lead"
