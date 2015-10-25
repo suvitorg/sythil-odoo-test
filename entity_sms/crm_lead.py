@@ -9,7 +9,7 @@ class crm_lead_esms(models.Model):
 
     _inherit = "crm.lead"
     
-    mobile_e164 = fields.Char(string="Mobile e164", compute='_calc_e164')
+    mobile_e164 = fields.Char(string="Mobile e164", store=True, compute='_calc_e164')
 
     @api.one
     @api.depends('country_id','mobile')

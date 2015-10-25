@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+      <record model="ir.ui.view" id="esms_mass_sms_form_view">
+          <field name="name">esms mass sms view</field>
+          <field name="model">esms.mass.sms</field>
+          <field name="arch" type="xml">
+      	      <form>
+      	          <header>
+      	              <button type="object" name="send_mass_sms" string="Send Mass SMS" attrs="{'invisible': ['|', ('mass_sms_state', '!=', 'draft'), ('message_text', '=', False)]}"/>
+      	          </header>
+      	          <group>
+      	              <field name="from_mobile"/>
+      	              <field name="selected_records"/>
+      	              <field name="message_text"/>
+      	              <field name="mass_sms_state"/>
+      	              <field name="total_count"/>
+      	              <field name="fail_count"/>
+      	              <field name="queue_count"/>
+      	              <field name="sent_count"/>
+      	              <field name="delivered_count"/>
+      	          </group>
+      	      </form>
+      	  </field>
+      </record>
+
+      <record model="ir.ui.view" id="esms_mass_sms_tree_view">
+          <field name="name">esms mass sms tree view</field>
+          <field name="model">esms.mass.sms</field>
+          <field name="arch" type="xml">
+      	      <tree>
+      	          <field name="from_mobile"/>
+      	          <field name="total_count"/>
+      	          <field name="message_text"/>
+      	      </tree>
+      	  </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="esms_mass_sms_action">
+          <field name="name">Send Mass SMS</field>
+          <field name="res_model">esms.mass.sms</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+	  <field name="help" type="html">
+		<p>
+                    Start mass SMS.
+                </p>
+      	  </field>
+      </record>
+
+      <menuitem id="esms_mass_sms_menu" name="Mass SMS" parent="base.marketing_menu" sequence="100"/>        
+      <menuitem id="esms_mass_sms2_menu" name="Mass SMS" parent="esms_mass_sms_menu" action="esms_mass_sms_action" />
+
+   </data>
+</openerp>

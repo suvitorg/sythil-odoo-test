@@ -12,6 +12,7 @@ class esms_history(models.Model):
     record_id = fields.Integer(readonly=True, string="Record")
     account_id = fields.Many2one('esms.accounts', readonly=True, string="SMS Account")
     gateway_id = fields.Many2one('esms.gateways', readonly=True, string="SMS Gateway")
+    mass_sms_id = fields.Many2one('esms.mass.sms', readonly=True, string="Mass SMS")
     model_id = fields.Many2one('ir.model', readonly=True, string="Model")
     model_name = fields.Char(string="Model Name", related='model_id.model', readonly=True)
     field_id = fields.Many2one('ir.model.fields', readonly=True, string="Field")
@@ -36,3 +37,20 @@ class esms_history(models.Model):
                 self.record_name = my_record.name
             else:
                 self.record_name = self.to_mobile
+                
+                
+    @api.model
+    def create(self, values):
+        new_rec = super(esms_history, self).create(values)
+        
+        autoreslist = self.env['esms.autoresponse'].search([('from_mobile','=',new_rec.to_mobile), ('keyword','=ilike',new_rec.sms_content)])
+	if len(autoreslist) > 0 and new_rec.direction == 'I':
+	    autores = autoreslist[0]
+	    self.env[new_rec.account_id.account_gateway.gateway_model_name].send_message(new_rec.account_id.id, new_rec.to_mobile, new_rec.from_mobile, autores.sms_content, new_rec.model_id.model, new_rec.record_id, new_rec.field_id.name)
+	
+	#Can't use STOP since twilio uses it
+	if new_rec.sms_content == 'NOSMS' and new_rec.direction == 'I' and new_rec.model_name == 'res.partner':
+	    for rec in self.env['res.partner'].search([('id','=',new_rec.record_id)]):
+	        rec.sms_opt_out = True
+	        #Send opt out response
+                self.env[new_rec.account_id.account_gateway.gateway_model_name].send_message(new_rec.account_id.id, new_rec.to_mobile, new_rec.from_mobile, 'You have been unsubscribed from mass sms', new_rec.model_id.model, new_rec.record_id, new_rec.field_id.name)
