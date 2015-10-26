@@ -14,13 +14,14 @@ class esms_compose(models.Model):
     error_message = fields.Char(readonly=True)
     record_id = fields.Integer()
     model_id = fields.Char()
-    sms_gateway = fields.Many2one('esms.accounts', required=True, string='SMS Gateway Account')
-    from_number = fields.Char(default=compute_default_value, required=True, string="From Mobile Number")
+    sms_gateway = fields.Many2one('esms.accounts', string='SMS Gateway Account')
+    from_number = fields.Char(default=compute_default_value, string="From Mobile Number")
     to_number = fields.Char(required=True, string='To Mobile Number', readonly=True)
     sms_content = fields.Text(string='SMS Content')
     file_attachments = fields.One2many('esms.mms', 'partner_id', string="MMS Attachments")
     field_id = fields.Char(string='Field Name')
     template_id = fields.Many2one('esms.templates', string="Template")
+    from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile")
     
     @api.onchange('template_id')
     def load_template(self):
@@ -28,7 +29,7 @@ class esms_compose(models.Model):
             
             sms_rendered_content = self.env['esms.templates'].render_template(self.template_id.template_body, self.template_id.model_id.model, self.record_id)
             
-            self.from_number = self.template_id.sms_from
+            self.from_mobile = self.template_id.from_mobile.id
             self.sms_content = sms_rendered_content
             self.sms_gateway = self.template_id.account_gateway.id
 
@@ -36,8 +37,8 @@ class esms_compose(models.Model):
     def send_entity(self):
         self.ensure_one()
 
-        gateway_model = self.sms_gateway.account_gateway.gateway_model_name
-        my_sms = self.env[gateway_model].send_message(self.sms_gateway.id, self.from_number, self.to_number, self.sms_content, self.model_id, self.record_id, self.field_id)
+        gateway_model = self.from_mobile.account_id.account_gateway.gateway_model_name
+        my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, self.to_number, self.sms_content, self.model_id, self.record_id, self.field_id)
         
         #use the human readable error message if present
         error_message = ""

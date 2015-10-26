@@ -12,8 +12,7 @@
                             <group>
                                 <field name="model_id" required="1" on_change="onchange_model_id(model_id)" options="{'no_create': True}"/>
                                 <field name="model" invisible="1"/>
-                                <field name="account_gateway"/>
-                                <field name="sms_from"/>
+                                <field name="from_mobile"/>
                             </group>
                         </div>
                         <notebook>

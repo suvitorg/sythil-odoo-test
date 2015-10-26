@@ -11,11 +11,11 @@ class esms_mass_sms(models.Model):
     from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile", domain="[('mobile_verified','=','True')]")
     selected_records = fields.Many2many('res.partner', required=True, string="Selected Records", domain="[('sms_opt_out','=',False)]")
     message_text = fields.Text(string="Message Text", required=True)
-    total_count = fields.Integer(string="Total SMS Count", compute="_total_count")
-    fail_count = fields.Integer(string="Failed SMS Count", compute="_fail_count")
-    queue_count = fields.Integer(string="Queue SMS Count", compute="_queue_count")
-    sent_count = fields.Integer(string="Sent SMS Count", compute="_sent_count")
-    delivered_count = fields.Integer(string="Delivered SMS Count", compute="_delivered_count")
+    total_count = fields.Integer(string="Total", compute="_total_count")
+    fail_count = fields.Integer(string="Failed", compute="_fail_count")
+    queue_count = fields.Integer(string="Queue", compute="_queue_count")
+    sent_count = fields.Integer(string="Sent", compute="_sent_count")
+    delivered_count = fields.Integer(string="Received", compute="_delivered_count")
     mass_sms_state = fields.Selection((('draft','Draft'),('sent','Sent')), readonly=True, string="State", default="draft")
     
     @api.one
@@ -43,7 +43,7 @@ class esms_mass_sms(models.Model):
     def send_mass_sms(self):
         self.mass_sms_state = "sent"
         for rec in self.selected_records:
-            message_final = self.message_text + "\nReply NOSMS to stop receiving sms"
+            message_final = self.message_text + "\nReply STOP to stop receiving sms"
             gateway_model = self.from_mobile.account_id.account_gateway.gateway_model_name
 	    my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, rec.mobile_e164, message_final, "esms.mass.sms", self.id, "mobile")
             my_model = self.env['ir.model'].search([('model','=','res.partner')])
