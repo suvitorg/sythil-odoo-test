@@ -1,2 +1,0 @@
-name,model,function,interval_number,interval_type,numbercall,active
-"Event Registrants Reminder",event.err,check_reminder,1,minutes,-1,false
