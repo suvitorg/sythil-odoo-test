@@ -3,11 +3,11 @@
     'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
-    'summary':'girlfrind++',
+    'summary':'girlfriend++',
     'data': [
         'ir.cron.csv',
-        'res.users.csv',
         'art_gf.xml',
+        'shahra/res.users.csv',
     ],
     'demo': [],
     'depends': [],

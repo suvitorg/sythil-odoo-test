@@ -9,8 +9,9 @@ class art_gf(models.Model):
 
     _name = "art.gf"
 
-    name = fields.Char(required=True, string="Name")
-    user_id = fields.Many2one('res.users', required=True, string="Assigned User", domain="[('login','!=','gf')]")
+    name = fields.Char(string="Name")
+    gf_id = fields.Many2one('res.users', required=True, string="Girlfriend", domain="[('active','=',0),('art_gf','=',1)]")
+    user_id = fields.Many2one('res.users', required=True, string="Assigned User", domain="[('art_gf','=',0)]")
 
     @api.model
     def random_talk(self):
@@ -32,7 +33,7 @@ class art_gf(models.Model):
     
     @api.one
     def gf_send_message(self, message):
-        from_uid = self.env['ir.model.data'].get_object_reference('art_gf', 'art_gf_user')[1]
+        from_uid = self.gf_id.id
         
         user_to = self.user_id.id
         
