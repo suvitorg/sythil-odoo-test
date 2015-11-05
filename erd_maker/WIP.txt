@@ -1,0 +1,87 @@
+from PIL import Image, ImageDraw, ImageFont
+from cStringIO import StringIO
+
+
+    @api.one
+    def make_erd_text(self):
+        self.output_text = ""
+        self.current_transverse = 0
+        self.erd_transverse_text(self.my_model.model)
+        
+    def erd_transverse_text(self, trans_model):
+        self.current_transverse += 1
+        prefix_output = ""
+        for x in range(0, self.current_transverse - 1):
+            prefix_output += "    "
+        self.output_text += "\n##### " + trans_model + "(start) #####\n"
+        for field in self.env['ir.model.fields'].search([('model_id.model','=',trans_model)]):
+	    if self.omit_builtin_fields == True and (field.name == "create_date" or field.name == "create_uid" or field.name == "__last_update" or field.name == "write_date" or field.name == "write_uid"):
+	        continue
+	    field_name = field.name
+	    if field.required == True:
+	        field_name += "*"
+	    self.output_text += prefix_output + field_name + "|" + field.field_description + "|" + field.ttype + "\n"
+	    if (field.ttype == "many2one" or field.ttype == "one2many") and self.current_transverse <= self.transverse_depth:
+	        self.erd_transverse_text(field.relation)
+        self.output_text += "##### " + trans_model + "(end) #####\n"
+        self.current_transverse -= 1
+    
+    
+    im = ""
+    draw = ""
+    font = ""
+    table_width = 900
+    table_margin = 50
+    row_height = 50
+    row_padding = 5    
+    
+    @api.one
+    def make_erd_jpeg(self):
+        
+
+        
+        #total table width including margin muliplied by the transverse depth
+        image_width = (self.table_margin * 2 + self.table_width) * (self.transverse_depth + 1)
+        
+        #default height is only high enough for one row the margin
+        image_height = (self.table_margin * 2 + self.row_height)
+            
+        #white background
+        background_colour = 255
+        
+        #height will increase with each field
+        im = Image.new("L", (image_width,image_height),background_colour)
+        
+        self.output_text = ""
+	self.current_transverse = 0
+	self.draw = ImageDraw.Draw(im)
+	self.font = ImageFont.load_default()
+        #self.font = ImageFont.truetype("erd_maker/static/src/img/Aaargh.ttf", 15)
+        
+	self.erd_transverse_image(self.my_model.model)
+        
+        
+        output = StringIO()
+        im.save(output, format='JPEG')
+        im_data = output.getvalue()
+        self.output_image = base64.b64encode(im_data)
+        
+    def erd_transverse_image(self, trans_model):
+        self.current_transverse += 1
+        counter = 0
+        
+        self.draw.rectangle([(self.table_margin,self.table_margin), (self.table_margin + self.table_width,self.table_margin + self.row_height)])
+        self.draw.text((self.table_margin + self.row_padding, self.table_margin + row_padding), trans_model, font=self.font)
+            
+        for field in self.env['ir.model.fields'].search([('model_id.model','=',trans_model)]):
+	    if self.omit_builtin_fields == True and (field.name == "create_date" or field.name == "create_uid" or field.name == "__last_update" or field.name == "write_date" or field.name == "write_uid"):
+	        continue
+	    field_name = field.name
+	    if field.required == True:
+	        field_name += "*"
+	    #self.draw.text((10, 10 + (counter * 30)), field_name + "|" + field.field_description + "|" + field.ttype, font=self.font)
+            counter += 1
+	    #if (field.ttype == "many2one" or field.ttype == "one2many") and self.current_transverse <= self.transverse_depth:
+	    #    self.erd_transverse_text(field.relation)
+        self.current_transverse -= 1
+    
