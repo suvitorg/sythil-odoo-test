@@ -10,6 +10,6 @@
         'shahra/res.users.csv',
     ],
     'demo': [],
-    'depends': [],
+    'depends': ['im_chat'],
     'installable': True,
 }
