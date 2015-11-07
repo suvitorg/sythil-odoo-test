@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+<template id="product_page" name="Takeaway" page="True">
+    <t t-call="website.layout">
+        <div class="container">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                
+                
+                    <t t-foreach="categories" t-as="category">
+                        <b><t t-esc="category.name"/></b><br/>
+                        <t t-esc="category.description"/><br/>
+                        <t t-foreach="category.modifier_groups" t-as="modifier_group">
+                            <t t-esc="modifier_group.name"/><br/>
+                            <t t-esc="modifier_group.description"/><br/>
+                            <t t-foreach="modifier_group.modifiers" t-as="modifier">
+                                <t t-esc="modifier.name"/><t t-esc="modifier.price"/><br/>
+                            </t>
+                        
+                        </t>
+                        <t t-foreach="category.product_ids" t-as="product">
+                            <t t-esc="product.name"/><br/>
+                        </t>
+                    </t>
+                
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </t>
+</template>
+
+</data>
+</openerp>
