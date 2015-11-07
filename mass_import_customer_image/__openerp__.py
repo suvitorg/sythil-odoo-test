@@ -3,10 +3,11 @@
     'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
+    'summary':"Imports a large amount of customer image files",
     'data': [
         'mass_customer_image_migrate.xml',
     ],
     'demo': [],
-    'depends': ['crm'],
+    'depends': [],
     'installable': True,
 }
