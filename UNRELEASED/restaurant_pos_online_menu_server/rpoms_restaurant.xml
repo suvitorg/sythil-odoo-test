@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <record model="ir.ui.view" id="rpoms_restaurant_form_view">
+          <field name="name">rpoms restaurant form view</field>
+          <field name="model">rpoms.restaurant</field>
+          <field name="arch" type="xml">
+      	      <form>
+      	          <group>
+      	              <field name="name"/>
+      	              <field name="location_id"/>
+      	              <field name="street"/>
+      	              <field name="delivary_radius_kilometers"/>
+      	              <field name="latitude"/>
+      	              <field name="longitude"/>
+      	              <field name="delivary_suburbs"/>
+      	          </group>
+      	      </form>
+      	  </field>
+      </record>
+
+      <record model="ir.ui.view" id="rpoms_restaurant_tree_view">
+          <field name="name">rpoms restaurant tree view</field>
+          <field name="model">rpoms.restaurant</field>
+          <field name="arch" type="xml">
+      	      <tree>
+      	          <field name="name"/>
+      	          <field name="location_id"/>
+      	      </tree>
+      	  </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="rpoms_restaurant_action">
+          <field name="name">POS Restaurants</field>
+      	  <field name="res_model">rpoms.restaurant</field>
+      	  <field name="view_type">form</field>
+      	  <field name="view_mode">tree,form</field>
+      	  <field name="help" type="html">
+	      <p class="oe_view_nocontent_create">Don't manually add restaurants, it's done by the POS</p>
+	  </field>
+      </record>      
+
+      <menuitem id="rpoms_restaurant_menu" name="Restaurant" parent="point_of_sale.menu_point_root" sequence="90"/>
+      <menuitem id="rpoms_restaurant_restaurant_menu" name="Restaurants" parent="rpoms_restaurant_menu" action="rpoms_restaurant_action" sequence="10"/>
+      
+    </data>
+</openerp>
