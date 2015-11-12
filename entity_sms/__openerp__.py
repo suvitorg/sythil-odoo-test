@@ -27,5 +27,6 @@
     ],
     'demo': [],
     'depends': ['web', 'crm','marketing'],
+    'images': ['static/description/banner'],
     'installable': True,
 }
