@@ -2,6 +2,41 @@
 <openerp>
 <data>
 
+<template id="rpoms_search" name="Takeaway Search" page="True">
+    <t t-call="website.layout">
+        <div class="container">
+            <div class="mt16 mb16">
+                <h1 class="text-center">Restaurant Search</h1>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <form method="GET" action="/takeaway/suburbsearch">
+                            <input type="search" class="form-control" name="q" placeholder="Enter Suburb"/><input type="submit" value="Suburb Search"/>
+                        </form>
+                    </div>
+                    <div class="col-md-3"></div>
+                
+            </div>            
+        </div>
+    </t>
+</template>
+
+<template id="rpoms_suburb_list" name="Takeaway Suburb List" page="True">
+    <t t-call="website.layout">
+        <div class="container">
+            <div class="mt16 mb16">
+                <h1 class="text-center">Suburb List</h1>
+            </div>
+            <div class="mt16 mb16 col-md-12">
+                <t t-foreach="suburbs" t-as="suburb">
+                    <div class="col-md-4">
+		        <h2 class="mt8 mb8"><a t-attf-href="/takeaway/#{suburb.country_id.name}/#{suburb.state_id.name}/#{suburb.city}"><t t-esc="suburb.city"/> (<t t-esc="suburb.restaurant_count"/>)</a></h2>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</template>
+
 <template id="rpoms_countries" name="Takeaway Countries" page="True">
     <t t-call="website.layout">
         <div class="container">
@@ -54,6 +89,28 @@
     </t>
 </template>
 
+<template id="rpoms_restaurant_list" name="Restaurant List" page="True">
+    <t t-call="website.layout">
+        <div class="container">
+            <div class="mt16 mb16">
+                <h1 class="text-center">Restaurants</h1>
+            </div>
+                <div class="col-md-3"></div>
+	        <div class="col-md-6">
+	    
+                    <t t-foreach="restaurants" t-as="restaurant">
+		        <div style="height:100px;">
+		            <h2><t t-esc="restaurant.name"/></h2>
+		            <t t-esc="restaurant.street"/>, <t t-esc="restaurant.location_id.city"/>
+		        </div>
+                    </t>
+                
+                </div>
+                <div class="col-md-3"></div>    
+            
+        </div>
+    </t>
+</template>
 
 <template id="product_page" name="Takeaway" page="True">
     <t t-call="website.layout">
