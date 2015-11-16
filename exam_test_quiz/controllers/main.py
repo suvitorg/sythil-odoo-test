@@ -31,6 +31,8 @@ class MyController(http.Controller):
         for question in exam.questions:
             question_count += 1
             if question.num_correct > 1:
+                e_result = exam_result.results.sudo().create({'result_id':exam_result.id, 'question':question.id})
+                
                 question_result = True
                 for option in question.question_options:
                     fieldy = "question" + str(question.id) + "option" + str(option.id)
@@ -43,11 +45,14 @@ class MyController(http.Controller):
                     if option.correct == False and (fieldy in values) == True:
                         question_result = False
                 
+                    if fieldy in values == True:
+                        http.request.env['etq.result.question.option'].sudo().create({'question_id':e_result.id,'option_id':int(values["question" + str(question.id) + "option" + str(option.id)])})
+
                 if question_result == True:
                     correct_count += 1
                 
-                exam_result.results.sudo().create({'result_id':exam_result.id, 'question':question.id, 'correct':question_result})
-                    
+                e_result.correct = question_result
+                                
             elif question.num_correct == 1:
                 correct_option = question.question_options.search([('question_id','=',question.id),('correct','=',True)])[0].id
                 question_result = False
@@ -59,7 +64,8 @@ class MyController(http.Controller):
                 else:
                     question_result = False
 
-                exam_result.results.sudo().create({'result_id':exam_result.id, 'question':question.id, 'correct':question_result})
+                e_result = exam_result.results.sudo().create({'result_id':exam_result.id, 'question':question.id, 'correct':question_result})
+                http.request.env['etq.result.question.option'].sudo().create({'question_id':e_result.id,'option_id':int(values["question" + str(question.id)])})
         
         percent = float(correct_count) / float(question_count) * 100
         return http.request.render('exam_test_quiz.exam_results', {'exam_result':exam_result, 'question_count': question_count, 'correct_count': correct_count,'percent':percent})
