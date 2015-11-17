@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+
+      <record model="ir.actions.act_window" id="etq_exam_share_action">
+          <field name="name">Share Quiz</field>
+      	  <field name="res_model">etq.exam.share</field>
+      	  <field name="view_type">form</field>
+      	  <field name="view_mode">form</field>
+      	  <field name="target">new</field>
+      	  <field name="context">{'default_exam_id':active_id}</field>
+      	  <field name="help" type="html">
+	      <p class="oe_view_nocontent_create">Share Your Quiz</p>
+	  </field>
+      </record>
+      
       <record model="ir.ui.view" id="etq_exam_form_view">
           <field name="name">etq exam Form View</field>
           <field name="model">etq.exam</field>
@@ -8,6 +22,8 @@
       	      <form>
       	          <header>
       	              <button name="view_quiz" type="object" string="View Exam"/>
+      	              <button type='action' name='%(etq_exam_share_action)d' string="Share Exam" />
+
       	          </header>
       	          <group>
       	              <field name="name"/>
