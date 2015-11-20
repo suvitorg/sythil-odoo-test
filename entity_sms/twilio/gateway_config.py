@@ -62,6 +62,7 @@ class twilio_core(models.Model):
         sms_account = self.env['esms.accounts'].browse(account_id)
         
         if message_id != "":
+            payload = {}
             response_string = requests.get("https://api.twilio.com/2010-04-01/Accounts/" + sms_account.twilio_account_sid + "/Messages/" + message_id, data=payload, auth=(str(sms_account.twilio_account_sid), str(sms_account.twilio_auth_token)))
 	    root = etree.fromstring(str(response_string.text))
 	    my_messages = root.xpath('//Message')
