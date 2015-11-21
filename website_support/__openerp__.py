@@ -18,5 +18,6 @@
     ],
     'demo': [],
     'depends': ['web', 'crm', 'website'],
+    'images':['static/description/1.jpg'],
     'installable': True,
 }

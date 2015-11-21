@@ -40,11 +40,37 @@ class MyController(http.Controller):
 
     @http.route('/support/ticket/view', type="http", auth="user", website=True)
     def support_ticket_view_list(self, **kw):
-        return http.request.render('website_support.support_ticket_view_list', {'support_tickets':http.request.env['website.support.ticket'].search([('partner_id','=',http.request.env.user.partner_id.id)])})
+        #Only show tickets from this user
+        support_tickets = http.request.env['website.support.ticket'].search([('partner_id','=',http.request.env.user.partner_id.id)])
+        return http.request.render('website_support.support_ticket_view_list', {'support_tickets':support_tickets,'ticket_count':len(support_tickets)})
+
+    @http.route('/support/ticket/view/<ticket>', type="http", auth="user", website=True)
+    def support_ticket_view(self, ticket):
+        #only let the user this ticket is assigned to view this ticket
+        support_ticket = http.request.env['website.support.ticket'].search([('partner_id','=',http.request.env.user.partner_id.id), ('id','=',ticket) ])[0]        
+        return http.request.render('website_support.support_ticket_view', {'support_ticket':support_ticket})
+
+    @http.route('/support/ticket/comment',type="http", auth="user")
+    def support_ticket_comment(self, **kw):
+
+        values = {}
+        for field_name, field_value in kw.items():
+            values[field_name] = field_value
+        
+        ticket = http.request.env['website.support.ticket'].search([('id','=',values['ticket_id'])])
+        
+        #check if this user owns this ticket
+        if ticket.partner_id.id != http.request.env.user.partner_id.id:
+            return "You do not have permission to submit this commment"
+        else:
+            http.request.env['website.support.ticket.message'].create({'ticket_id':ticket.id,'content':values['comment']})
+        
+        return werkzeug.utils.redirect("/support/ticket/view/" + str(ticket.id))
+        
 
     @http.route('/support/help/auto-complete',type="http", auth="user")
     def support_help_autocomplete(self, **kw):
-        _logger.error("fart")
+
         values = {}
         for field_name, field_value in kw.items():
             values[field_name] = field_value
