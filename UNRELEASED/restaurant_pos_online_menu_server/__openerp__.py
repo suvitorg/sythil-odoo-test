@@ -10,6 +10,7 @@
     'pos_category.xml',
     'rpoms_restaurant.xml',
     'website.menu.csv',
+    'rpoms.cuisines.csv',
     ],
     'demo': [],
     'depends': ['point_of_sale','website','base_location_geonames_import'],

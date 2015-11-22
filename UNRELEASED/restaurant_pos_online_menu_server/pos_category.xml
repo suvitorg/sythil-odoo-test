@@ -9,7 +9,6 @@
             <field name="arch" type="xml">
                 <sheet position="inside">
                     <group>
-                        <field name="publish_menu"/>
                         <field name="description"/>
                     </group>
                     Products

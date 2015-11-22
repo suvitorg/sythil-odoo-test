@@ -8,12 +8,30 @@
       	      <form>
       	          <group>
       	              <field name="name"/>
+      	              <field name="image" widget="image" options="{'preview_image': 'image_medium', 'size': [80, 80]}"/>
       	              <field name="location_id"/>
       	              <field name="street"/>
       	              <field name="delivary_radius_kilometers"/>
       	              <field name="latitude"/>
       	              <field name="longitude"/>
       	              <field name="delivary_suburbs"/>
+      	              <field name="min_order"/>
+      	              <field name="cuisines"/>
+      	              <field name="pos_cats"/>
+      	              <field name="takeaway_time_monday_start" widget="float_time"/>
+		      <field name="takeaway_time_monday_end" widget="float_time"/>
+		      <field name="takeaway_time_tuesday_start" widget="float_time"/>
+		      <field name="takeaway_time_tuesday_end" widget="float_time"/>
+		      <field name="takeaway_time_wednesday_start" widget="float_time"/>
+		      <field name="takeaway_time_wednesday_end" widget="float_time"/>
+		      <field name="takeaway_time_thursday_start" widget="float_time"/>
+		      <field name="takeaway_time_thursday_end" widget="float_time"/>
+		      <field name="takeaway_time_friday_start" widget="float_time"/>
+		      <field name="takeaway_time_friday_end" widget="float_time"/>
+		      <field name="takeaway_time_saturday_start" widget="float_time"/>
+		      <field name="takeaway_time_saturday_end" widget="float_time"/>
+		      <field name="takeaway_time_sunday_start" widget="float_time"/>
+		      <field name="takeaway_time_sunday_end" widget="float_time"/>
       	          </group>
       	      </form>
       	  </field>

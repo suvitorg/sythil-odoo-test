@@ -48,5 +48,7 @@ class MyController(http.Controller):
 
     
     @http.route('/takeaway/<country>/<state>/<suburb>/<restaurant>', type="http", auth="public", website=True)
-    def rpoms_restaurant(self, country, state, suburb, restaurant):
-        return http.request.render('restaurant_pos_online_menu_server.product_page', {'categories': http.request.env['pos.category'].sudo().search([('publish_menu','=',True)])})
+    def rpoms_restaurant_pro(self, country, state, suburb, restaurant):
+        restaurant = http.request.env['rpoms.restaurant'].sudo().search([('location_id.country_id.name', '=', country), ('location_id.state_id.name', '=', state), ('location_id.city', '=', suburb), ('slug', '=', restaurant)])
+        
+        return http.request.render('restaurant_pos_online_menu_server.product_page', {'restaurant': restaurant})

@@ -11,7 +11,6 @@ class rpoms_pos_category(models.Model):
     
     product_ids = fields.One2many('product.template', 'pos_categ_id', string='Products')
     modifier_groups = fields.One2many('rpoms.modifier.groups', 'category_id', string='Modifiers Groups')
-    publish_menu = fields.Boolean(string="Online Menu")
     description = fields.Text(string="Description")
     
 class rpoms_modifier_groups(models.Model):
