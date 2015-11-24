@@ -12,9 +12,9 @@ class MyController(http.Controller):
 	for field_name, field_value in kwargs.items():
             values[field_name] = field_value
         
-        request.env['esms.twilio'].delivary_receipt(values['AccountSid'], values['MessageSid'])
+        request.env['esms.twilio'].sudo().delivary_receipt(values['AccountSid'], values['MessageSid'])
         
-        return "OK"        
+        return "<Response></Response>"
         
     @http.route('/sms/twilio/receive', type="http", auth="public")
     def sms_twilio_receive(self, **kwargs):
@@ -27,4 +27,4 @@ class MyController(http.Controller):
         twilio_account = request.env['esms.accounts'].sudo().search([('twilio_account_sid','=', values['AccountSid'])])
         request.env['esms.twilio'].sudo().check_messages(twilio_account.id, values['MessageSid'])
         
-        return "OK"
+        return "<Response></Response>"
