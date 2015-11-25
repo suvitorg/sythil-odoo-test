@@ -5,9 +5,10 @@ import requests
 from datetime import datetime
 
 class sms_response():
-    delivary_state = ""
-    response_string = ""
-    human_read_error = ""
+     delivary_state = ""
+     response_string = ""
+     human_read_error = ""
+     message_id = ""
 
 class smsglobal_core(models.Model):
 
@@ -15,11 +16,12 @@ class smsglobal_core(models.Model):
     
     api_url = fields.Char(string='API URL')
     
+ 
     def send_message(self, sms_gateway_id, from_number, to_number, sms_content, my_model_name='', my_record_id=0, my_field_name=''):
         sms_account = self.env['esms.accounts'].search([('id','=',sms_gateway_id)])
         
         #format the from number before sending
-        format_from = self.env.user.partner_id.mobile
+        format_from = from_number
         if " " in format_from: format_from.replace(" ", "")
         if "+" in format_from: format_from = format_from.replace("+", "")
         
@@ -58,6 +60,7 @@ class smsglobal_core(models.Model):
         my_sms_response.delivary_state = delivary_state
         my_sms_response.response_string = response_string.text
         my_sms_response.human_read_error = human_read_error
+        my_sms_response.message_id = sms_gateway_message_id
         return my_sms_response
 
 

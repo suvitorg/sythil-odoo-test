@@ -21,7 +21,7 @@ class esms_compose(models.Model):
     file_attachments = fields.One2many('esms.mms', 'partner_id', string="MMS Attachments")
     field_id = fields.Char(string='Field Name')
     template_id = fields.Many2one('esms.templates', string="Template")
-    from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile")
+    from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile")        
     
     @api.onchange('template_id')
     def load_template(self):

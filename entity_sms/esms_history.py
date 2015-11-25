@@ -30,7 +30,7 @@ class esms_history(models.Model):
     @api.one
     @api.depends('to_mobile')
     def _rec_nam(self):
-        if self.model_id != False:
+        if self.model_id != False and self.record_id != False:
             my_record_count = self.env[self.model_id.model].search_count([('id','=',self.record_id)])
             if my_record_count > 0:
                 my_record = self.env[self.model_id.model].search([('id','=',self.record_id)])

@@ -70,6 +70,17 @@ class esms_templates(models.Model):
     lang = fields.Char(string='Language', help="Optional translation language (ISO code) to select when sending out an email. If not set, the english version will be used. This should usually be a placeholder expression that provides the appropriate language, e.g. ${object.partner_id.lang}.", placeholder="${object.partner_id.lang}")
     from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile")
 
+    @api.model
+    def send_template(self, template_id, record_id):
+        my_template = self.env['esms.templates'].browse(template_id)
+        sms_rendered_content = self.env['esms.templates'].render_template(my_template.template_body, my_template.model_id.model, record_id)
+        
+        rendered_sms_to = self.env['esms.templates'].render_template(my_template.sms_to, my_template.model_id.model, record_id)
+         
+        gateway_model = my_template.from_mobile.account_id.account_gateway.gateway_model_name
+        
+	my_sms = self.env[gateway_model].send_message(my_template.from_mobile.account_id.id, my_template.from_mobile.mobile_number, rendered_sms_to, sms_rendered_content, my_template.model_id, record_id)
+	
     def render_template(self, template, model, res_id):
         """Render the given template text, replace mako expressions ``${expr}``
            with the result of evaluating these expressions with
@@ -104,7 +115,6 @@ class esms_templates(models.Model):
         
         variables['object'] = record
         try:
-            _logger.error("hi")
             render_result = template.render(variables)
         except Exception:
             _logger.error("Failed to render template %r using values %r" % (template, variables))

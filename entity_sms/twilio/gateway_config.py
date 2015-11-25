@@ -151,18 +151,19 @@ class twilio_core(models.Model):
         response_string = requests.get("https://api.twilio.com/2010-04-01/Accounts/" + my_account.twilio_account_sid + "/Messages/" + message_id, auth=(str(my_account.twilio_account_sid), str(my_account.twilio_auth_token)))
         root = etree.fromstring(str(response_string.text))
         
+        
         #map the Twilio delivary code to the esms delivary states 
 	delivary_state = ""
-	if root.xpath('//status')[0].text == "failed":
+	if root.xpath('//Status')[0].text == "failed":
 	    delivary_state = "failed"
-	elif root.xpath('//status')[0].text == "sent":
+	elif root.xpath('//Status')[0].text == "sent":
 	    delivary_state = "successful"
-	elif root.xpath('//status')[0].text == "delivered":
+	elif root.xpath('//Status')[0].text == "delivered":
 	    delivary_state = "DELIVRD"
-	elif root.xpath('//status')[0].text == "undelivered":
+	elif root.xpath('//Status')[0].text == "undelivered":
 	    delivary_state = "UNDELIV"
         
-        my_message = self.env['esms.history'].search(['sms_gateway_message_id','=', message_id])
+        my_message = self.env['esms.history'].search([('sms_gateway_message_id','=', message_id)])
         if len(my_message) > 0:
             self.status_code = delivary_state
             self.delivary_error_string = root.xpath('//ErrorMessage')[0].text        
