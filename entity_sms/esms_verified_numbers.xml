@@ -8,7 +8,7 @@
           <field name="arch" type="xml">
       	      <form>
       	          <header>
-      	              <button name="send_mobile_verify" type="object" string="Verify Number" help="Sends an sms from this number to this number"/>
+      	              <button name="send_mobile_verify" type="object" string="Test Mobile Number" help="Sends an sms from this number to this number to test if the system can receive smses"/>
       	          </header>
       	          <group>
       	              <field name="name"/>

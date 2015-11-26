@@ -11,7 +11,7 @@ class esms_verified_numbers(models.Model):
     name = fields.Char(string="Name") 
     mobile_number = fields.Char(string="Mobile Number")
     account_id = fields.Many2one('esms.accounts', string="Account")
-    mobile_verified = fields.Boolean(readonly="True", string="Verified", help="Verified if the number has functioning send and receive functionality", compute="_mobile_verify")
+    mobile_verified = fields.Boolean(readonly="True", string="Can receive SMS", help="Verified if the number has functioning send and receive functionality", compute="_mobile_verify")
     
     @api.one
     @api.depends('mobile_number')

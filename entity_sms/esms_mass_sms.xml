@@ -9,26 +9,35 @@
       	      <form>
       	          <header>
       	              <button type="object" name="send_mass_sms" string="Send Mass SMS" attrs="{'invisible': ['|', ('mass_sms_state', '!=', 'draft'), ('message_text', '=', False)]}"/>
+      	              <field name="mass_sms_state" widget="statusbar"/>
       	          </header>
-      	          <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_failed_action)d" icon="fa-star">
-		      <field name="fail_count" widget="statinfo"/>
-      	          </button>
-      	          <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_queued_action)d" icon="fa-star">
-		      <field name="queue_count" widget="statinfo"/>
-      	          </button>
-      	          <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_sent_action)d" icon="fa-star">
-		      <field name="sent_count" widget="statinfo"/>
-      	          </button>
-      	          <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_delivered_action)d" icon="fa-star">
-		      <field name="delivered_count" widget="statinfo"/>
-      	          </button>
-      	          <group>
-      	              <field name="from_mobile"/>
-      	              <field name="selected_records"/>
-      	              <field name="message_text"/>
-      	              <field name="mass_sms_state"/>
-      	              <field name="total_count"/>
-      	          </group>
+      	          <sheet>
+      	              <div class="oe_button_box pull-right">
+      	                  <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_failed_action)d" icon="fa-star">
+	                      <field name="fail_count" widget="statinfo"/>
+      	                  </button>
+      	                  <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_queued_action)d" icon="fa-star">
+		              <field name="queue_count" widget="statinfo"/>
+      	                  </button>
+      	                  <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_sent_action)d" icon="fa-star">
+		              <field name="sent_count" widget="statinfo"/>
+      	                  </button>
+      	                  <button class="oe_inline oe_stat_button" type="action" name="%(entity_sms.esms_history_delivered_action)d" icon="fa-star">
+		              <field name="delivered_count" widget="statinfo"/>
+      	                  </button>
+      	              </div>
+      	              <group>
+      	                  <field name="from_mobile" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}"/>
+      	                  <field name="selected_records" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}" context="{'search_default_customer':True}">
+      	                      <tree>
+      	                          <field name="name"/>
+      	                          <field name="mobile"/>
+      	                      </tree>
+      	                  </field>
+      	                  <field name="total_count"/>
+      	                  <field name="message_text" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}"/>
+      	              </group>
+      	          </sheet>
       	      </form>
       	  </field>
       </record>
