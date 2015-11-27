@@ -54,6 +54,18 @@
       	  </field>
       </record>
 
+
+      <record model="ir.ui.view" id="esms_mass_sms_partner_tree_view">
+          <field name="name">esms mass sms partner tree view</field>
+          <field name="model">res.partner</field>
+          <field name="arch" type="xml">
+      	      <tree>
+      	          <field name="name"/>
+      	          <field name="mobile"/>
+      	      </tree>
+      	  </field>
+      </record>
+      
       <record model="ir.actions.act_window" id="esms_mass_sms_action">
           <field name="name">Send Mass SMS</field>
           <field name="res_model">esms.mass.sms</field>

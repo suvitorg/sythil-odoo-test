@@ -1,6 +1,6 @@
 {
     'name': "Entity SMS",
-    'version': "2.9.3",
+    'version': "2.9.4",
     'author': "Sythil",
     'category': "Tools",
     'summary': "Allows 2 way sms conversations between leads/partners using the twilio gateway",
@@ -24,6 +24,7 @@
 	'smsgateway/gateway_config.xml',
         'smsglobal/gateway_config.xml',
         'twilio/gateway_config.xml',
+        'ir_actions.xml',
     ],
     'demo': [],
     'depends': ['web', 'crm','marketing'],

@@ -41,6 +41,8 @@ class smsglobal_core(models.Model):
 	    human_read_error = "INSUFFICIENT CREDIT"
 	elif "ERROR: 40" in response_string.text:
 	    human_read_error = "BAD CREDENTIALS"
+	elif "ERROR: 8" in response_string.text:
+	    human_read_error = "Source or Destination number is not correctly formated"    
 	elif "ERROR" in response_string.text:
 	    human_read_error = "FAILED DELIVERY"
 	else:

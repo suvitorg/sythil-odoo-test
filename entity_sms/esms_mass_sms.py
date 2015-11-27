@@ -25,19 +25,19 @@ class esms_mass_sms(models.Model):
 
     @api.one
     def _fail_count(self):
-        self.fail_count = self.env['esms.history'].search_count([('mass_sms_id','=','self.id'), ('status_code','=','failed')])
+        self.fail_count = self.env['esms.history'].search_count([('mass_sms_id','=',self.id), ('status_code','=','failed')])
         
     @api.one
     def _queue_count(self):
-        self.queue_count = self.env['esms.history'].search_count([('mass_sms_id','=','self.id'), ('status_code','=','queued')])
+        self.queue_count = self.env['esms.history'].search_count([('mass_sms_id','=',self.id), ('status_code','=','queued')])
 
     @api.one
     def _sent_count(self):
-        self.sent_count = self.env['esms.history'].search_count([('mass_sms_id','=','self.id'), ('status_code','=','successful')])
+        self.sent_count = self.env['esms.history'].search_count([('mass_sms_id','=',self.id), ('status_code','=','successful')])
 
     @api.one
     def _delivered_count(self):
-        self.delivered_count = self.env['esms.history'].search_count([('mass_sms_id','=','self.id'), ('status_code','=','DELIVRD')])
+        self.delivered_count = self.env['esms.history'].search_count([('mass_sms_id','=',self.id), ('status_code','=','DELIVRD')])
     
     @api.one
     def send_mass_sms(self):

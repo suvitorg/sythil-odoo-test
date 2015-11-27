@@ -165,8 +165,8 @@ class twilio_core(models.Model):
         
         my_message = self.env['esms.history'].search([('sms_gateway_message_id','=', message_id)])
         if len(my_message) > 0:
-            self.status_code = delivary_state
-            self.delivary_error_string = root.xpath('//ErrorMessage')[0].text        
+            my_message[0].status_code = delivary_state
+            my_message[0].delivary_error_string = root.xpath('//ErrorMessage')[0].text        
             
 class twilio_conf(models.Model):
 

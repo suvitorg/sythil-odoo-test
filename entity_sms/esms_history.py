@@ -4,7 +4,7 @@ _logger = logging.getLogger(__name__)
 import requests
 from datetime import datetime
 
-class esms_history(models.Model):
+class EsmsHistory(models.Model):
 
     _name = "esms.history"
     _order = "my_date desc"
@@ -41,12 +41,19 @@ class esms_history(models.Model):
                 
     @api.model
     def create(self, values):
-        new_rec = super(esms_history, self).create(values)
+        new_rec = super(EsmsHistory, self).create(values)
         
         autoreslist = self.env['esms.autoresponse'].search([('from_mobile','=',new_rec.to_mobile), ('keyword','=ilike',new_rec.sms_content)])
 	if len(autoreslist) > 0 and new_rec.direction == 'I':
 	    autores = autoreslist[0]
-	    self.env[new_rec.account_id.account_gateway.gateway_model_name].send_message(new_rec.account_id.id, new_rec.to_mobile, new_rec.from_mobile, autores.sms_content, new_rec.model_id.model, new_rec.record_id, new_rec.field_id.name)
+	    my_sms = self.env[new_rec.account_id.account_gateway.gateway_model_name].send_message(new_rec.account_id.id, new_rec.to_mobile, new_rec.from_mobile, autores.sms_content, new_rec.model_id.model, new_rec.record_id, new_rec.field_id.name)
+	                
+	    esms_history = self.env['esms.history'].create({'record_id': new_rec.record_id,'model_id':new_rec.model_id.id,'account_id':new_rec.account_id.id,'from_mobile':new_rec.from_mobile,'to_mobile':new_rec.to_mobile,'sms_content':autores.sms_content,'status_string':my_sms.response_string, 'direction':'O','my_date':datetime.utcnow(), 'status_code':my_sms.delivary_state, 'sms_gateway_message_id':my_sms.message_id, 'gateway_id': new_rec.account_id.account_gateway.id})
+            
+            #record the message in the communication log
+            if new_rec.model_id.model == "res.partner": 
+                self.env['res.partner'].browse(new_rec.record_id).message_post(body=autores.sms_content, subject="SMS Auto Response")
+
 	
 	if new_rec.sms_content == 'STOP' and new_rec.direction == 'I' and new_rec.model_name == 'res.partner':
 	    for rec in self.env['res.partner'].search([('id','=',new_rec.record_id)]):

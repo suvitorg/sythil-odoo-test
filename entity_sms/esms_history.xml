@@ -123,7 +123,7 @@
           <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">kanban,tree,form</field>
-          <field name="domain">[('status_code', '=', 'failed')]</field>
+          <field name="domain">[('status_code', '=', 'failed'),('mass_sms_id','=',active_id)]</field>
           <field name="help" type="html">
       	      <p class="oe_view_nocontent_create">SMS History</p>
       	  </field>
@@ -134,7 +134,7 @@
           <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">kanban,tree,form</field>
-          <field name="domain">[('status_code', '=', 'queued')]</field>
+          <field name="domain">[('status_code', '=', 'queued'),('mass_sms_id','=',active_id)]</field>
           <field name="help" type="html">
       	      <p class="oe_view_nocontent_create">SMS History</p>
       	  </field>
@@ -145,7 +145,7 @@
           <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">kanban,tree,form</field>
-          <field name="domain">[('status_code', '=', 'successful')]</field>
+          <field name="domain">[('status_code', '=', 'successful'),('mass_sms_id','=',active_id)]</field>
           <field name="help" type="html">
       	      <p class="oe_view_nocontent_create">SMS History</p>
       	  </field>
@@ -156,7 +156,7 @@
           <field name="res_model">esms.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">kanban,tree,form</field>
-          <field name="domain">[('status_code', '=', 'DELIVRD')]</field>
+          <field name="domain">[('status_code', '=', 'DELIVRD'),('mass_sms_id','=',active_id)]</field>
           <field name="help" type="html">
       	      <p class="oe_view_nocontent_create">SMS History</p>
       	  </field>
