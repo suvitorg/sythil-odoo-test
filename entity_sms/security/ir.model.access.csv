@@ -15,3 +15,4 @@
 "access_esms_templates","access_esms_templates","model_esms_templates",,1,1,1,1
 "access_esms_compose","access_esms_compose","model_esms_compose",,1,1,1,1
 "access_esms_mms","access_esms_mms","model_esms_mms",,1,0,0,0
+"access_esms_settings_system","access_esms_settings_system","model_esms_settings","base.group_system",1,1,1,1
