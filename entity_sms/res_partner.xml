@@ -20,7 +20,16 @@
       	            <field name="mobile" placeholder="E.164 format e.g. +61 427 671 760"/>
       	            <field name="mobile_e164" invisible="True"/>
       	        </field>
+      	        <notebook position="inside">
+      	            <page string="SMS Marketing">
+      	                <group>
+      	                    <field name="sms_opt_out"/>
+      	                </group>
+      	            </page>
+      	        </notebook>
       	    </field>
         </record>
+        
+        
     </data>
 </openerp>
