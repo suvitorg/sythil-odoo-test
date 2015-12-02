@@ -34,7 +34,7 @@
         },
         new_landing_page: function() {
             website.prompt({
-                id: "editor_new_page",
+                id: "editor_new_landing_page",
                 window_title: _t("New Landing Page"),
                 input: _t("Page Title"),
                 init: function () {
