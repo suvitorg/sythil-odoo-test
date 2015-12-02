@@ -31,7 +31,7 @@ class Website_Landng(openerp.addons.web.controllers.main.Home):
     # Edit
     #------------------------------------------------------
     @http.route('/website/landing/add/<path:path>', type='http', auth="user", website=True)
-    def pagenew(self, path, noredirect=False, add_menu=None):
+    def pagelandingnew(self, path, noredirect=False, add_menu=None):
         xml_id = request.registry['website.landing'].new_page(request.cr, request.uid, path, context=request.context)
         if add_menu:
             model, id  = request.registry["ir.model.data"].get_object_reference(request.cr, request.uid, 'website', 'main_menu')

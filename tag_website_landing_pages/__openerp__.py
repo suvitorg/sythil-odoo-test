@@ -1,6 +1,6 @@
 {
     'name': "Website Landing Page(TAG)",
-    'version': "1.1",
+    'version': "1.2",
     'author': "TAGSBM",
     'category': "Tools",
     'data': [
