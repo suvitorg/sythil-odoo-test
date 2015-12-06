@@ -79,7 +79,7 @@ class esms_templates(models.Model):
          
         gateway_model = my_template.from_mobile.account_id.account_gateway.gateway_model_name
         
-	my_sms = self.env[gateway_model].send_message(my_template.from_mobile.account_id.id, my_template.from_mobile.mobile_number, rendered_sms_to, sms_rendered_content, my_template.model_id, record_id)
+	my_sms = self.env[gateway_model].send_message(my_template.from_mobile.account_id.id, my_template.from_mobile.mobile_number, rendered_sms_to, sms_rendered_content, my_template.model_id.model, record_id)
 	
     def render_template(self, template, model, res_id):
         """Render the given template text, replace mako expressions ``${expr}``
