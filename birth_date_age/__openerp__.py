@@ -9,6 +9,9 @@
         'ir.cron.csv',
     ],
     'demo': [],
+    'images':[
+        'static/description/1.png',
+    ],
     'depends': [],
     'installable': True,
 }
