@@ -68,7 +68,7 @@ class esms_templates(models.Model):
     null_value = fields.Char(string='Default Value', help="Optional value to use if the target field is empty")
     copyvalue = fields.Char(string='Placeholder Expression', help="Final placeholder expression, to be copy-pasted in the desired template field.")
     lang = fields.Char(string='Language', help="Optional translation language (ISO code) to select when sending out an email. If not set, the english version will be used. This should usually be a placeholder expression that provides the appropriate language, e.g. ${object.partner_id.lang}.", placeholder="${object.partner_id.lang}")
-    from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile")
+    from_mobile = fields.Many2one('esms.verified.numbers', string="From Mobile")
 
     @api.model
     def send_template(self, template_id, record_id):

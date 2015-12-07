@@ -50,13 +50,7 @@ class smsglobal_core(models.Model):
        
         #The message id is important for delivary reports also set delivary_state=successful
 	sms_gateway_message_id = response_string.text.split('SMSGlobalMsgID:')[1]    
-        
-        #only record the sent sms/mms if it was successfully sent, multi send sms records it inconsiderate
-        if delivary_state == "successful":
-            my_model = self.env['ir.model'].search([('model','=',my_model_name)])
-	    my_field = self.env['ir.model.fields'].search([('name','=',my_field_name)])
-            esms_history = self.env['esms.history'].create({'field_id':my_field[0].id, 'record_id': my_record_id,'model_id':my_model[0].id,'account_id':sms_account.id,'from_mobile':from_number,'to_mobile':to_number,'sms_content':sms_content,'status_string':response_string.text, 'direction':'O','my_date':datetime.utcnow(), 'status_code':delivary_state, 'sms_gateway_message_id':sms_gateway_message_id})
-        
+                
         #send a repsonse back saying how the sending went
         my_sms_response = sms_response()
         my_sms_response.delivary_state = delivary_state
