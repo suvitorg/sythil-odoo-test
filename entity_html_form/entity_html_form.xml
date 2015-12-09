@@ -111,7 +111,7 @@
         
       <menuitem id="ehtml_menu" name="HTML Embed Forms" parent="base.menu_custom" sequence="160"/>
       <menuitem id="ehtml_menu_insert" name="Create Forms" parent="ehtml_menu" action="ehtml_action" sequence="170"/>
-      <menuitem id="ehtml_menu_history" name="Inseted Form Data" parent="ehtml_menu" action="ehtml_history_action" sequence="180"/>
+      <menuitem id="ehtml_menu_history" name="Inserted Form Data" parent="ehtml_menu" action="ehtml_history_action" sequence="180"/>
         
   </data>
 </openerp>

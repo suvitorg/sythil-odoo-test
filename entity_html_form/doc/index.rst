@@ -1,3 +1,17 @@
+Menus
+=====
+HTML Embed Forms
+----------------
+Child of "Settings" menu, parent menu of all other eHTML menus
+
+Create Forms
+------------
+Child of "HTML Embed Forms" menu, place to create HTML forms
+
+Inserted Form Data
+------------------
+Child of "HTML Embed Forms" menu, history of all form submissions
+
 Models / Fields
 ===============
 ehtml.formgen(An individual Form)
@@ -97,3 +111,16 @@ Fields
 **Insert Value (insert_value)**: The value inserted
 
 
+Security
+========
+Administration / Settings (base.group_system)
+---------------------------------------------
+**ehtml.formgen**: Read, Write, Create and Delete
+
+**ehtml.fieldentry**: Read, Write, Create and Delete
+
+**ehtml.fielddefault**: Read, Write, Create and Delete
+
+**ehtml.history**: Read
+
+**ehtml.fieldinsert**:  Read
