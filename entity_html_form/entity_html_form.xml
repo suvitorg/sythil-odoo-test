@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
   <data>
+
+      <record model="ir.sequence.type" id="seq_ehtml_id">
+          <field name="name">eHTML Field Sequence</field>
+          <field name="code">ehtml.fieldentry</field>
+      </record>
+
+      <record id="ehtml_seq_id" model="ir.sequence">
+          <field name="name">eHTML Field Sequence</field>
+          <field name="code">ehtml.fieldentry</field>
+      </record>
+
       <record model="ir.ui.view" id="ehtml_form_view">
          <field name="name">ehtml form</field>
          <field name="model">ehtml.formgen</field>
@@ -17,6 +28,7 @@
 		              <tree editable="bottom">
 		                  <field name="model_id" invisible="1"/>
 		                  <field name="model" invisible="1"/>
+		                  <field name="sequence" widget="handle"/>
 		                  <field name="field_id" domain="['|',('ttype','=','char'),'|',('ttype','=','text'),('ttype','=','integer'),('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid'),('model_id','=',model)]"/>
 		                  <field name="html_name"/>
 		                  <field name="html_field_type"/>

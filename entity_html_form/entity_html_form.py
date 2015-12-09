@@ -5,13 +5,13 @@ _logger = logging.getLogger(__name__)
 
 class ehtml_gen(models.Model):
 
-    _name = "ehtml.formgen"
-
+    _name = "ehtml.formgen"    
+    
     name = fields.Char(string="Form Name", required=True)
     model_id = fields.Many2one('ir.model', string="Model", required=True)
     fields_ids = fields.One2many('ehtml.fieldentry', 'html_id', string="HTML Fields")
     output_html = fields.Text(string='Embed Code')
-    required_fields = fields.Text(readonly=True)
+    required_fields = fields.Text(readonly=True, string="Required Fields")
     defaults_values = fields.One2many('ehtml.fielddefault', 'html_id', string="Default Values", help="Sets the value of an field before it gets inserted into the database")
     return_url = fields.Char(string="Return URL", help="The URL that the user will be redirected to after submitting the form", required=True)
     form_type = fields.Selection([('reg','Plain'),('odoo','Odoo Website')], default="odoo", string="Form Type")
@@ -116,7 +116,7 @@ class ehtml_gen(models.Model):
     @api.one
     def generate_form_odoo(self):
         html_output = ""
-        html_output += '<div id="ehtml_form">' + "\n"
+        html_output += '<div id="ehtml_form" class="container">' + "\n"
         html_output += '<form method="POST" class="form-horizontal mt32" action="' + request.httprequest.host_url + 'form/myinsert">' + "\n"
         for fe in self.fields_ids:              
             html_output += "<div t-attf-class=\"form-group #{error and 'name' in error and 'has-error' or ''}\">\n"
@@ -199,14 +199,23 @@ class ehtml_gen(models.Model):
 class ehtml_field_entry(models.Model):
 
     _name = "ehtml.fieldentry"
-
-    html_id = fields.Many2one('ehtml.formgen')
+    _order = "sequence asc"
+    
+    sequence = fields.Integer(string="Sequence")
+    html_id = fields.Many2one('ehtml.formgen', string="HTML Form")
     model_id = fields.Many2one('ir.model', string="Model", required=True)
-    model = fields.Char(related="model_id.model")
-    field_id = fields.Many2one('ir.model.fields', domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Fields")
+    model = fields.Char(related="model_id.model", string="Related Model")
+    field_id = fields.Many2one('ir.model.fields', domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Field")
     html_name = fields.Char(string="HTML Field Name")
     html_field_type = fields.Selection((('text','Textbox'),('textarea','Textarea'),('number','Number'), ('search','Search') ), string="HTML Field Type")
     
+    @api.model
+    def create(self, values):
+        sequence=self.env['ir.sequence'].get('sequence')
+        values['sequence']=sequence
+        return super(ehtml_field_entry, self).create(values)
+        
+                
     @api.onchange('field_id')
     def update_html_name(self):
         self.html_name = self.field_id.name
@@ -228,9 +237,9 @@ class ehtml_field_default(models.Model):
 
     _name = "ehtml.fielddefault"
 
-    html_id = fields.Many2one('ehtml.formgen')
+    html_id = fields.Many2one('ehtml.formgen', string="HTML Form")
     model_id = fields.Many2one('ir.model', string="Model", required=True)
-    model = fields.Char(related="model_id.model")
+    model = fields.Char(related="model_id.model", string="Model Name")
     field_id = fields.Many2one('ir.model.fields', string="Form Fields")
     default_value = fields.Char(string="Default Value")
     

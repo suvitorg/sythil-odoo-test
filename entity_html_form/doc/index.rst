@@ -32,6 +32,8 @@ Permissions
 
 Fields
 ^^^^^^
+**Sequence (sequence)**: Drag and drop field order
+
 **HTML Form (html_id)**: ID pointing back to the HTML form
 
 **Model (model_id)**: The model ID of the field hidden from user sight

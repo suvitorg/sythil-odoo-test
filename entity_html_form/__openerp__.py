@@ -1,5 +1,5 @@
 {
-    'name': "Entity HTML Form Generator",
+    'name': "HTML Form Builder",
     'version': "1.1",
     'author': "Sythil",
     'category': "Tools",
@@ -8,6 +8,10 @@
         'entity_html_form.xml',
     ],
     'demo': [],
-    'depends': [],
+    'images':[
+    'static/description/1.jpg',
+    ],
+
+    'depends': ['web','website'],
     'installable': True,
 }
