@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+<template id="snippet_ehtml" name="eHTML snippet">
+<section class="oe_snippet_body">
+<div class="container">
+<div class="row">
+hi
+</div>
+</div>
+</section>
+</template>
+
+<template id="ehtml_place_into_bar" inherit_id="website.snippets" name="eHTML Place into bar">
+  <xpath expr="//div[@id='snippet_structure']" position="inside">
+ 
+     <div>
+         <div class="oe_snippet_thumbnail">
+             <img class="oe_snippet_thumbnail_img" src="/entity_html_form/static/src/img/ui/snippet_thumb.jpg"/>
+             <span class="oe_snippet_thumbnail_title">eHTML Forms</span>
+         </div>
+ 
+         <section class="oe_snippet_body fw_categories">
+             <div class="container">
+                 <div class="row">
+                 [html_form]
+                 </div>
+             </div>
+         </section>
+    </div>
+
+    <xpath expr="//div[@id='snippet_options']" position="inside">
+        <div data-snippet-option-id='ehtml_place_into_bar'
+            data-selector=".js_follow_alias"
+            data-selector-siblings="p, h1, h2, h3, blockquote, .well, .panel"
+           >
+            <li>
+                <a href="#" class="button js_mailing_list">Change Form</a>
+            </li>
+        </div>
+    </xpath>      
+
+  </xpath>
+</template>
+
+  </data>
+</openerp>

@@ -26,7 +26,6 @@
       	  <field name="target">inline</field>
       </record>
 
-      <menuitem id="esms_settings_menu" name="Settings" parent="esms_gateway_config_menu" action="esms_settings_action" sequence="10"/>
 
     </data>
 </openerp>
