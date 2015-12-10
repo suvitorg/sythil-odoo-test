@@ -12,6 +12,9 @@
         'etq_exam_share.xml',
     ],
     'demo': [],
-    'depends': ['website'],
+    'images':[
+    'static/description/2.jpg',
+    ],
+    'depends': ['base', 'web', 'website'],
     'installable': True,
 }
