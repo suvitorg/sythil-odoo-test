@@ -1,9 +1,9 @@
 import openerp.http as http
 from openerp.http import request, SUPERUSER_ID
 import logging
-from datetime import datetime
 _logger = logging.getLogger(__name__)
 import werkzeug
+from datetime import datetime
 import json
 
 class MyController(http.Controller):
