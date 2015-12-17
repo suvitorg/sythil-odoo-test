@@ -3,6 +3,7 @@ from openerp.http import request
 import logging
 _logger = logging.getLogger(__name__)
 import werkzeug
+import base64
 
 class MyController(http.Controller):
 
@@ -25,7 +26,10 @@ class MyController(http.Controller):
         
         #populate an array which has ONLY the fields that are in the form (prevent injection)
         for fi in entity_form.fields_ids:
-            secure_values[fi.field_id.name] = values[fi.html_name]
+            if fi.field_id.ttype == "binary":
+                secure_values[fi.field_id.name] = base64.encodestring(values[fi.html_name].read() )    
+            else:
+                secure_values[fi.field_id.name] = values[fi.html_name]
             new_history.insert_data.sudo().create({'html_id': new_history.id, 'field_id':fi.field_id.id, 'insert_value':values[fi.html_name]})
 
         #default values
