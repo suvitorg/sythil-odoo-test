@@ -37,7 +37,7 @@ class twilio_core(models.Model):
 
         #Analyse the reponse string and determine if it sent successfully other wise return a human readable error message   
         human_read_error = ""
-        root = etree.fromstring(str(response_string.text))
+        root = etree.fromstring(response_string.text.encode('utf-8'))
         my_elements_human = root.xpath('/TwilioResponse/RestException/Message')
         if len(my_elements_human) != 0:
 	    human_read_error = my_elements_human[0].text

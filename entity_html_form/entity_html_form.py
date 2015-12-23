@@ -183,7 +183,7 @@ class ehtml_gen(models.Model):
 	        if fe.field_id.required == True:
 	            html_output += ' required'
 	        	            
-	        html_output += '>' + fe.field_id.field_description
+	        html_output += '/>' + fe.field_id.field_description
 	        if fe.field_id.required == True:
 	            html_output += ' *'
 	        
@@ -218,6 +218,9 @@ class ehtml_gen(models.Model):
 	            html_output += ' required'        
 		    	            
     	        html_output += ">\n"
+
+    	        html_output += "            <option value=\"\">Select Option</option>\n"
+
     	        
     	        selection_list = dict(self.env[self.model_id.model]._columns[fe.field_id.name].selection)
     	        
@@ -313,7 +316,7 @@ class ehtml_field_entry(models.Model):
     model = fields.Char(related="model_id.model", string="Related Model")
     field_id = fields.Many2one('ir.model.fields', domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Field")
     html_name = fields.Char(string="HTML Field Name")
-    html_field_type = fields.Selection((('binary','Binary'),('text','Textbox'),('textarea','Textarea'),('number','Number'),('selection','Selection'),('radiobuttons','Radiobuttons'),('search','Search'),('dropdownstatic','Dropdown(static)') ), string="HTML Field Type")
+    html_field_type = fields.Selection((('binary','Binary'),('text','Textbox'),('textarea','Textarea'),('number','Number'),('selection','Selection'),('radiobuttons','Radiobuttons'),('checkbox','Checkbox'),('search','Search'),('dropdownstatic','Dropdown(static)') ), string="HTML Field Type")
     
     @api.model
     def create(self, values):
@@ -331,6 +334,9 @@ class ehtml_field_entry(models.Model):
 
         if (self.field_id.ttype == "boolean"):
 	    self.html_field_type = "checkbox"        
+
+        if (self.field_id.ttype == "selection"):
+	    self.html_field_type = "selection"        
         
         if (self.field_id.ttype == "char"):
             self.html_field_type = "text"

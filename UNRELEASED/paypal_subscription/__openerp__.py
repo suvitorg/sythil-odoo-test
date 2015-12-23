@@ -1,11 +1,10 @@
 {
-    'name': "Membership Subscription(Paypal)",
+    'name': "Payment Subscription(Paypal)",
     'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
-    'summary':'Monthly membership fees',
+    'summary':'Purchase subscription product',
     'data': [
-        'bda.xml',
     ],
     'demo': [],
     'images':[
