@@ -31,7 +31,7 @@
       	                  <field name="selected_records" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}" context="{'search_default_customer':True}">
       	                      <tree>
       	                          <field name="name"/>
-      	                          <field name="mobile"/>
+      	                          <field name="mobile_e164"/>
       	                      </tree>
       	                  </field>
       	                  <field name="total_count"/>

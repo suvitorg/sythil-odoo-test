@@ -8,9 +8,9 @@ class esms_mass_sms(models.Model):
 
     _name = "esms.mass.sms"
     
-    from_mobile = fields.Many2one('esms.verified.numbers', required=True, string="From Mobile", domain="[('mobile_verified','=','True')]")
-    selected_records = fields.Many2many('res.partner', required=True, string="Selected Records", domain="[('sms_opt_out','=',False),('mobile','!=','')]")
-    message_text = fields.Text(string="Message Text", required=True)
+    from_mobile = fields.Many2one('esms.verified.numbers', string="From Mobile", domain="[('mobile_verified','=','True')]")
+    selected_records = fields.Many2many('res.partner', string="Selected Records", domain="[('sms_opt_out','=',False),('mobile','!=','')]")
+    message_text = fields.Text(string="Message Text")
     total_count = fields.Integer(string="Total", compute="_total_count")
     fail_count = fields.Integer(string="Failed", compute="_fail_count")
     queue_count = fields.Integer(string="Queue", compute="_queue_count")
