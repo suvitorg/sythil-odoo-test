@@ -1,8 +1,8 @@
-Views
-=====
-res.partner Age View (birth_date_age_view)
--------------------------------------------------------------------
-inherits ``base.view_partner_form``, Adds ``birth_date`` and ``age`` fields just below ``website`` field.
+Inherited Views
+===============
+res.partner.form (base.view_partner_form)
+-----------------------------------------
+Adds ``birth_date`` and ``age`` fields just below ``website`` field.
 
 Models / Fields
 ===============
