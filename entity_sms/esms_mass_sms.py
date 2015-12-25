@@ -17,7 +17,30 @@ class esms_mass_sms(models.Model):
     sent_count = fields.Integer(string="Sent", compute="_sent_count")
     delivered_count = fields.Integer(string="Received", compute="_delivered_count")
     mass_sms_state = fields.Selection((('draft','Draft'),('sent','Sent')), readonly=True, string="State", default="draft")
+    model_object_field = fields.Many2one('ir.model.fields', string="Field", domain="[('model_id.model','=','res.partner'),('ttype','!=','one2many'),('ttype','!=','many2many')]", help="Select target field from the related document model.\nIf it is a relationship field you will be able to select a target field at the destination of the relationship.")
+    sub_object = fields.Many2one('ir.model', string='Sub-model', readonly=True, help="When a relationship field is selected as first field, this field shows the document model the relationship goes to.")
+    sub_model_object_field = fields.Many2one('ir.model.fields', string='Sub-field', help="When a relationship field is selected as first field, this field lets you select the target field within the destination document model (sub-model).")
+    copyvalue = fields.Char(string='Placeholder Expression', help="Final placeholder expression, to be copy-pasted in the desired template field.")
+
     
+    @api.one
+    @api.onchange('model_object_field')
+    def get_sub_model(self):
+        if self.model_object_field.relation:
+            self.sub_object = self.env['ir.model'].search([('model','=',self.model_object_field.relation)])[0].id
+        else:
+            self.sub_object = False
+        
+    @api.onchange('model_object_field','sub_model_object_field')
+    def build_exp(self):
+        expression = ''
+        if self.model_object_field:
+            expression = "${object." + self.model_object_field.name
+            if self.sub_model_object_field:
+                expression += "." + self.sub_model_object_field.name
+            expression += "}"
+        self.copyvalue = expression
+       
     @api.one
     @api.depends('selected_records')
     def _total_count(self):
@@ -43,7 +66,9 @@ class esms_mass_sms(models.Model):
     def send_mass_sms(self):
         self.mass_sms_state = "sent"
         for rec in self.selected_records:
-            message_final = self.message_text + "\n\nReply STOP to stop receiving sms"
+            sms_rendered_content = self.env['esms.templates'].render_template(self.message_text, 'res.partner', rec.id)
+
+            message_final = sms_rendered_content + "\n\nReply STOP to stop receiving sms"
             gateway_model = self.from_mobile.account_id.account_gateway.gateway_model_name
 	    my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, rec.mobile_e164, message_final, "esms.mass.sms", self.id, "mobile")
             my_model = self.env['ir.model'].search([('model','=','res.partner')])

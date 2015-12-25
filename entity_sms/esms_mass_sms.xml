@@ -26,6 +26,9 @@
 		              <field name="delivered_count" widget="statinfo"/>
       	                  </button>
       	              </div>
+                        <notebook>
+                            <page string="Content">
+
       	              <group>
       	                  <field name="from_mobile" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}"/>
       	                  <field name="selected_records" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}" context="{'search_default_customer':True}">
@@ -37,6 +40,18 @@
       	                  <field name="total_count"/>
       	                  <field name="message_text" attrs="{'readonly': [('mass_sms_state', '=', 'sent')]}"/>
       	              </group>
+</page>
+                            <page string="Dynamic Placeholder Generator">
+                                <group>
+                                    <field name="model_object_field"/>
+                                    <field name="sub_object" readonly="1"/>
+                                    <field name="sub_model_object_field" domain="[('model_id','=',sub_object),('ttype','!=','one2many'),('ttype','!=','many2many')]" attrs="{'readonly':[('sub_object','=',False)],'required':[('sub_object','!=',False)]}"/>
+                                    <field name="copyvalue"/>
+                                </group>
+                            </page>
+                        </notebook>
+
+
       	          </sheet>
       	      </form>
       	  </field>
