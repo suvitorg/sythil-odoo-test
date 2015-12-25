@@ -10,7 +10,7 @@
     'demo': [],
     'depends': ['entity_sms','marketing_campaign'],
     'images':[
-    ''static/description/1.jpg',
+    'static/description/1.jpg',
     ],
     'installable': True,
 }
