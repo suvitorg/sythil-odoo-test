@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <record model="ir.ui.view" id="res_dating_form_view">
+          <field name="name">res.dating form view</field>
+          <field name="model">res.dating</field>
+          <field name="arch" type="xml">
+      	      <form>
+      	          <group>
+      	              <field name="country_id"/>
+      	              <field name="state_id" domain="[('country_id','=',country_id)]"/>
+      	              <field name="people_per_suburb"/>
+      	              <field name="min_age"/>
+      	              <field name="max_age"/>
+      	          </group>
+      	          <footer>
+      	              <button type="object" name="create_fake_profiles" string="Create Fake Profiles"/>
+      	              <button type="object" name="delete_fake_profiles" string="Delete All Fake Profiles"/>
+      	          </footer>
+      	      </form>
+      	  </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="res_dating_action">
+          <field name="name">Create Fake Profiles</field>
+      	  <field name="res_model">res.dating</field>
+      	  <field name="view_type">form</field>
+      	  <field name="view_mode">form</field>
+      	  <field name="target">new</field>
+      </record>
+
+      <menuitem id="res_dating_menu" name="Create Fake Profiles" parent="base.menu_sales" action="res_dating_action" sequence="90"/>
+      
+    </data>
+</openerp>
