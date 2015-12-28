@@ -56,6 +56,8 @@ Fields
 
 **Form Field (field_id)**: The Odoo field this form field inserts data into
 
+**Field Label (field_label)**: Human readable label for the field on the website
+
 **HTML Field Name (html_name)**: The HTML name of the field handy for autocomplete e.g auto fill email/mobile
 
 **HTML Field Type (html_field_type)**: The type of HTML input to use for this type of field

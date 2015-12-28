@@ -5,7 +5,7 @@
     'category': "Tools",
     'summary':'Adds Date of Birth and Age which is updated daily',
     'data': [
-        'bda.xml',
+        'res_partner.xml',
         'ir.cron.csv',
     ],
     'demo': [],

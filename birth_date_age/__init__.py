@@ -1,1 +1,1 @@
-import bda
+import res_partner

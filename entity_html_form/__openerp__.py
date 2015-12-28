@@ -8,11 +8,13 @@
     'data': [
         'entity_html_form.xml',
         'views/snippets.xml',
+        'views/website_templates.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [],
     'images':[
     'static/description/1.jpg',
+    'static/description/2.jpg',
     ],
 
     'depends': ['web','website'],

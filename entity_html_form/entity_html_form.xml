@@ -23,7 +23,6 @@
                           <field name="return_url" placeholder="http://www.google.com.au"/>
                           <field name="model_id"/>
                           <field name="form_type"/>
-                          <field name="required_fields"/>
                           <field name="fields_ids" context="{'html_id': active_id,'default_model_id':model_id}">
 		              <tree editable="bottom">
 		                  <field name="model_id" invisible="1"/>
@@ -31,6 +30,7 @@
 		                  <field name="sequence" widget="handle"/>
 		                  <field name="field_id" domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid'),('model_id','=',model)]"/>
 		                  <field name="html_name"/>
+		                  <field name="field_label"/>
 		                  <field name="html_field_type"/>
 		              </tree>
 		          </field>

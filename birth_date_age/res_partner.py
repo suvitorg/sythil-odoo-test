@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 import logging
 _logger = logging.getLogger(__name__)
 
-class birth_date_age(models.Model):
+class BirthDateAge(models.Model):
 
     _inherit = "res.partner"
 

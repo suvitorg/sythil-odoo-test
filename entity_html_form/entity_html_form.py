@@ -4,19 +4,22 @@ import logging
 _logger = logging.getLogger(__name__)
 import cgi
 
-class ehtml_gen(models.Model):
+class EhtmlFormgen(models.Model):
 
     _name = "ehtml.formgen"    
+    
+    def _default_return_url(self):
+        return request.httprequest.host_url + "form/thankyou"    
     
     name = fields.Char(string="Form Name", required=True)
     model_id = fields.Many2one('ir.model', string="Model", required=True)
     fields_ids = fields.One2many('ehtml.fieldentry', 'html_id', string="HTML Fields")
-    output_html = fields.Text(string='Embed Code')
+    output_html = fields.Text(string='Embed Code', readonly=True)
     required_fields = fields.Text(readonly=True, string="Required Fields")
     defaults_values = fields.One2many('ehtml.fielddefault', 'html_id', string="Default Values", help="Sets the value of an field before it gets inserted into the database")
-    return_url = fields.Char(string="Return URL", help="The URL that the user will be redirected to after submitting the form", required=True)
+    return_url = fields.Char(string="Return URL", default=_default_return_url, help="The URL that the user will be redirected to after submitting the form", required=True)
     form_type = fields.Selection([('reg','Plain'),('odoo','Odoo Website')], default="odoo", string="Form Type")
-    
+        
     @api.onchange('model_id')
     @api.one
     def change_model(self):
@@ -24,14 +27,12 @@ class ehtml_gen(models.Model):
         for field_entry in self.fields_ids:
             field_entry.unlink()
         
-        #get all fields that are required
-        model_fields = self.env['ir.model.fields'].search([('model_id','=', self.model_id.id)])
+        required_string = ""
+        for model_field in self.env['ir.model.fields'].search([('model_id','=', self.model_id.id),('required','=',True) ]):
+            required_string += model_field.field_description.encode("utf-8") + " (" + model_field.name.encode("utf-8") + ")\n"
         
-        self.required_fields = ""
-        for model_field in model_fields:
-            if (model_field.required == True):
-                self.required_fields += str(model_field.field_description) + " (" + str(model_field.name) + ")\n"
-        
+        self.required_fields = required_string
+
     @api.one
     def generate_form(self):
         if self.form_type == 'reg':
@@ -119,7 +120,7 @@ class ehtml_gen(models.Model):
         html_output = ""
         html_output += "<section id=\"ehtml_form\" class=\"oe_snippet_body ehtml_form container\">\n"
         html_output += '  <form method="POST" action="' + request.httprequest.host_url + 'form/myinsert" enctype=\"multipart/form-data\">' + "\n"
-        html_output += "    <h1>Dinner at Eight Platinum Male</h1>\n"
+        html_output += "    <h1>" + self.name.encode("utf-8") + "</h1>\n"
         html_output += "    <div id=\"ehtml_fields\" class=\"oe_structure\">\n"
                                  
         for fe in self.fields_ids:
@@ -127,30 +128,33 @@ class ehtml_gen(models.Model):
             
             if fe.html_field_type == "text":
                 html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label for=\"" + fe.html_name + "\">" + fe.field_id.field_description
-                if fe.field_id.required == True:
-                    html_output += ' *'
-                    
-                html_output += '</label>\n'
+		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
+		
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'		
+		
+		html_output += ">" + fe.field_label + "</label>\n"
+                
                 html_output += '          <input type="text" class="form-control" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-                    
+                
                 if fe.field_id.size > 0:
                     html_output += ' maxlength="' + fe.field_id.size + '"'
                     
                 if fe.field_id.required == True:
                     html_output += ' required="required"'
                 
-                html_output += '/>\n'
+                html_output += "/>\n"
                 html_output += "        </div>\n"
             if fe.html_field_type == "textarea":
                 html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label for=\"" + fe.html_name + "\">" + fe.field_id.field_description
-                if fe.field_id.required == True:
-                    html_output += ' *'
-                    
-                html_output += '</label>\n'
+		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
+		                
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'         
+                
+		html_output += ">" + fe.field_label + "</label>\n"
                 html_output += '          <textarea class="form-control" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-                   
+                                
                 if fe.field_id.required == True:
     	            html_output += ' required'
     	            
@@ -159,13 +163,15 @@ class ehtml_gen(models.Model):
     	        html_output += "        </div>\n"
             if fe.html_field_type == "binary":
                 html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label for=\"" + fe.html_name + "\">" + fe.field_id.field_description
-                if fe.field_id.required == True:
-                    html_output += ' *'
-                    
-                html_output += '</label>\n'
+		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
+		
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'		
+		
+		html_output += ">" + fe.field_label + "</label>\n"
+
                 html_output += '          <input type="file" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-                   
+                                
                 if fe.field_id.required == True:
     	            html_output += ' required'
     	            
@@ -175,45 +181,54 @@ class ehtml_gen(models.Model):
  
     	    if fe.html_field_type == "checkbox":
 	        html_output += "        <div class=\"checkbox\">\n"
-	        html_output += "          <label>\n"
+	        html_output += "          <label class=\"control-label\""
+	                        
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'
+	        
+	        html_output += ">\n"
 	        
 	                        
 	        html_output += '          <input type="checkbox" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-	                       
+                                	                       
 	        if fe.field_id.required == True:
 	            html_output += ' required'
 	        	            
-	        html_output += '/>' + fe.field_id.field_description
-	        if fe.field_id.required == True:
-	            html_output += ' *'
+	        html_output += '/>' + fe.field_label + "\n"
 	        
-	        html_output += "\n"	        
 	        html_output += "          </label>\n"
 	        html_output += "        </div>\n"
     	    
     	    if fe.html_field_type == "number":
                 html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label for=\"" + fe.html_name + "\">" + fe.field_id.field_description
-                if fe.field_id.required == True:
-                    html_output += ' *'
-                    
-                html_output += '</label>\n'                	        
+		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
+		
+                
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'		
+		
+		html_output += ">" + fe.field_label + "</label>\n"                	        
+	        
 	        html_output += '          <input type="number" class="form-control" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-		    
+                                		    
 	        if fe.field_id.required == True:
 	            html_output += ' required'        
 		    	            
-    	        html_output += '/>\n'
+    	        html_output += "/>\n"
     	        html_output += "        </div>\n"
     	    if fe.html_field_type == "selection":
                 html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label for=\"" + fe.html_name + "\">" + fe.field_id.field_description
-                if fe.field_id.required == True:
-                    html_output += ' *'
-                    
-                html_output += '</label>\n'
+		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
+		                
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'                
+                		
+		html_output += ">" + fe.field_label
+                
+                                    
+                html_output += "</label>\n"
 	        html_output += '          <select class="form-control" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-		    
+                		    
 	        if fe.field_id.required == True:
 	            html_output += ' required'        
 		    	            
@@ -233,12 +248,13 @@ class ehtml_gen(models.Model):
 
     	    if fe.html_field_type == "radiobuttons":
                 
-                html_output += "      <label>" + fe.field_id.field_description
-		                
-		if fe.field_id.required == True:
-		    html_output += ' *'
-		                    
-                html_output += '</label>\n'
+                html_output += "      <label class=\"control-label\""
+                
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'                
+                
+                html_output += ">" + fe.field_label + "</label>\n"
+    	        
     	        selection_list = dict(self.env[self.model_id.model]._columns[fe.field_id.name].selection)
     	        
     	        for selection_value,selection_label in selection_list.items():
@@ -255,11 +271,14 @@ class ehtml_gen(models.Model):
     	            
     	    if fe.html_field_type == "dropdownstatic":
                 html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label for=\"" + fe.html_name + "\">" + fe.field_id.field_description
-                if fe.field_id.required == True:
-                    html_output += ' *'
+		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
+		                
+                if fe.field_id.required == False:
+                    html_output += ' style="font-weight: normal"'		
+		
+		html_output += ">" + fe.field_label                                
                     
-                html_output += '</label>\n'
+                html_output += "</label>\n"
 	        html_output += '          <select class="form-control" id="' + fe.html_name + '" name="' + fe.html_name + '"'
 		    
 	        if fe.field_id.required == True:
@@ -272,29 +291,6 @@ class ehtml_gen(models.Model):
     	        
     	        html_output += "          </select>\n"
     	        html_output += "        </div>\n"
-    	        
-    	    if fe.html_field_type == "search":
-                html_output += "<script>\n"
-                html_output += "$(document).ready(function() {\n"
-                html_output += '    $("#' + fe.html_name + '").autocomplete({' + "\n"
-                html_output += "        source: function( request, response ) {\n"
-                html_output += '            $.ajax({url: "' + request.httprequest.host_url + 'form/autocomplete?callback=?",dataType: "jsonp",' + "\n"
-                html_output += '            data: {'+ "\n"
-                html_output += "                q: request.term\n"
-                html_output += "            },\n"
-                html_output += "            success: function( data ) {\n"
-                html_output += "                response( data );\n"
-                html_output += "            }});\n"
-                html_output += "        }\n"
-                html_output += "    });\n"
-                html_output += "});\n"
-                html_output += "</script>\n"
-                html_output += '<input type="search" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-		    
-	        if fe.field_id.required == True:
-	            html_output += ' required'
-		    	            
-    	        html_output += '/>\n'
             
             html_output += "      </section>\n"
 	html_output += '      <input type="hidden" name="form_id" value="' + str(self.id) + '"/>' + "\n"
@@ -305,7 +301,7 @@ class ehtml_gen(models.Model):
         html_output += "</section>\n"
         self.output_html = html_output
 
-class ehtml_field_entry(models.Model):
+class EhtmlFieldEntry(models.Model):
 
     _name = "ehtml.fieldentry"
     _order = "sequence asc"
@@ -315,6 +311,7 @@ class ehtml_field_entry(models.Model):
     model_id = fields.Many2one('ir.model', string="Model", required=True)
     model = fields.Char(related="model_id.model", string="Related Model")
     field_id = fields.Many2one('ir.model.fields', domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Field")
+    field_label = fields.Char(string="Field Label")
     html_name = fields.Char(string="HTML Field Name")
     html_field_type = fields.Selection((('binary','Binary'),('text','Textbox'),('textarea','Textarea'),('number','Number'),('selection','Selection'),('radiobuttons','Radiobuttons'),('checkbox','Checkbox'),('search','Search'),('dropdownstatic','Dropdown(static)') ), string="HTML Field Type")
     
@@ -322,12 +319,12 @@ class ehtml_field_entry(models.Model):
     def create(self, values):
         sequence=self.env['ir.sequence'].get('sequence')
         values['sequence']=sequence
-        return super(ehtml_field_entry, self).create(values)
-        
+        return super(EhtmlFieldEntry, self).create(values)
                 
     @api.onchange('field_id')
     def update_html_name(self):
         self.html_name = self.field_id.name
+        self.field_label = self.field_id.field_description
 
         if (self.field_id.ttype == "binary"):
 	    self.html_field_type = "binary"
@@ -350,7 +347,7 @@ class ehtml_field_entry(models.Model):
         if (self.field_id.ttype == "many2one"):
 	    self.html_field_type = "dropdownstatic"
         
-class ehtml_field_default(models.Model):
+class EhtmlFieldDefault(models.Model):
 
     _name = "ehtml.fielddefault"
 
@@ -360,7 +357,7 @@ class ehtml_field_default(models.Model):
     field_id = fields.Many2one('ir.model.fields', string="Form Fields")
     default_value = fields.Char(string="Default Value")
     
-class ehtml_history(models.Model):
+class EhtmlHistory(models.Model):
 
     _name = "ehtml.history"
 
@@ -370,7 +367,7 @@ class ehtml_history(models.Model):
     form_name = fields.Char(string="Form Name", related="html_id.name")
     insert_data = fields.One2many('ehtml.fieldinsert', 'html_id', string="HTML Fields", readonly=True)
     
-class ehtml_field_insert(models.Model):
+class EhtmlFieldInsert(models.Model):
 
     _name = "ehtml.fieldinsert"
 

@@ -7,6 +7,10 @@ import base64
 
 class MyController(http.Controller):
 
+    @http.route('/form/thankyou', type="http", auth="public", website=True)
+    def ehtml_thanks(self, **kw):
+        return http.request.render('entity_html_form.ehtml_thank_you', {})
+        
     @http.route('/form/myinsert',type="http", auth="public")
     def my_insert(self, **kwargs):
         
