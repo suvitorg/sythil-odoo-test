@@ -3,11 +3,15 @@
     'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
-    'summary':'Creates an ERD starting from the specified table and transending a certain depth',
+    'summary':'Creates an Entity Relationship Diagram (ERD)',
     'data': [
-        'erdm.xml',
+        'erd_maker.xml',
+        'erd_maker_module.xml',
     ],
     'demo': [],
     'depends': [],
+    'images':[
+    'static/description/1.png',
+    ],
     'installable': True,
 }
