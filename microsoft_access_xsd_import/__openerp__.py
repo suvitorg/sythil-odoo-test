@@ -7,6 +7,9 @@
         'maxsdi.xml',
     ],
     'demo': [],
+    'images':[
+        'static/description/1.jpg',
+    ],
     'depends': [],
     'installable': True,
 }
