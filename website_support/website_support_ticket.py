@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 
-class website_support_ticket(models.Model):
+class WebsiteSupportTicket(models.Model):
 
     _name = "website.support.ticket"
     
@@ -16,10 +16,10 @@ class website_support_ticket(models.Model):
     partner_id = fields.Many2one('res.partner', string="Partner", readonly=True)
     person_name = fields.Char(required=True, string='Person Name', readonly=True)
     email = fields.Char(string="Email", readonly=True)
-    category = fields.Many2one('website.support.ticket.categories', required=True)
+    category = fields.Many2one('website.support.ticket.categories', string="Category", required=True)
     subject = fields.Char(string="Subject", readonly=True)
     description = fields.Text(string="Description", readonly=True)
-    state = fields.Many2one('website.support.ticket.states', required=True, default=_open_ticket)
+    state = fields.Many2one('website.support.ticket.states', required=True, default=_open_ticket, string="State")
     conversation_history = fields.One2many('website.support.ticket.message', 'ticket_id', string="Conversation History")
 
     @api.one
@@ -33,20 +33,20 @@ class website_support_ticket(models.Model):
 	#msg_id = self.env['mail.mail'].create(values)
         #self.env['mail.mail'].send([msg_id], True)
     
-class website_support_ticket_message(models.Model):
+class WebsiteSupportTicketMessage(models.Model):
 
     _name = "website.support.ticket.message"
     
     ticket_id = fields.Many2one('website.support.ticket', string='Ticket ID')
     content = fields.Text(string="Content")
    
-class website_support_ticket_categories(models.Model):
+class WebsiteSupportTicketCategories(models.Model):
 
     _name = "website.support.ticket.categories"
     
     name = fields.Char(required=True, string='Category Name')
    
-class website_support_ticket_states(models.Model):
+class WebsiteSupportTicketStates(models.Model):
 
     _name = "website.support.ticket.states"
     

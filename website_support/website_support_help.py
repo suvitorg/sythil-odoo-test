@@ -8,7 +8,7 @@ from openerp.tools import html_escape as escape, ustr, image_resize_and_sharpen,
 import unicodedata
 import re
 
-class website_support_help_groups(models.Model):
+class WebsiteSupportHelpGroups(models.Model):
 
     _name = "website.support.help.groups"
     
@@ -21,14 +21,14 @@ class website_support_help_groups(models.Model):
     def _page_count(self):
         self.page_count = self.env['website.support.help.page'].search_count([('group_id','=',self.id)])
     
-class website_support_help_page(models.Model):
+class WebsiteSupportHelpPage(models.Model):
 
     _name = "website.support.help.page"
     _order = "name asc"
     
     name = fields.Char(string='Page Name')
     url = fields.Char(string="Page URL")
-    group_id = fields.Many2one('website.support.help.groups')
+    group_id = fields.Many2one('website.support.help.groups', string="Group")
     
     @api.one
     @api.onchange('name')

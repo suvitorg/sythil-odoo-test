@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 
-class res_partner_ticket(models.Model):
+class ResPartnerTicket(models.Model):
 
     _inherit = "res.partner"
     
