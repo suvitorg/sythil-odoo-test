@@ -31,6 +31,7 @@
       	              <field name="questions">
       	                  <tree>
       	                      <field name="question"/>
+      	                      <field name="question_type"/>
       	                      <field name="num_options"/>
       	                      <field name="num_correct"/>
       	                  </tree>
@@ -67,13 +68,27 @@
       	      <form>
       	          <group>
       	              <field name="question"/>
-      	              <field name="question_options" context="{'question_id':active_id}">
+      	              <field name="question_rendered"/>
+      	              <field name="question_type"/>
+      	              <field name="question_options" attrs="{'invisible':[('question_type','!=','multi_choice')]}" context="{'question_id':active_id}">
       	                  <tree editable="bottom">
       	                      <field name="option"/>
       	                      <field name="correct"/>
       	                  </tree>
       	              </field>
+
       	          </group>
+      	          <div attrs="{'invisible':[('question_type','!=','fill_blank')]}">
+		      pharse questions like this<br/>
+		      Bob went to the {1} and bought a {2} yesterday<br/>
+		      the {1} and {2} will get replaced by blank boxes and will be marked as correct if they match the answers in this list<br/>
+		      max 9 blank boxes
+		      <field name="question_options_blank" context="{'question_id':active_id}">
+		          <tree editable="bottom">
+		              <field name="answer"/>
+		          </tree>
+		      </field>
+      	          </div>
       	      </form>
       	  </field>
       </record>

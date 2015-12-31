@@ -8,7 +8,7 @@ from openerp.tools import html_escape as escape, ustr, image_resize_and_sharpen,
 import unicodedata
 import re
 
-class etq_exam(models.Model):
+class EtqExam(models.Model):
 
     _name = "etq.exam"
     
@@ -36,15 +36,37 @@ class etq_exam(models.Model):
             
             self.slug = slug
     
-class etq_question(models.Model):
+class EtqQuestion(models.Model):
 
     _name = "etq.question"
     
     exam_id = fields.Many2one('etq.exam',string="Exam ID")
     question = fields.Char(string="Question")
-    question_options = fields.One2many('etq.question.option','question_id',string="Options")
+    question_rendered = fields.Char(string="Question Render", compute="render_question")    
+    question_type = fields.Selection((('multi_choice','Multiple Choice'), ('fill_blank','Fill in the Blank')), default="multi_choice", string="Question Type")
+    question_options = fields.One2many('etq.question.option','question_id',string="Multiple Choice Options")
+    question_options_blank = fields.One2many('etq.question.optionblank','question_id',string="Fill in the Blank Options")    
     num_options = fields.Integer(string="Options",compute="calc_options")
     num_correct = fields.Integer(string="Correct Options",compute="calc_correct")
+
+    @api.one
+    @api.depends('question')
+    def render_question(self):
+        if self.question:
+            temp_string = self.question
+            
+            temp_string = temp_string.replace("{1}","<i><input name=\"question" + str(self.id) + "option1\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{2}","<i><input name=\"question" + str(self.id) + "option2\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{3}","<i><input name=\"question" + str(self.id) + "option3\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{4}","<i><input name=\"question" + str(self.id) + "option4\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{5}","<i><input name=\"question" + str(self.id) + "option5\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{6}","<i><input name=\"question" + str(self.id) + "option6\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{7}","<i><input name=\"question" + str(self.id) + "option7\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{8}","<i><input name=\"question" + str(self.id) + "option8\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            temp_string = temp_string.replace("{9}","<i><input name=\"question" + str(self.id) + "option9\" size=\"5\" style=\"border:none;border-bottom: 1px black solid;\" type=\"text\"/></i>")
+            self.question_rendered = temp_string
+            
+            
 
     @api.one
     @api.depends('question_options')
@@ -56,10 +78,17 @@ class etq_question(models.Model):
     def calc_correct(self):
         self.num_correct = self.question_options.search_count([('question_id','=',self.id), ('correct','=',True)])
     
-class etq_question_options(models.Model):
+class EtqQuestionOptions(models.Model):
 
     _name = "etq.question.option"
     
     question_id = fields.Many2one('etq.question',string="Question ID")
     option = fields.Char(string="Option")
     correct = fields.Boolean(string="Correct")
+    
+class EtqQuestionOptionBlank(models.Model):
+
+    _name = "etq.question.optionblank"
+    
+    question_id = fields.Many2one('etq.question',string="Question ID")
+    answer = fields.Char(string="Blank Answer")

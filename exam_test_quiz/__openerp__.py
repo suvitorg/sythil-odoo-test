@@ -1,6 +1,6 @@
 {
     'name': "Online Exam / Test / Quiz",
-    'version': "0.6.1",
+    'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
     'summary': "Informal Online Exam / Test / Quiz",

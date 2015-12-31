@@ -31,3 +31,5 @@ class etq_result_question_options(models.Model):
     
     question_id = fields.Many2one('etq.result.question',string="Question ID", readonly=True)
     option_id = fields.Many2one('option', string="Option", readonly=True)
+    question_options_value = fields.Char(string="Option Value", readonly=True)
+    
