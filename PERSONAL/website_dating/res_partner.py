@@ -20,6 +20,7 @@ class ResPartnerWebsiteDating(models.Model):
     location_string = fields.Char(string="Location", compute="_compute_location", store=True)
     interest_list = fields.Many2many('res.partner.interests', string="Interest List")
     dating_matches = fields.Text(string="Dating Matches")
+    profile_visibility = fields.Selection([('public','Public'), ('members_only','Members Only'), ('not_listed','Not Listed')], default="members_only", string="Profile Visibility", help="Public: can be viewed by anyone on the internet\nMembers Only: Can only be viewed by people who have an account\nNot Listed: Profile will only be visiable to members you have contacted")
     
     @api.one
     def find_dating_matches(self):
