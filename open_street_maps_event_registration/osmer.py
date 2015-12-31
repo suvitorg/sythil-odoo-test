@@ -13,11 +13,11 @@ from openerp.tools.translate import _
 import requests
 from lxml import etree
 
-class osmer(models.Model):
+class Osmer(models.Model):
 
     _inherit = "event.event"
 
-    osmer_secret = fields.Char()
+    osmer_secret = fields.Char(string="Osmer Secret")
  
     @api.multi
     def open_map(self):
@@ -72,7 +72,7 @@ class MyController(http.Controller):
             
             #location = geolocator.geocode(location_string)     
             response_string = requests.post("http://nominatim.openstreetmap.org/search/" + location_string + "?format=xml")
-            _logger.error(response_string.text)
+            
             root = etree.fromstring(str(response_string.text.encode('utf-8')))
             my_elements = root.xpath('//place')
 	        
