@@ -7,12 +7,14 @@
     'data': [
     'res_dating.xml',
     'res_partner.xml',
+    'views/website_dating_views.xml',
     'ir.cron.csv',
     'res.dating.fake.first.csv',
     'res.dating.fake.last.csv',
     'res.partner.gender.csv',
+    'website.menu.csv',
     ],
     'demo': [],
-    'depends': ['crm','base_location_geonames_import','partner_firstname'],
+    'depends': ['crm','base_location_geonames_import','partner_firstname', 'website'],
     'installable': True,
 }

@@ -18,8 +18,9 @@
 			    <field name="gender"/>
 			    <field name="gender_pref"/>
 			    <field name="interest_list"/>
-			    <field name="dating_matches"/>
-			    <button type="object" name="find_dating_matches" string="Find Matches"/>
+			    <field name="profile_visibility"/>			    
+			    <field name="like_list"/>
+			    <field name="dating_messages"/>
       	                </group>
       	            </page>
       	        </notebook>

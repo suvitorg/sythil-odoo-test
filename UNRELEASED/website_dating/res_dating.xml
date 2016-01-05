@@ -9,7 +9,7 @@
       	          <group>
       	              <field name="country_id"/>
       	              <field name="state_id" domain="[('country_id','=',country_id)]"/>
-      	              <field name="people_per_suburb"/>
+      	              <field name="num_profiles"/>
       	              <field name="min_age"/>
       	              <field name="max_age"/>
       	          </group>

@@ -12,58 +12,42 @@ class ResPartnerWebsiteDating(models.Model):
     dating = fields.Boolean(string="Dating")
     fake_profile = fields.Boolean(string="Fake Profile")
     birth_date = fields.Date(string="DOB")
-    age = fields.Integer(string="Age", readonly=True)
+    age = fields.Integer(string="Age")
     gender = fields.Many2one('res.partner.gender', string="Gender")
     gender_pref = fields.Many2many('res.partner.gender', string="Gender Preference")
     min_age_pref = fields.Integer(string="Min Age Preference")
     max_age_pref = fields.Integer(string="Max Age Preference")
+    age_pref_string = fields.Char(string="Age Pref", compute="_calc_age_pref")
     location_string = fields.Char(string="Location", compute="_compute_location", store=True)
     interest_list = fields.Many2many('res.partner.interests', string="Interest List")
-    dating_matches = fields.Text(string="Dating Matches")
-    profile_visibility = fields.Selection([('public','Public'), ('members_only','Members Only'), ('not_listed','Not Listed')], default="members_only", string="Profile Visibility", help="Public: can be viewed by anyone on the internet\nMembers Only: Can only be viewed by people who have an account\nNot Listed: Profile will only be visiable to members you have contacted")
-    
-    @api.one
-    def find_dating_matches(self):
-        domain_string = ""
-        #domain_string = "["
-        
-        #only dating members
-        domain_string += "('dating','=','True')"
-        
-        #within age pref age range
-        domain_string += ", ('age','>=','" + str(self.min_age_pref) + "')"
-        domain_string += ", ('age','<=','" + str(self.max_age_pref) + "')"
-        
-        #other person seeking your age group
-        
-        
-        #gender preference
-        
-        
-        #domain_string += "]"
-        
-        temp_s = ""
-        for mat in self.env['res.partner'].search([('dating','=','True'), ('age','>=','29'), ('age','<=','58')]):
-            temp_s += str(mat.name)
-        self.dating_matches = temp_s
+    profile_visibility = fields.Selection([('public','Public'), ('members_only','Members Only'), ('not_listed','Not Listed')], default="not_listed", string="Profile Visibility", help="Public: can be viewed by anyone on the internet\nMembers Only: Can only be viewed by people who have an account\nNot Listed: Profile will only be visiable to members you have contacted")
+    profile_text = fields.Text(string="Profile Text")
+    like_list = fields.Many2many(comodel_name='res.partner', relation='like_list', column1='like1', column2='like2', string='Like List')
+    dating_messages = fields.One2many('res.dating.message', 'partner_id', string="Dating Message")
 
+    @api.one
+    @api.depends('min_age_pref','max_age_pref')
+    def _calc_age_pref(self):
+        self.age_pref_string = str(self.min_age_pref) + " - " + str(self.max_age_pref)
+            
     @api.one
     @api.depends('country_id.name','state_id.name','city')
     def _compute_location(self):
         slocation = ""
-        if self.country_id:
-            slocation += self.country_id.name + ", "
-            
-        if self.state_id:
-	    slocation += self.state_id.name + ", "
 	    
 	if self.city:
 	    slocation += self.city + ", "
 	    
-	self.location_string = slocation
+	if self.state_id:
+	    slocation += self.state_id.name + ", "
+	    
+        if self.country_id:
+            slocation += self.country_id.name + ", "
+	    
+	self.location_string = slocation[:-2]
         
-    @api.onchange('birth_date')
     @api.one
+    @api.onchange('birth_date')
     def update_ages_onchange(self):
         if self.birth_date:
             d1 = datetime.strptime(self.birth_date, "%Y-%m-%d").date()
@@ -83,6 +67,7 @@ class ResPartnerWebsiteDatingGender(models.Model):
     _name = "res.partner.gender"
 
     name = fields.Char(string="Gender")
+    letter = fields.Char(string="Letter")
     
 class ResPartnerInterests(models.Model):
 

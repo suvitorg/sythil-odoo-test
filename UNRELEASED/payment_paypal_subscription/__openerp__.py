@@ -1,15 +1,16 @@
 {
     'name': "Payment Subscription(Paypal)",
     'version': "1.0",
-    'author': "Sythil",
+    'author': "Vuente",
     'category': "Tools",
     'summary':'Purchase subscription product',
-    'data': [
-    ],
     'demo': [],
     'images':[
         'static/description/1.png',
     ],
-    'depends': [],
+    'data': [
+        'product_template.xml',
+    ],
+    'depends': ['payment_paypal','website_sale'],
     'installable': True,
 }
