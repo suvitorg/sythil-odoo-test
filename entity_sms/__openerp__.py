@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary': "Allows 2 way sms conversations between leads/partners using the twilio gateway",
+    'license':'GPL-3',
     'data': [
         'ir.cron.csv',
         'esms_core.xml',

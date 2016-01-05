@@ -3,6 +3,7 @@
     'version': "1.0",
     'author': "Sythil",
     'category': "Tools",
+    'license':'GPL-3',
     'data': [
         'maxsdi.xml',
     ],

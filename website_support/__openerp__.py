@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary': "A helpdesk / support ticket system for your website",
+    'license':'GPL-3',
     'data': [
         'website_support_ticket.xml',
         'website_support_ticket_categories.xml',

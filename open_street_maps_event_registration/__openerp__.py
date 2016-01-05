@@ -3,6 +3,7 @@
     'version': "1.2",
     'author': "Sythil",
     'summary':'Shows the locations of all partners on an event',
+    'license':'GPL-3',
     'category': "Tools",
     'data': [
         'osmer.xml',

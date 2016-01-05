@@ -5,6 +5,7 @@
     'category': "Tools",
     'summary': "Creates an HTML form that you can embed anywhere",
     'description': "Creates an HTML form that you can embed anywhere",
+    'license':'GPL-3',
     'data': [
         'entity_html_form.xml',
         'views/snippets.xml',

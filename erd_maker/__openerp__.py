@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary':'Creates an Entity Relationship Diagram (ERD)',
+    'license':'GPL-3',
     'data': [
         'erd_maker.xml',
         'erd_maker_module.xml',

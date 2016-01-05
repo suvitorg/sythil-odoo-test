@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary':'Adds Date of Birth and Age which is updated daily',
+    'license':'GPL-3',
     'data': [
         'res_partner.xml',
         'ir.cron.csv',

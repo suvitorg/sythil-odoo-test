@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary': "A directory of single people",
+    'license':'GPL-3',
     'data': [
     'res_dating.xml',
     'res_partner.xml',

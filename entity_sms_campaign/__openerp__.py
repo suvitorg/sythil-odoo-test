@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary': "Adds the ability to more easily send smses from a marketing campaign",
+    'license':'GPL-3',
     'data': [
     'marketing_campaign_activity.xml',
     ],

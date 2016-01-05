@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary': "The Website Directory",
+    'license':'GPL-3',
     'data': [
     'views/resaurant_pos_online.xml',
     'views/assets.xml',    

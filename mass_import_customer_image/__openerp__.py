@@ -4,6 +4,7 @@
     'author': "Sythil",
     'category': "Tools",
     'summary':"Imports a large amount of customer image files",
+    'license':'GPL-3',
     'data': [
         'mass_customer_image_migrate.xml',
     ],
