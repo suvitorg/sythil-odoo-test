@@ -1,6 +1,6 @@
 {
-    'name': "Website Dating",
-    'version': "0.1",
+    'name': "Website Dating (Super Alpha)",
+    'version': "0.1.5",
     'author': "Sythil",
     'category': "Tools",
     'summary': "A directory of single people",
@@ -14,6 +14,7 @@
     'res.dating.fake.last.csv',
     'res.partner.gender.csv',
     'website.menu.csv',
+    'res.partner.relationship.csv',
     ],
     'demo': [],
     'depends': ['crm','base_location_geonames_import','partner_firstname', 'website'],

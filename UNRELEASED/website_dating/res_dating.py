@@ -52,6 +52,9 @@ class ResDating(models.Model):
             min_age_pref = randint(self.min_age, self.max_age)
             max_age_pref = randint(min_age_pref, self.max_age)
 
+            #random relationship type
+            relationship_type = self.env['res.partner.relationship'].browse(randint(1, self.env['res.partner.relationship'].search_count([]) ) )
+            
             #random suburb
             rand_suburb = suburb_list[randint(0, len(suburb_list) - 1)]
                 
@@ -66,11 +69,10 @@ class ResDating(models.Model):
                 profile_vis = "public"
                 
             #random profile text
-            profile_text = "I am " + str(age)
+            profile_text = "I am " + str(age) + " year old " + first_name.gender + " seeking " + str(relationship_type.name)
             
             #create the partner
-            new_partner = self.env['res.partner'].create({'profile_text': profile_text,'profile_visibility': profile_vis,'dating':'True', 'fake_profile':'True', 'birth_date': birth_date, 'firstname':first_name.name, 'lastname':last_name.name,'gender':gender, 'zip_id':rand_suburb.id, 'country_id':rand_suburb.country_id.id, 'state_id':rand_suburb.state_id.id, 'city':rand_suburb.city,'zip':rand_suburb.name, 'age':age,'min_age_pref':min_age_pref,'max_age_pref':max_age_pref})
-            
+            new_partner = self.env['res.partner'].create({'profile_text': profile_text,'profile_visibility': profile_vis,'dating':'True', 'fake_profile':'True', 'birth_date': birth_date, 'firstname':first_name.name, 'lastname':last_name.name,'gender':gender, 'zip_id':rand_suburb.id, 'country_id':rand_suburb.country_id.id, 'state_id':rand_suburb.state_id.id, 'city':rand_suburb.city,'zip':rand_suburb.name, 'age':age, 'relationship_type': relationship_type.id, 'min_age_pref':min_age_pref,'max_age_pref':max_age_pref})           
             
             #random gender pref
             rand_gender_pref = randint(1, 100)

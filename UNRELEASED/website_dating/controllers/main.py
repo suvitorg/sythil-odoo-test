@@ -117,6 +117,15 @@ class WebsiteDatingController(http.Controller):
         
         return http.request.render('website_dating.my_dating_list', {'my_dates': my_dates, 'my_dates_count': my_dates_count} )
 
+    @http.route('/dating/profiles/settings', type="http", auth="user", website=True)
+    def dating_profile_settings(self, **kwargs):
+        
+        #only logged in members can view this page
+        if http.request.env.user.partner_id.name != 'Public user':
+            return http.request.render('website_dating.my_dating_profile_settings', {'my_date': http.request.env.user.partner_id} )
+        else:
+            return "Permission Denied"
+            
     @http.route('/dating/profiles/<member_id>', type="http", auth="public", website=True)
     def dating_profile(self, member_id, **kwargs):
         
@@ -124,7 +133,7 @@ class WebsiteDatingController(http.Controller):
         they_like = False
         can_view = False
         
-        member = http.request.env['res.partner'].search([('id','=',member_id), ('dating','=',True)])[0]
+        member = http.request.env['res.partner'].sudo().search([('id','=',member_id), ('dating','=',True)])[0]
         partner = http.request.env.user.partner_id
         
         
@@ -152,7 +161,7 @@ class WebsiteDatingController(http.Controller):
                 can_view = True
         
         #the owner can view there own profile
-        if http.request.env.user.partner_id.id == member_id:
+        if http.request.env.user.partner_id.id == int(member_id):
             can_view = True
         
         if can_view:

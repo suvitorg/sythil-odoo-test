@@ -17,7 +17,9 @@ class ResPartnerWebsiteDating(models.Model):
     gender_pref = fields.Many2many('res.partner.gender', string="Gender Preference")
     min_age_pref = fields.Integer(string="Min Age Preference")
     max_age_pref = fields.Integer(string="Max Age Preference")
+    dist_pref = fields.Integer(string="Distance Pref")
     age_pref_string = fields.Char(string="Age Pref", compute="_calc_age_pref")
+    relationship_type = fields.Many2one('res.partner.relationship', string="Relationship Type", help="The type of relationship this member is seeking")
     location_string = fields.Char(string="Location", compute="_compute_location", store=True)
     interest_list = fields.Many2many('res.partner.interests', string="Interest List")
     profile_visibility = fields.Selection([('public','Public'), ('members_only','Members Only'), ('not_listed','Not Listed')], default="not_listed", string="Profile Visibility", help="Public: can be viewed by anyone on the internet\nMembers Only: Can only be viewed by people who have an account\nNot Listed: Profile will only be visiable to members you have contacted")
@@ -82,3 +84,9 @@ class ResPartnerInterestCategories(models.Model):
 
     name = fields.Char(string="Name")
     interest_list = fields.One2many('res.partner.interests', 'interest_category_id', string="Interest List")
+    
+class ResPartnerRelationship(models.Model):
+
+    _name = "res.partner.relationship"
+
+    name = fields.Char(string="Name")
