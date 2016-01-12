@@ -67,12 +67,23 @@ class ResDating(models.Model):
             elif rand_profile_vis <= 100:
                 #20% of being public
                 profile_vis = "public"
-                
+            
+            #random message settings
+            rand_message_setting = randint(1, 100)
+            message_setting = ""
+            if rand_message_setting <= 80:
+                #80% of being members only
+                message_setting = "members_only"
+            elif rand_message_setting <= 100:
+                #20% of being public
+                message_setting = "public"
+
+            
             #random profile text
             profile_text = "I am " + str(age) + " year old " + first_name.gender + " seeking " + str(relationship_type.name)
             
             #create the partner
-            new_partner = self.env['res.partner'].create({'profile_text': profile_text,'profile_visibility': profile_vis,'dating':'True', 'fake_profile':'True', 'birth_date': birth_date, 'firstname':first_name.name, 'lastname':last_name.name,'gender':gender, 'zip_id':rand_suburb.id, 'country_id':rand_suburb.country_id.id, 'state_id':rand_suburb.state_id.id, 'city':rand_suburb.city,'zip':rand_suburb.name, 'age':age, 'relationship_type': relationship_type.id, 'min_age_pref':min_age_pref,'max_age_pref':max_age_pref})           
+            new_partner = self.env['res.partner'].create({'message_setting':message_setting, 'profile_micro': profile_text, 'profile_text': profile_text,'profile_visibility': profile_vis,'dating':'True', 'fake_profile':'True', 'birth_date': birth_date, 'firstname':first_name.name, 'lastname':last_name.name,'gender':gender, 'zip_id':rand_suburb.id, 'country_id':rand_suburb.country_id.id, 'state_id':rand_suburb.state_id.id, 'city':rand_suburb.city,'zip':rand_suburb.name, 'age':age, 'relationship_type': relationship_type.id, 'min_age_pref':min_age_pref,'max_age_pref':max_age_pref})           
             
             #random gender pref
             rand_gender_pref = randint(1, 100)
@@ -93,12 +104,22 @@ class ResDating(models.Model):
                 new_partner.gender_pref = [(4, male_gender_id)]
                 new_partner.gender_pref = [(4, female_gender_id)]
                     
-                        
-class ResDatingMessage(models.Model):
 
-    _name = "res.dating.message"
+class ResDatingContacts(models.Model):
+
+    _name = "res.dating.contacts"
     
     partner_id = fields.Many2one('res.partner', string='From Partner')
     to_id = fields.Many2one('res.partner', string='To Partner')
-    message = fields.Text(string="Message")
-    type =  fields.Selection([('regular','Regular'), ('like','Like')], default="regular", string="Type")
+    unread_message_count = fields.Integer()
+    
+class ResDatingMessages(models.Model):
+
+    _name = "res.dating.messages"
+
+    message_owner = fields.Many2one('res.partner', string='Owner')
+    message_partner_id = fields.Integer(string='From Partner')
+    message_to_id = fields.Integer(string='To Partner')    
+    message_text = fields.Text(string="Message")
+    type =  fields.Selection([('regular','Regular'), ('like','Like')], string="Type")
+    read = fields.Boolean(string="Read")

@@ -20,7 +20,8 @@
 			    <field name="interest_list"/>
 			    <field name="profile_visibility"/>			    
 			    <field name="like_list"/>
-			    <field name="dating_messages"/>
+			    <field name="contacts"/>
+	
       	                </group>
       	            </page>
       	        </notebook>

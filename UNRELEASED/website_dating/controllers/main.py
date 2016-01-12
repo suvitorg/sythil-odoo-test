@@ -54,6 +54,8 @@ class WebsiteDatingController(http.Controller):
 	member = http.request.env['res.partner'].search([('id','=',member_id), ('dating','=',True)])[0]
         
         member.profile_visibility = values['profile_visibility']
+        member.message_setting = values['message_setting']
+        
         
         return werkzeug.utils.redirect("/dating/profiles/" + str(member_id) )
     
@@ -125,6 +127,85 @@ class WebsiteDatingController(http.Controller):
             return http.request.render('website_dating.my_dating_profile_settings', {'my_date': http.request.env.user.partner_id} )
         else:
             return "Permission Denied"
+ 
+    @http.route('/dating/profiles/messages/send', type="http", auth="user", website=True)
+    def dating_profile_messages_send(self, **kwargs):
+
+        values = {}
+	for field_name, field_value in kwargs.items():
+	    values[field_name] = field_value 
+ 
+        can_message = False
+	        
+	member_id = values['member_id']
+	member = http.request.env['res.partner'].sudo().search([('id','=',values['member_id']), ('dating','=',True)])[0]
+	partner = http.request.env.user.partner_id
+	        
+	        
+	for you_likes in partner.like_list:
+	    if int(member_id) == int(you_likes.id):
+	        you_like = True
+	        break
+	            
+	for they_likes in member.like_list:
+	    if partner.id == they_likes.id:
+	        they_like = True
+	        break
+	        
+	#Can Message Checks
+	if member.message_setting == "public":
+	    can_message = True
+	            
+	if member.message_setting == "members_only":
+	    if http.request.env.user.partner_id.name != 'Public user':
+	        can_message = True
+	            
+	if member.message_setting == "i_like":
+	    if they_like == True:
+                can_message = True
+ 
+        if can_message == True:
+            in_contacts = False
+            for cont in partner.contacts:
+                if cont.to_id == int(member_id):
+                    in_contacts = True
+                    
+            if in_contacts == False:
+                http.request.env['res.dating.contacts'].sudo().create({'partner_id':partner.id, 'to_id': member.id})
+            
+            comment =  values['comment']
+            
+            #sender gets a copy
+            http.request.env['res.dating.messages'].sudo().create({'message_owner': partner.id, 'message_partner_id': partner.id, 'message_to_id': member_id, 'message_text': comment, 'read':True})
+
+            #recipient also gets a copy
+            http.request.env['res.dating.messages'].sudo().create({'message_owner': member.id,'message_partner_id': partner.id, 'message_to_id': member_id, 'message_text': comment})
+
+        return werkzeug.utils.redirect("/dating/profiles/" + str(member_id) )
+ 
+    @http.route('/dating/profiles/messages/<member_id>', type="http", auth="user", website=True)
+    def dating_profile_messages(self, member_id, **kwargs):
+        
+        member = http.request.env['res.partner'].sudo().search([('id','=',member_id), ('dating','=',True)])[0]
+        partner = http.request.env.user.partner_id
+        
+        #message_list = http.request.env['res.dating.messages'].search([('message_owner','=', partner.id), '|', ('message_partner_id','=', member.id), ('message_to_id','=', member.id)])
+        
+        message_list = http.request.env['res.dating.messages'].search([('message_owner','=', partner.id)])
+        
+        
+        
+        for mess in message_list:
+            _logger.error(mess.message_text)
+        
+        
+        #only logged in members can view this page
+        if http.request.env.user.partner_id.name != 'Public user':
+            return "fart"
+            #return http.request.render('website_dating.my_dating_messages', {'my_date':member, 'message_list': message_list} )
+        else:
+            return "Permission Denied"
+
             
     @http.route('/dating/profiles/<member_id>', type="http", auth="public", website=True)
     def dating_profile(self, member_id, **kwargs):
@@ -132,6 +213,7 @@ class WebsiteDatingController(http.Controller):
         you_like = False
         they_like = False
         can_view = False
+        can_message = False
         
         member = http.request.env['res.partner'].sudo().search([('id','=',member_id), ('dating','=',True)])[0]
         partner = http.request.env.user.partner_id
@@ -147,7 +229,19 @@ class WebsiteDatingController(http.Controller):
                 they_like = True
                 break
         
-        
+        #Can Message Checks
+        if member.message_setting == "public":
+            can_message = True
+            
+        if member.message_setting == "members_only":
+            if http.request.env.user.partner_id.name != 'Public user':
+                can_message = True
+            
+        if member.message_setting == "i_like":
+            if they_like == True:
+                can_message = True
+            
+        #Profile visiable checks
         if member.profile_visibility == "public":
             #everyone can view public profiles
             can_view = True
@@ -165,6 +259,6 @@ class WebsiteDatingController(http.Controller):
             can_view = True
         
         if can_view:
-            return http.request.render('website_dating.my_dating_profile', {'my_date': member, 'you_like':you_like, 'they_like':they_like} )
+            return http.request.render('website_dating.my_dating_profile', {'my_date': member, 'can_message': can_message, 'you_like':you_like, 'they_like':they_like} )
         else:
             return "Permission Denied"

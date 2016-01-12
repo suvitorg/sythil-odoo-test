@@ -24,8 +24,10 @@ class ResPartnerWebsiteDating(models.Model):
     interest_list = fields.Many2many('res.partner.interests', string="Interest List")
     profile_visibility = fields.Selection([('public','Public'), ('members_only','Members Only'), ('not_listed','Not Listed')], default="not_listed", string="Profile Visibility", help="Public: can be viewed by anyone on the internet\nMembers Only: Can only be viewed by people who have an account\nNot Listed: Profile will only be visiable to members you have contacted")
     profile_text = fields.Text(string="Profile Text")
+    profile_micro = fields.Char(size=100, string="Profile Micro Summary")
     like_list = fields.Many2many(comodel_name='res.partner', relation='like_list', column1='like1', column2='like2', string='Like List')
-    dating_messages = fields.One2many('res.dating.message', 'partner_id', string="Dating Message")
+    message_setting = fields.Selection([('public','Anyone'), ('members_only','Members Only'), ('i_like','Members I Like')], string="Message Setting")
+    contacts = fields.One2many('res.dating.contacts', 'partner_id', string="Contact List", help="A member that has contacted you or you have contacted them")
 
     @api.one
     @api.depends('min_age_pref','max_age_pref')
