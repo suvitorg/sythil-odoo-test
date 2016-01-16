@@ -40,6 +40,17 @@
       	  </field>
       </record>
 
+      <record id="action_view_support_ticket" model="ir.actions.act_window">
+          <field name="name">Support Tickets</field>
+	  <field name="res_model">website.support.ticket</field>
+	  <field name="view_mode">tree,form</field>
+	  <field name="help" type="html">
+	      <p>
+	          No Support Tickets found
+	      </p>
+          </field>
+      </record>
+
       <record model="ir.actions.act_window" id="whdst_action">
           <field name="name">Support Tickets</field>
       	  <field name="res_model">website.support.ticket</field>
