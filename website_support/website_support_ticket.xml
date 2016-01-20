@@ -61,6 +61,16 @@
 	  </field>
       </record>
 
+    <record id="support_ticket_search" model="ir.ui.view">
+      <field name="model">website.support.ticket</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="partner_id"/>
+          <field name="subject"/>
+        </search>
+      </field>
+    </record>
+
       <menuitem id="whdst_customer_support" name="Customer Support" parent="base.menu_base_partner" sequence="90"/>
       <menuitem id="whdst_customer_support_tickets" name="Support Tickets" parent="whdst_customer_support" action="whdst_action" sequence="10"/>
       <menuitem id="whdst_customer_support_tickets_config" name="Support Tickets" parent="base.menu_base_config" sequence="80"/>

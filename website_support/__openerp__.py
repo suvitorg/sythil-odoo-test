@@ -1,6 +1,6 @@
 {
     'name': "Website Help Desk / Support Ticket",
-    'version': "1.1",
+    'version': "1.2",
     'author': "Sythil",
     'category': "Tools",
     'summary': "A helpdesk / support ticket system for your website",
@@ -10,6 +10,7 @@
         'website_support_ticket_categories.xml',
         'website_support_ticket_states.xml',
         'res_partner.xml',
+        'res_users.xml',
         'website_support_help_groups.xml',
         'website.support.ticket.states.csv',
         'website.support.ticket.categories.csv',

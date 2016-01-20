@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
-
+        
+        <record id="new_support_ticket_category" model="email.template">
+            <field name="name">Suppport Ticket New Ticket (Category)</field>
+            <field name="model_id" ref="model_website_support_ticket"></field>
+            <field name="email_from">${(user.email)|safe}</field>
+            <field name="subject">New Support Ticket for your category</field>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.person_name},</p>
+                <p>A new support ticket has been create in a category that you follow</p>
+                <p>Person Name: ${object.person_name}</p>
+                <p>Category: ${object.category.name}</p>
+                <p>Subject: ${object.subject}</p>
+                <p>${object.description}</p>
+                <p>Click <a href="_ticket_url_">here</a> to view this support ticket online</p>
+            ]]>
+            </field>
+        </record>
+        
         <record id="ticket_new_message" model="email.template">
             <field name="name">Suppport Ticket New Message</field>
-            <field name="model">website.support.ticket</field>
+            <field name="model_id" ref="model_website_support_ticket"></field>
             <field name="email_from">${(user.email)|safe}</field>
             <field name="email_to">${(object.email)}</field>
+            <field name="auto_delete">False</field>
             <field name="subject">New Support Ticket Message</field>
                 <field name="body_html"><![CDATA[
                 <p>Dear ${object.person_name},</p>
@@ -105,12 +123,16 @@
         <div class="container">
             <div class="col-md-12 mt16 mb16">
                 <div class="pull-right">
-                    <a href="/support/ticket/submit">Submit a Ticket</a> | <a href="/support/ticket/view">My Tickets</a>
+                    <a href="/support/ticket/submit">Submit a Ticket</a>
+                    <t t-if="request.env.user.partner_id.name != 'Public user'">
+                        | <a href="/support/ticket/view">My Tickets</a>
+                    </t>
                 </div>
             </div>
             
             <div class="mt16 mb16">
                 <h1 class="text-center">Help Pages</h1>
+                <!--
                 <div name="search_from_container" t-attf-class="form-group">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
@@ -118,6 +140,7 @@
                     </div>
                     <div class="col-md-3"></div>
                 </div>
+                -->
             </div>
             
             <div class="mt16 mb16 col-md-12">

@@ -45,9 +45,16 @@ class WebsiteSupportTicketCategories(models.Model):
     _name = "website.support.ticket.categories"
     
     name = fields.Char(required=True, string='Category Name')
+    cat_user_ids = fields.Many2many('res.users', string="Category Users")
    
 class WebsiteSupportTicketStates(models.Model):
 
     _name = "website.support.ticket.states"
     
     name = fields.Char(required=True, string='State Name')
+    
+class WebsiteSupportTicketUsers(models.Model):
+
+    _inherit = "res.users"
+    
+    cat_user_ids = fields.Many2many('website.support.ticket.categories', string="Category Users")

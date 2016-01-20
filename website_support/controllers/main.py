@@ -26,10 +26,28 @@ class MyController(http.Controller):
         
         if http.request.env.user.id:
             new_ticket_id = request.env['website.support.ticket'].create({'person_name':values['person_name'],'category':values['category'], 'email':values['email'], 'description':values['description'], 'subject':values['subject'], 'partner_id':http.request.env.user.partner_id.id})
-            #Send a message to all followers of this partner that they have sent a new ticket
-            #http.request.env['res.partner'].browse(http.request.env.user.partner_id.id).message_post(body="Customer " + http.request.env.user.partner_id.name + " has sent in a new support ticket", subject="New Support Ticket")
+            
+            partner = http.request.env.user.partner_id
+            
+            #Add to the communication history
+            partner.message_post(body="Customer " + partner.name + " has sent in a new support ticket", subject="New Support Ticket")
+            
         else:
             new_ticket_id = request.env['website.support.ticket'].create({'person_name':values['person_name'],'category':values['category'], 'email':values['email'], 'description':values['description'], 'subject':values['subject']})
+
+        #send an email out to everyone in the category
+        notification_template = request.env['ir.model.data'].get_object('website_support', 'new_support_ticket_category')
+       	
+        category = request.env['website.support.ticket.categories'].sudo().browse(int(values['category']))
+        
+        for my_user in category.cat_user_ids:
+            values = request.env['email.template'].generate_email(notification_template.id, new_ticket_id.id)
+       	    values['email_to'] = my_user.login
+            values['body_html'] = values['body_html'].replace("_ticket_url_", "web#id=" + str(new_ticket_id.id) + "&view_type=form&model=website.support.ticket")
+       	    
+       	    msg_id = request.env['mail.mail'].create(values)
+            
+        request.env['mail.mail'].process_email_queue()
         
         return werkzeug.utils.redirect("/support/ticket/thanks")
         
@@ -41,13 +59,13 @@ class MyController(http.Controller):
     @http.route('/support/ticket/view', type="http", auth="user", website=True)
     def support_ticket_view_list(self, **kw):
         #Only show tickets from this user
-        support_tickets = http.request.env['website.support.ticket'].search([('partner_id','=',http.request.env.user.partner_id.id)])
+        support_tickets = http.request.env['website.support.ticket'].sudo().search([('partner_id','=',http.request.env.user.partner_id.id)])
         return http.request.render('website_support.support_ticket_view_list', {'support_tickets':support_tickets,'ticket_count':len(support_tickets)})
 
     @http.route('/support/ticket/view/<ticket>', type="http", auth="user", website=True)
     def support_ticket_view(self, ticket):
         #only let the user this ticket is assigned to view this ticket
-        support_ticket = http.request.env['website.support.ticket'].search([('partner_id','=',http.request.env.user.partner_id.id), ('id','=',ticket) ])[0]        
+        support_ticket = http.request.env['website.support.ticket'].sudo().search([('partner_id','=',http.request.env.user.partner_id.id), ('id','=',ticket) ])[0]        
         return http.request.render('website_support.support_ticket_view', {'support_ticket':support_ticket})
 
     @http.route('/support/ticket/comment',type="http", auth="user")
@@ -68,7 +86,7 @@ class MyController(http.Controller):
         return werkzeug.utils.redirect("/support/ticket/view/" + str(ticket.id))
         
 
-    @http.route('/support/help/auto-complete',type="http", auth="user")
+    @http.route('/support/help/auto-complete',auth="public", website=True, type='http')
     def support_help_autocomplete(self, **kw):
 
         values = {}
