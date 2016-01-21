@@ -1,0 +1,14 @@
+id,internal_name,name,data_type
+textbox_char,textbox_char,textbox,char
+number_char,number_char,number,char
+textarea_char,textarea_char,textarea,char
+textarea_text,textarea_text,textarea,text
+number_integer,number_integer,number,integer
+number_float,number_float,number,float
+binary_binary,binary_binary,binary,binary
+dropdown_selection,dropdown_selection,dropdown,selection
+dropdown_many2one,dropdown_many2one,dropdown,many2one
+search_many2one,search_many2one,Search,many2one
+date_date,date_date,date,date
+datetime_datetime,datetime_datetime,datetime,datetime
+jk,jk,no idea,one2many
