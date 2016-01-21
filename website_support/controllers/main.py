@@ -17,7 +17,7 @@ class MyController(http.Controller):
         return http.request.render('website_support.support_submit_ticket', {'categories': http.request.env['website.support.ticket.categories'].sudo().search([]), 'person_name': http.request.env.user.name, 'email': http.request.env.user.email})
 
 
-    @http.route('/support/ticket/process', type="http", auth="user", website=True)
+    @http.route('/support/ticket/process', type="http", auth="public", website=True)
     def support_process_ticket(self, **kwargs):
         
         values = {}
