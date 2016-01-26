@@ -2,19 +2,9 @@
 <openerp>
   <data>
 
-      <record model="ir.sequence.type" id="seq_ehtml_id">
-          <field name="name">eHTML Field Sequence</field>
-          <field name="code">ehtml.fieldentry</field>
-      </record>
-
-      <record id="ehtml_seq_id" model="ir.sequence">
-          <field name="name">eHTML Field Sequence</field>
-          <field name="code">ehtml.fieldentry</field>
-      </record>
-
       <record model="ir.ui.view" id="ehtml_form_view">
          <field name="name">ehtml form</field>
-         <field name="model">ehtml.formgen</field>
+         <field name="model">html.form</field>
          <field name="arch" type="xml">
              <form string="HTML Form">
                   <sheet>
@@ -22,16 +12,11 @@
                           <field name="name"/>
                           <field name="return_url" placeholder="http://www.google.com.au"/>
                           <field name="model_id"/>
-                          <field name="form_type"/>
                           <field name="fields_ids" context="{'html_id': active_id,'default_model_id':model_id}">
-		              <tree editable="bottom">
-		                  <field name="model_id" invisible="1"/>
-		                  <field name="model" invisible="1"/>
-		                  <field name="sequence" widget="handle"/>
-		                  <field name="field_id" domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid'),('model_id','=',model)]"/>
+		              <tree editable="true">
+		                  <field name="field_id"/>
+		                  <field name="field_type"/>
 		                  <field name="html_name"/>
-		                  <field name="field_label"/>
-		                  <field name="html_field_type"/>
 		              </tree>
 		          </field>
 		          
@@ -56,7 +41,7 @@
 
       <record model="ir.ui.view" id="ehtml_history_form_view">
          <field name="name">ehtml History Form</field>
-         <field name="model">ehtml.history</field>
+         <field name="model">html.form.history</field>
          <field name="arch" type="xml">
              <form string="HTML Form History">
                   <sheet>
@@ -75,10 +60,10 @@
               </form>
           </field>
       </record>          
-          
+
       <record model="ir.ui.view" id="ehtml_history_tree_view">
          <field name="name">ehtml History Tree</field>
-         <field name="model">ehtml.history</field>
+         <field name="model">html.form.history</field>
          <field name="arch" type="xml">
              <tree string="HTML Embed Form History Tree">
                  <field name="form_name"/>
@@ -87,10 +72,9 @@
           </field>
       </record>          
 
-      
       <record model="ir.actions.act_window" id="ehtml_action">
           <field name="name">HTML</field>
-          <field name="res_model">ehtml.formgen</field>
+          <field name="res_model">html.form</field>
           <field name="view_type">form</field>
           <field name="view_mode">tree,form</field>
           <field name="help" type="html">
@@ -100,7 +84,7 @@
         
       <record model="ir.actions.act_window" id="ehtml_history_action">
           <field name="name">HTML</field>
-          <field name="res_model">ehtml.history</field>
+          <field name="res_model">html.form.history</field>
           <field name="view_type">form</field>
           <field name="view_mode">tree,form</field>
           <field name="help" type="html">
@@ -108,10 +92,9 @@
           </field>
       </record>
         
-        
-      <menuitem id="ehtml_menu" name="HTML Embed Forms" parent="base.menu_custom" sequence="160"/>
-      <menuitem id="ehtml_menu_insert" name="Create Forms" parent="ehtml_menu" action="ehtml_action" sequence="170"/>
-      <menuitem id="ehtml_menu_history" name="Inserted Form Data" parent="ehtml_menu" action="ehtml_history_action" sequence="180"/>
+      <menuitem id="html_menu" name="HTML Embed Forms" parent="base.menu_custom" sequence="160"/>
+      <menuitem id="html_menu_insert" name="Create Forms" parent="html_menu" action="ehtml_action" sequence="170"/>
+      <menuitem id="html_menu_history" name="Inserted Form Data" parent="html_menu" action="ehtml_history_action" sequence="180"/>
         
   </data>
 </openerp>

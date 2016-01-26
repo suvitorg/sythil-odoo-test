@@ -106,7 +106,7 @@ Permissions
 
 Fields
 ^^^^^^
-**HTML Form (html_id)**: ID pointing back to the HTML form history
+**HTML Form (html_id)**: ID pointing back to the HTML form history, on delete cascades
 
 **Field (field_id)**: The field that data was inserted into
 

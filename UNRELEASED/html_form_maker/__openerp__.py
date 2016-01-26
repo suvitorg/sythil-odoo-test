@@ -1,16 +1,18 @@
 {
     'name': "HTML Form Builder",
-    'version': "1.1",
+    'version': "0.5",
     'author': "Sythil",
     'category': "Tools",
     'summary': "Creates an HTML form that you can embed anywhere",
     'description': "Creates an HTML form that you can embed anywhere",
-    'license':'GPL-3',
+    'license':'AGPL-3',
     'data': [
         'entity_html_form.xml',
+        'html.form.field.type.csv',
         'views/snippets.xml',
         'views/website_templates.xml',
         'security/ir.model.access.csv',
+        'html.form.field.type.csv',
     ],
     'demo': [],
     'images':[
