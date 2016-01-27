@@ -1,5 +1,5 @@
 {
-    'name': "HTML Form Builder (Beta)",
+    'name': "HTML Snippet Form Builder (Beta)",
     'version': "0.5",
     'author': "Sythil",
     'category': "Tools",
