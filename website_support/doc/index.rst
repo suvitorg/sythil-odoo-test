@@ -4,6 +4,40 @@ res.partner.form (base.view_partner_form)
 -----------------------------------------
 Adds "Support Tickets" button in the top right button box.
 
+Web Controllers
+===============
+/support/help
+-------------
+Public, lists help groups and their help pages.
+
+/support/ticket/submit
+----------------------
+Public, Page where public / registered users can submit a support ticket.
+
+/support/ticket/process
+-----------------------
+Public, insert support ticket into database, send email to all follows of the tickets support category and redirect user to thank you page.
+
+/support/ticket/thanks
+----------------------
+Public, thanks the users for submitting the ticket.
+
+/support/ticket/view
+--------------------
+User, views a list of support tickets submitted by the logged in user.
+
+/support/ticket/view/<ticket>
+-----------------------------
+User, views an individual ticket with the id <ticket>, shows error if the ticket is not owned by the logged in user.
+
+/support/ticket/comment
+-----------------------
+User, Inserts support ticket comment into database and redirects user back to /support/ticket/view/<ticket> page.
+
+/support/help/auto-complete
+---------------------------
+Public, broken but it's meant to allow people to search for help pages.
+
 Menus
 =====
 Customer Support
