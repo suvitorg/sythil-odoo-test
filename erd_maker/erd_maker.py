@@ -25,7 +25,7 @@ class ErdMaker(models.TransientModel):
         
         temp_string = ""
         for keys,values in self.table_dict.items():
-            temp_string += str(values)
+            temp_string += values.encode('utf-8')
         
         self.output_text = temp_string
         self.table_dict.clear()
