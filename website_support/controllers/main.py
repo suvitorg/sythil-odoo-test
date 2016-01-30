@@ -5,6 +5,7 @@ _logger = logging.getLogger(__name__)
 import werkzeug
 from datetime import datetime
 import json
+from openerp.addons.website.models.website import slug
 
 class MyController(http.Controller):
 
@@ -68,6 +69,20 @@ class MyController(http.Controller):
         support_ticket = http.request.env['website.support.ticket'].sudo().search([('partner_id','=',http.request.env.user.partner_id.id), ('id','=',ticket) ])[0]        
         return http.request.render('website_support.support_ticket_view', {'support_ticket':support_ticket})
 
+    @http.route('/helpgroup/new/<group>', type='http', auth="public", website=True)
+    def help_group_create(self, group, **post):
+        help_group = request.env['website.support.help.groups'].create({'name': group})
+        return werkzeug.utils.redirect("/support/help")
+
+    @http.route('/helppage/new', type='http', auth="public", website=True)
+    def help_page_create(self, group_id, **post):
+        help_page = request.env['website.support.help.page'].create({'group_id': group_id,'name': "New Help Page"})
+        return werkzeug.utils.redirect("/support/help/%s/%s?enable_editor=1" % (slug(help_page.group_id), slug(help_page)))
+
+    @http.route(['''/support/help/<model("website.support.help.groups"):help_group>/<model("website.support.help.page", "[('group_id','=',help_group[0])]"):help_page>'''], type='http', auth="public", website=True)
+    def help_page(self, help_group, help_page, enable_editor=None, **post):
+        return request.website.render("website_support.help_page", {'help_page':help_page})
+
     @http.route('/support/ticket/comment',type="http", auth="user")
     def support_ticket_comment(self, **kw):
 
@@ -86,7 +101,7 @@ class MyController(http.Controller):
         return werkzeug.utils.redirect("/support/ticket/view/" + str(ticket.id))
         
 
-    @http.route('/support/help/auto-complete',auth="public", website=True, type='http')
+    @http.route('/support/help/auto-complete',auth="user", website=True, type='http')
     def support_help_autocomplete(self, **kw):
 
         values = {}
@@ -97,7 +112,7 @@ class MyController(http.Controller):
         
         my_return = []
         
-        help_pages = request.env['website.support.help.page'].search([('name','=ilike',"%" + values['term'] + "%")],limit=5)
+        help_pages = request.env['website.support.help.page'].sudo().search([('name','=ilike',"%" + values['term'] + "%")],limit=5)
         
         for help_page in help_pages:
             return_item = {"label": help_page.name,"value": help_page.url}
