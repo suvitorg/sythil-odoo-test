@@ -49,7 +49,7 @@
                 <section data-form-type="textbox" data-field-id="0" class="oe_snippet_body ehtml_form_field">
                     <div class="form-group">
                         <label for="field1">Field 1</label>
-                        <input type="text" name="field1" name2="field1" class="form-control"/>
+                        <input type="text" name="field1" class="form-control"/>
                     </div>
                 </section>
             </div>
@@ -64,7 +64,24 @@
                 <section data-form-type="textarea" data-field-id="0" class="oe_snippet_body ehtml_form_field">
                     <div class="form-group">
                         <label for="field1">Field 1</label>
-                        <textarea class="form-control" name="field1" name2="field1"/>
+                        <textarea class="form-control" name="field1"/>
+                    </div>
+                </section>
+            </div>
+
+            <!-- FORM DROPBOX INPUT -->
+            <div>
+                <div class="oe_snippet_thumbnail">
+                    <img class="oe_snippet_thumbnail_img" src="/html_form_maker/static/src/img/ui/snippet_thumb_field_dropbox.jpg"/>
+                    <span class="oe_snippet_thumbnail_title">Dropbox (Alpha)</span>
+                </div>
+ 
+                <section data-form-type="dropbox" data-field-id="0" class="oe_snippet_body ehtml_form_field">
+                    <div class="form-group">
+                        <label for="field1">Field 1</label>
+                        <select class="form-control" name="field1">
+                            <option value="">Select an option</option>
+                        </select>
                     </div>
                 </section>
             </div>

@@ -108,8 +108,10 @@
 				self.$target.find('input').attr("name", self.$modal.find("#html_form_field_config_name").val() );
 
 				var s = new openerp.Session();
-				s.rpc('/form/updatefield', {'form_id': self.$target.parents().find(".ehtml_form").attr('data-form-id'), 'html_field_id': self.$target.attr('data-field-id'), 'field': field_id, 'field_type': self.$target.attr('data-form-type'), 'html_name': self.$modal.find("#html_form_field_config_name").val() }).then(function(result) {
-                    self.$target.attr('data-field-id', result);
+				s.rpc('/form/updatefield', {'form_id': self.$target.parents().find(".ehtml_form").attr('data-form-id'), 'html_field_id': self.$target.attr('data-field-id'), 'field': field_id, 'field_type': self.$target.attr('data-form-type'), 'html_name': self.$modal.find("#html_form_field_config_name").val(), 'label': self.$modal.find("#html_form_config_label").val() }).then(function(result) {
+                    self.$target.attr('data-field-id', result.field_id);
+                    self.$target.html(result.html);
+
 				});
 
                 self.$modal.modal('hide');

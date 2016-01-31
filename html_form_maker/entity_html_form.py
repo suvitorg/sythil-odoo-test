@@ -156,35 +156,6 @@ class HtmlForm(models.Model):
 		    	            
     	        html_output += "/>\n"
     	        html_output += "        </div>\n"
-    	    if fe.html_field_type == "selection":
-                html_output += "        <div class=\"form-group\">\n"
-		html_output += "          <label class=\"control-label\" for=\"" + fe.html_name + "\""
-		                
-                if fe.field_id.required == False:
-                    html_output += ' style="font-weight: normal"'                
-                		
-		html_output += ">" + fe.field_label
-                
-                                    
-                html_output += "</label>\n"
-	        html_output += '          <select class="form-control" id="' + fe.html_name + '" name="' + fe.html_name + '"'
-                		    
-	        if fe.field_id.required == True:
-	            html_output += ' required'        
-		    	            
-    	        html_output += ">\n"
-
-    	        html_output += "            <option value=\"\">Select Option</option>\n"
-
-    	        
-    	        selection_list = dict(self.env[self.model_id.model]._columns[fe.field_id.name].selection)
-    	        
-    	        for selection_value,selection_label in selection_list.items():
-    	            html_output += "            <option value=\"" + str(selection_value) + "\">" + str(selection_label) + "</option>\n"
-    	        
-    	        html_output += "          </select>\n"
-    	        html_output += "        </div>\n"
-    	        	    
 
     	    if fe.html_field_type == "radiobuttons":
                 
@@ -242,7 +213,8 @@ class HtmlFormField(models.Model):
     
     html_id = fields.Many2one('html.form', ondelete='cascade', string="HTML Form")
     field_id = fields.Many2one('ir.model.fields', domain="[('name','!=','create_date'),('name','!=','create_uid'),('name','!=','id'),('name','!=','write_date'),('name','!=','write_uid')]", string="Form Field")
-    field_type = fields.Selection([('textbox','Textbox'), ('textarea','Textarea')], string="Field Type")
+    field_type = fields.Selection([('textbox','Textbox'), ('textarea','Textarea'), ('dropbox','Dropbox')], string="Field Type")
+    field_label = fields.Char(string="Field Label")
     html_name = fields.Char(string="HTML Name")
     setting_general_required = fields.Boolean(string="Required")
     setting_binary_file_type_filter = fields.Selection([('image','Image'), ('audio','Audio')], string="File Type Filter")
