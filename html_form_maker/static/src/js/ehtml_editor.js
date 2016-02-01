@@ -85,11 +85,9 @@
 
 		    self.$modal.find("#html_form_config_label").val(self.$target.find('label').html() );
 
-            self.$modal.find("#html_form_field_config_name").val( self.$target.find('input').attr("name2") );
-
             $(document).ready(function() {
                 $("#html_form_config_field").autocomplete({
-                    source: '/form/getfields',
+                    source: '/form/getfields?html_type=' + self.$target.attr('data-form-type'),
                     minLength: 1,
                     select: function( event, ui ) {
 		    			$("#html_form_config_label").val(ui.item.description);
@@ -104,7 +102,6 @@
             self.$modal.find("#save_field").on('click', function () {
 				self.$target.find('label').html(self.$modal.find("#html_form_config_label").val());
 				self.$target.find('label').attr('for', self.$modal.find("#html_form_config_name").val() );
-				self.$target.find('input').attr("name2", self.$modal.find("#html_form_field_config_name").val() );
 				self.$target.find('input').attr("name", self.$modal.find("#html_form_field_config_name").val() );
 
 				var s = new openerp.Session();

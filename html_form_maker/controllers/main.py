@@ -6,6 +6,11 @@ import werkzeug
 import base64
 import json
 
+class html_field_response():
+     error = ""
+     return_data = ""
+     history_data = ""
+
 class HtmlFormController(http.Controller):
 
     @http.route('/form/thankyou', type="http", auth="public", website=True)
@@ -139,14 +144,18 @@ class HtmlFormController(http.Controller):
 	for field_name, field_value in kw.items():
             values[field_name] = field_value        
         
-        my_return = []
-        #valid_data_types = request.env['html.form.field.type'].sudo().search([('html_type','=','textbox')])
-        my_fields = request.env['ir.model.fields'].search([('model_id.model','=','res.partner'), ('field_description','=ilike',"%" + values['term'] + "%")], limit=5)
+        my_return = []        
+        html_types = request.env['html.form.field.type'].search([('html_type','=',values['html_type'])])
+        html_types_list = []
+        
+        for ht in html_types:
+            html_types_list.append(ht.data_type)
+            
+        my_fields = request.env['ir.model.fields'].search([('model_id.model','=','res.partner'), ('field_description','=ilike',"%" + values['term'] + "%"), ('ttype','in',html_types_list)], limit=5)
         
         for my_field in my_fields:
-            return_item = {"label": my_field.field_description + "(" + my_field.name + ")","description": my_field.field_description, "value": my_field.name, "id": my_field.id}
+            return_item = {"label": "[" + my_field.ttype + "] " + my_field.field_description + " (" + my_field.name + ")","description": my_field.field_description, "value": my_field.name, "id": my_field.id}
             my_return.append(return_item)
-        
         
         return json.JSONEncoder().encode(my_return)
 
@@ -161,28 +170,82 @@ class HtmlFormController(http.Controller):
         #the referral string is what the campaign looks for
         secure_values = {}
         history_values = {}
-        
+        form_error = False
         ref_url = http.request.httprequest.headers['Referer']
-        
         entity_form = http.request.env['html.form'].sudo().browse(int(values['form_id']))
-        
         new_history = http.request.env['html.form.history'].sudo().create({'ref_url':ref_url, 'html_id': entity_form.id})
         
         #populate an array which has ONLY the fields that are in the form (prevent injection)
         for fi in entity_form.fields_ids:
-            if fi.field_id.ttype == "binary":
-                secure_values[fi.field_id.name] = base64.encodestring(values[fi.html_name].read() )    
+            
+            method = '_process_html_%s' % (fi.field_type,)
+	    action = getattr(self, method, None)
+	        
+	    if not action:
+		raise NotImplementedError('Method %r is not implemented on %r object.' % (method, self))
+	
+            field_valid = html_field_response()
+	    field_valid = action(fi, values[fi.html_name])
+	    
+	    if field_valid.error == "":
+	        form_error = False
+	        secure_values[fi.field_id.name] = field_valid.return_data
+                new_history.insert_data.sudo().create({'html_id': new_history.id, 'field_id':fi.field_id.id, 'insert_value':field_valid.history_data})
             else:
-                secure_values[fi.field_id.name] = values[fi.html_name]
-                
-            new_history.insert_data.sudo().create({'html_id': new_history.id, 'field_id':fi.field_id.id, 'insert_value':values[fi.html_name]})
+                form_error = True
 
-        #default values
-        for df in entity_form.defaults_values:
-            secure_values[df.field_id.name] = df.default_value
-            new_history.insert_data.sudo().create({'html_id': new_history.id, 'field_id':df.field_id.id, 'insert_value':df.default_value})
+        if form_error:
+            #redirect back to the page
+            return werkzeug.utils.redirect(ref_url)
+        else:
+            #default values
+            for df in entity_form.defaults_values:
+                secure_values[df.field_id.name] = df.default_value
+                new_history.insert_data.sudo().create({'html_id': new_history.id, 'field_id':df.field_id.id, 'insert_value':df.default_value})
         
-        new_record = http.request.env[entity_form.model_id.model].sudo().create(secure_values)
-        new_history.record_id = entity_form.id
+            new_record = http.request.env[entity_form.model_id.model].sudo().create(secure_values)
+            new_history.record_id = entity_form.id
         
-        return werkzeug.utils.redirect(entity_form.return_url)
+            return werkzeug.utils.redirect(entity_form.return_url)
+        
+    def _process_html_textbox(self, field, field_data):
+        """Validation for textbox and preps for insertion into database"""
+        html_response = html_field_response()
+        html_response.error = ""
+        html_response.return_data = field_data
+        html_response.history_data = field_data
+
+        return html_response
+        
+    def _process_html_textarea(self, field, field_data):
+        html_response = html_field_response()
+        html_response.error = ""
+        html_response.return_data = field_data
+        html_response.history_data = field_data
+
+        return html_response
+        
+    def _process_html_dropbox(self, field, field_data):
+        """Validation for dropbox and preps for insertion into database"""
+        html_response = html_field_response()
+        html_response.error = ""
+
+        if field.field_id.ttype == "selection":
+    
+            #ensure that the user isn't trying to inject data that is not in the selection
+    	    selection_list = dict(request.env[field.field_id.model_id.model]._columns[field.field_id.name].selection)
+    	        
+    	    for selection_value,selection_label in selection_list.items():
+    	        if field_data == selection_value:
+    	            html_response.error = ""
+		    html_response.return_data = field_data
+		    html_response.history_data = field_data
+		    
+    	            return html_response
+    	        
+            html_response.error = "This is not a valid selection"
+	    html_response.return_data = ""
+	    html_response.history_data = ""
+		
+            return html_response
+            

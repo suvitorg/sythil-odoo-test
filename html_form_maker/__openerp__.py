@@ -1,6 +1,6 @@
 {
     'name': "HTML Snippet Form Builder (Beta)",
-    'version': "0.5",
+    'version': "0.6",
     'author': "Sythil",
     'category': "Tools",
     'summary': "Use snippets to build HTML forms",
