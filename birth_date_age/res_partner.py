@@ -9,7 +9,7 @@ class BirthDateAge(models.Model):
     _inherit = "res.partner"
 
     birth_date = fields.Date(string="DOB")
-    age = fields.Integer(string="Age", readonly=True)
+    age = fields.Integer(string="Age")
 
     @api.onchange('birth_date')
     @api.one
