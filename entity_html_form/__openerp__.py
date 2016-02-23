@@ -1,5 +1,5 @@
 {
-    'name': "HTML Form Builder",
+    'name': "HTML Form Creator",
     'version': "1.1",
     'author': "Sythil",
     'category': "Tools",
