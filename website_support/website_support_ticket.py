@@ -21,7 +21,9 @@ class WebsiteSupportTicket(models.Model):
     description = fields.Text(string="Description", readonly=True)
     state = fields.Many2one('website.support.ticket.states', required=True, default=_open_ticket, string="State")
     conversation_history = fields.One2many('website.support.ticket.message', 'ticket_id', string="Conversation History")
-
+    attachment = fields.Binary(string="Attachments")
+    attachment_filename = fields.Char(string="Attachment Filename")
+    
     @api.one
     def add_comment(self):
         self.conversation_history.create({'content':self.add_comment})

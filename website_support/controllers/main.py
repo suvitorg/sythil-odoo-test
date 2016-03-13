@@ -1,5 +1,6 @@
 import openerp.http as http
 from openerp.http import request, SUPERUSER_ID
+import base64
 import logging
 _logger = logging.getLogger(__name__)
 import werkzeug
@@ -25,8 +26,10 @@ class MyController(http.Controller):
 	for field_name, field_value in kwargs.items():
             values[field_name] = field_value
         
+        my_attachment = base64.encodestring(values['file'].read() )
+        
         if http.request.env.user.id:
-            new_ticket_id = request.env['website.support.ticket'].create({'person_name':values['person_name'],'category':values['category'], 'email':values['email'], 'description':values['description'], 'subject':values['subject'], 'partner_id':http.request.env.user.partner_id.id})
+            new_ticket_id = request.env['website.support.ticket'].create({'person_name':values['person_name'],'category':values['category'], 'email':values['email'], 'description':values['description'], 'subject':values['subject'], 'partner_id':http.request.env.user.partner_id.id, 'attachment': my_attachment, 'attachment_filename': values['file'].filename})
             
             partner = http.request.env.user.partner_id
             
@@ -34,7 +37,7 @@ class MyController(http.Controller):
             partner.message_post(body="Customer " + partner.name + " has sent in a new support ticket", subject="New Support Ticket")
             
         else:
-            new_ticket_id = request.env['website.support.ticket'].create({'person_name':values['person_name'],'category':values['category'], 'email':values['email'], 'description':values['description'], 'subject':values['subject']})
+            new_ticket_id = request.env['website.support.ticket'].create({'person_name':values['person_name'],'category':values['category'], 'email':values['email'], 'description':values['description'], 'subject':values['subject'], 'attachment': my_attachment, 'attachment_filename': values['file'].filename})
 
         #send an email out to everyone in the category
         notification_template = request.env['ir.model.data'].get_object('website_support', 'new_support_ticket_category')
