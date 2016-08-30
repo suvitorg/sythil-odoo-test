@@ -70,12 +70,28 @@ class esms_mass_sms(models.Model):
 
             message_final = sms_rendered_content + "\n\nReply STOP to stop receiving sms"
             gateway_model = self.from_mobile.account_id.account_gateway.gateway_model_name
-	    my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, rec.mobile_e164, message_final, "esms.mass.sms", self.id, "mobile")
+	    #my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, rec.mobile_e164, message_final, "esms.mass.sms", self.id, "mobile")
             my_model = self.env['ir.model'].search([('model','=','res.partner')])
             
             #unlike single sms we record down failed attempts to send since mass sms works in a "best try" matter, while single sms works in a "try again" matter.
-            esms_history = self.env['esms.history'].create({'mass_sms_id': self.id, 'record_id': rec.id,'model_id':my_model[0].id,'account_id':self.from_mobile.account_id.id,'from_mobile':self.from_mobile.mobile_number,'to_mobile':rec.mobile_e164,'sms_content':message_final,'status_string':my_sms.response_string, 'direction':'O','my_date':datetime.utcnow(), 'status_code':my_sms.delivary_state, 'sms_gateway_message_id':my_sms.message_id, 'gateway_id': self.from_mobile.account_id.account_gateway.id})
+            #Queue the sms for later sending
+            esms_history = self.env['esms.history'].create({'mass_sms_id': self.id, 'record_id': rec.id,'model_id':my_model[0].id,'account_id':self.from_mobile.account_id.id,'from_mobile':self.from_mobile.mobile_number,'to_mobile':rec.mobile_e164,'sms_content':message_final, 'direction':'O','my_date':datetime.utcnow(), 'status_code': 'queued', 'gateway_id': self.from_mobile.account_id.account_gateway.id})
+            #esms_history = self.env['esms.history'].create({'mass_sms_id': self.id, 'record_id': rec.id,'model_id':my_model[0].id,'account_id':self.from_mobile.account_id.id,'from_mobile':self.from_mobile.mobile_number,'to_mobile':rec.mobile_e164,'sms_content':message_final,'status_string':my_sms.response_string, 'direction':'O','my_date':datetime.utcnow(), 'status_code':my_sms.delivary_state, 'sms_gateway_message_id':my_sms.message_id, 'gateway_id': self.from_mobile.account_id.account_gateway.id})
             
             #record the message in the communication log
             self.env['res.partner'].browse(rec.id).message_post(body=message_final, subject="Mass SMS Sent")
         
+        
+    @api.model
+    def process_sms_queue(self):
+        for queued_sms in self.env['esms.history'].search([('status_code','=','queued')], limit=5):
+            rec = self.env[queued_sms.model_id.model].browse(queued_sms.record_id)
+            my_sms = self.env[queued_sms.gateway_id.gateway_model_name].send_message(
+            queued_sms.mass_sms_id.from_mobile.account_id.id
+            , queued_sms.mass_sms_id.from_mobile.mobile_number
+            , rec.mobile_e164
+            , queued_sms.sms_content
+            , "esms.mass.sms"
+            , queued_sms.mass_sms_id.id
+            , "mobile")
+            queued_sms.status_code = my_sms.delivary_state
