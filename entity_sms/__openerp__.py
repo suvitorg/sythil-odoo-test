@@ -21,14 +21,15 @@
         'esms_verified_numbers.xml',
         'esms.gateways.csv',
 	'security/ir.model.access.csv',
-	'res.country.csv',
 	'smsgateway/gateway_config.xml',
         'smsglobal/gateway_config.xml',
         'twilio/gateway_config.xml',
         'ir_actions.xml',
         'esms_settings.xml',
     ],
-    'demo': [],
+    'demo': [
+        'res.country.csv',
+    ],
     'depends': ['web', 'crm','marketing'],
     'images':[
     'static/description/2.jpg',
