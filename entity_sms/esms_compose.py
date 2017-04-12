@@ -29,8 +29,9 @@ class esms_compose(models.Model):
         if self.template_id.id != False:
             
             sms_rendered_content = self.env['esms.templates'].render_template(self.template_id.template_body, self.template_id.model_id.model, self.record_id)
-            
             self.from_mobile = self.template_id.from_mobile.id
+            if not self.to_number:
+                self.to_number = self.env['esms.templates'].render_template(self.template_id.sms_to, self.template_id.model_id.model, self.record_id)
             self.sms_content = sms_rendered_content
             self.sms_gateway = self.template_id.account_gateway.id
 
@@ -39,7 +40,7 @@ class esms_compose(models.Model):
         self.ensure_one()
 
         gateway_model = self.from_mobile.account_id.account_gateway.gateway_model_name
-        my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, self.to_number, self.sms_content.encode('utf-8'), self.model_id, self.record_id, self.field_id)
+        my_sms = self.env[gateway_model].send_message(self.from_mobile.account_id.id, self.from_mobile.mobile_number, self.to_number, self.sms_content, self.model_id, self.record_id, self.field_id)
         
         #use the human readable error message if present
         error_message = ""
