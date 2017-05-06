@@ -82,7 +82,7 @@ class esms_templates(models.Model):
         
 	my_sms = self.env[gateway_model].send_message(my_template.from_mobile.account_id.id, my_template.from_mobile.mobile_number, rendered_sms_to, sms_rendered_content, my_template.model_id.model, record_id)
 	
-    def render_template(self, template, model, res_id):
+    def render_template(self, template_body, model, res_id):
         """Render the given template text, replace mako expressions ``${expr}``
            with the result of evaluating these expressions with
            an evaluation context containing:
@@ -99,7 +99,7 @@ class esms_templates(models.Model):
         
         # try to load the template
         #try:
-        template = mako_template_env.from_string(tools.ustr(template))
+        template = mako_template_env.from_string(tools.ustr(template_body))
         #except Exception:
         #    _logger.error("Failed to load template %r", template)
         #    return False
@@ -118,7 +118,7 @@ class esms_templates(models.Model):
         try:
             render_result = template.render(variables)
         except Exception:
-            _logger.error("Failed to render template %r using values %r" % (template, variables))
+            _logger.exception(u"Failed to render template %r using values %r" % (template_body, variables))
             render_result = u""
         if render_result == u"False":
             render_result = u""
